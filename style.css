@@ -6,4 +6,11 @@
 .cascata{
     background-color: grey;
 }
-
+.gradiente{
+    font-weight:bold;
+    font-size: 4rem;
+    width: 400px;
+    height: 300px;
+    background: linear-gradient(red, yellow);
+    margin: 20px 30px; /*forma de declaração abreviada*/
+}
