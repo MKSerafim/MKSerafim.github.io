@@ -21,7 +21,6 @@
         
         label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
         
-        /* Instrução pequena e discreta */
         .help-text {
             font-size: 0.85rem;
             color: #666;
@@ -82,6 +81,20 @@
         <label for="id_conta">ID da Conta:</label>
         <p class="help-text">Não sabe seu ID? Acesse seu perfil, role até o final da página e copie a última informação exibida.</p>
         <input type="text" id="id_conta" name="id_conta" required placeholder="Digite seu ID aqui" />
+
+        <label for="assunto">Assunto:</label>
+        <select id="assunto" name="assunto" required>
+            <option value="" disabled selected>Selecione o motivo...</option>
+            <option value="suporte">Suporte</option>
+            <option value="erro_ortografia">Relatar erro de ortografia</option>
+            <option value="bug_login">Relatar bug de login</option>
+            <option value="novo_colaborador">Pedir acesso para novo colaborador</option>
+            <option value="excluir_conta">Excluir minha conta</option>
+            <option value="editar_conta">Editar minha conta</option>
+            <option value="erro_carregamento">Relatar erro de carregamento</option>
+            <option value="novo_app_loja">Pedir o aplicativo pra outra loja</option>
+            <option value="outros">Outros assuntos</option>
+        </select>
 
         <label for="message">Sua Mensagem:</label>
         <textarea id="message" name="message" rows="4" required placeholder="Digite sua mensagem aqui..."></textarea>
