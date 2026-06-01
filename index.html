@@ -21,7 +21,14 @@
         
         label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
         
-        /* Estilo para inputs, textarea e o select (a lista suspensa) */
+        /* Instrução pequena e discreta */
+        .help-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+        
         input, textarea, select { 
             width: 100%; 
             margin-bottom: 1rem; 
@@ -33,7 +40,6 @@
             background-color: white;
         }
 
-        /* Destaque quando o usuário clica no campo */
         select:focus, input:focus, textarea:focus {
             outline: 2px solid #007bff;
             border-color: transparent;
@@ -72,6 +78,10 @@
             <option value="HCG">HCG - Hiper Campos dos Goytacazes</option>
             <option value="BHP">BHP - Hiper Pampulha</option>
         </select>
+
+        <label for="id_conta">ID da Conta:</label>
+        <p class="help-text">Não sabe seu ID? Acesse seu perfil, role até o final da página e copie a última informação exibida.</p>
+        <input type="text" id="id_conta" name="id_conta" required placeholder="Digite seu ID aqui" />
 
         <label for="message">Sua Mensagem:</label>
         <textarea id="message" name="message" rows="4" required placeholder="Digite sua mensagem aqui..."></textarea>
