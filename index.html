@@ -9,9 +9,8 @@
             font-family: sans-serif; 
             margin: 0; 
             padding: 20px; 
-            /* Removi o display flex e min-height que centralizavam no meio */
             max-width: 400px; 
-            margin: 0 auto; /* Isso mantém centralizado horizontalmente */
+            margin: 0 auto;
         }
         
         h2 { text-align: center; color: #333; margin-top: 20px; }
@@ -51,7 +50,7 @@
             border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
-            margin-bottom: 30px; /* Espaço no final da página */
+            margin-bottom: 30px;
         }
         
         button:hover { background: #0056b3; }
@@ -62,6 +61,8 @@
     <h2>Entre em Contato</h2>
     
     <form action="https://formspree.io/f/mpqngqll" method="POST">
+        
+        <input type="hidden" name="_next" value="https://mkserafim.github.io/obrigado.html" />
         
         <label for="email">Seu E-mail:</label>
         <input type="email" id="email" name="email" required placeholder="seuemail@exemplo.com" />
