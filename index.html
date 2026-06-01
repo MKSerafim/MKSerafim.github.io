@@ -9,15 +9,12 @@
             font-family: sans-serif; 
             margin: 0; 
             padding: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            min-height: 100vh; 
+            /* Removi o display flex e min-height que centralizavam no meio */
             max-width: 400px; 
-            margin: 0 auto;
+            margin: 0 auto; /* Isso mantém centralizado horizontalmente */
         }
         
-        h2 { text-align: center; color: #333; }
+        h2 { text-align: center; color: #333; margin-top: 20px; }
         
         label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
         
@@ -54,6 +51,7 @@
             border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
+            margin-bottom: 30px; /* Espaço no final da página */
         }
         
         button:hover { background: #0056b3; }
