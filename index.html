@@ -1,44 +1,27 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="style.css">
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de Contato</title>
     <style>
-      p{
-        text-align: center;
-        color: blue;
-        font-size: 30px;
-        padding-top: 10px; /*formato individual de definição*/
-        padding-bottom: 10px;
-        padding-right: 5px;
-        padding-left: 5px;
-      }
-      #para1{
-        color: green;
-        padding: 10px 5px 10px 5px; /*formato abreviado de definição*/
-      }
+        body { font-family: sans-serif; max-width: 400px; margin: 2rem auto; padding: 0 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        input, textarea { width: 100%; margin-bottom: 1rem; padding: 0.5rem; box-sizing: border-box; }
+        button { background: #007bff; color: white; border: none; padding: 0.7rem; cursor: pointer; width: 100%; }
     </style>
-  </head>
-  <body>
-    <h1 style="color:blue; text-align: center; font-size: 5rem">
-      Sou um Titulo com css inline
-    </h1>
-    <p>
-      Ao utilizar o seletor de elementos, todos os elementos serão afetados.
-    </p>
-    <p id="para1">
-      Sou um paragrafo que mesmo tendo um id, sou afetado pelo estilo aplicado via seletor e também pelo estilo via id
-    </p>
-    <h2 class="elemento-com-borda">
-      Subtítulo com classe utilizando também em outro elemento
-    </h2>
-    <div class="elemento-com-borda cascata">
-      <p id="para2">
-        oi, não se esqueça de min.
-        mesmo estando dentro de um outro elemento, sou afetado pelo estilo aplicado via seletor
-      </p>
-    </div>
-    <div class="gradient">
-      Sou uma div estilizada com css3
-    </div>
-  </body>
+</head>
+<body>
+
+    <h2>Entre em Contato</h2>
+    <form action="https://formspree.io/f/mpqngqll" method="POST">
+        <label for="email">Seu E-mail:</label>
+        <input type="email" id="email" name="email" required placeholder="seuemail@exemplo.com" />
+
+        <label for="message">Sua Mensagem:</label>
+        <textarea id="message" name="message" required placeholder="Digite sua mensagem aqui..."></textarea>
+
+        <button type="submit">Enviar Mensagem</button>
+    </form>
+
+</body>
 </html>
