@@ -5,15 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enviado com Sucesso!</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center; padding: 20px; }
-        h1 { color: #007bff; }
+        body { 
+            font-family: sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            text-align: center; 
+            padding: 20px; 
+            margin: 0;
+        }
+        
+        h1 { color: #333; }
+        p { color: #666; margin-bottom: 2rem; }
+
+        /* Mesmo estilo do botão do formulário */
+        .btn-voltar { 
+            background: #007bff; 
+            color: white; 
+            text-decoration: none;
+            padding: 15px 30px; 
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+            width: 200px;
+            text-align: center;
+        }
+        
+        .btn-voltar:hover { background: #0056b3; }
     </style>
 </head>
 <body>
     <div>
         <h1>Mensagem enviada!</h1>
         <p>Recebemos seu contato com sucesso. Em breve entraremos em contato.</p>
-        <a href="index.html">Voltar para o formulário</a>
+        
+        <a href="index.html" class="btn-voltar">Voltar</a>
     </div>
 </body>
 </html>
