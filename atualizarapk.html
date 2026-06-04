@@ -1,0 +1,177 @@
+<style>
+  /* Container do Texto de Boas-Vindas */
+  .loja-boas-vindas {
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px auto 10px auto;
+    padding: 0 20px;
+    max-width: 600px;
+  }
+
+  .loja-boas-vindas h2 {
+    color: #333333;
+    margin-bottom: 8px;
+    font-size: 24px;
+  }
+
+  .loja-boas-vindas p {
+    color: #666666;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Container principal que alinha os cards em grade */
+  .loja-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  /* Card individual do aplicativo */
+  .app-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    width: 280px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  /* Efeito flutuante ao passar o mouse */
+  .app-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Seção de conteúdo (Imagem e Texto) */
+  .app-info {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-grow: 1;
+  }
+
+  /* Foto do App (Quadradinho com cantos arredondados) */
+  .app-icon {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  }
+
+  /* Textos do aplicativo */
+  .app-textos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .app-nome {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333333;
+    margin: 0 0 4px 0;
+  }
+
+  .app-versao {
+    font-size: 13px;
+    color: #777777;
+    margin: 0;
+  }
+
+  /* Botão de Download ocupando todo o espaço inferior */
+  .btn-download {
+    display: block;
+    width: 100%;
+    background-color: #25d366;
+    color: #ffffff;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    transition: background-color 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  /* Efeito de clique/hover no botão */
+  .btn-download:hover {
+    background-color: #1ebd57;
+    color: #ffffff;
+    text-decoration: none;
+  }
+</style>
+
+<div class="loja-boas-vindas">
+  <h2>Bem-vindo!</h2>
+  <p>Mantenha seu aplicativo atualizado. Escolha a sua loja abaixo e baixe a versão mais recente.</p>
+</div>
+
+<div class="loja-container">
+
+  <div class="app-card">
+    <div class="app-info">
+      <img class="app-icon" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8WBgt3lD4obuzIzJHWAvrPuxYCH7oosiY625urEFG6uY_N0fTcHhHIrdggGw_avWcxtwaEJBNolRKPVAZYdwkE66kiUtwkg8SnkbMF7c0CsxhzgqVIwnFoOIthLhxkSkCLgFvVZhyMz9kP8eLIsSMJn5EQwf3vJAL6oiev1t4GNMHfH-hsEHaE4oXhHH2/s1141/ic_stat_onesignal_default.jpeg" alt="Icone do App">
+      <div class="app-textos">
+        <h3 class="app-nome">Serafim HMC</h3>
+        <p class="app-versao">Versão do aplicativo 2.0</p>
+      </div>
+    </div>
+    <a href="LINK_DOWNLOAD_HMC" class="btn-download">DOWNLOAD</a>
+  </div>
+
+  <div class="app-card">
+    <div class="app-info">
+      <img class="app-icon" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8WBgt3lD4obuzIzJHWAvrPuxYCH7oosiY625urEFG6uY_N0fTcHhHIrdggGw_avWcxtwaEJBNolRKPVAZYdwkE66kiUtwkg8SnkbMF7c0CsxhzgqVIwnFoOIthLhxkSkCLgFvVZhyMz9kP8eLIsSMJn5EQwf3vJAL6oiev1t4GNMHfH-hsEHaE4oXhHH2/s1141/ic_stat_onesignal_default.jpeg" alt="Icone do App">
+      <div class="app-textos">
+        <h3 class="app-nome">Serafim HCG</h3>
+        <p class="app-versao">Versão do aplicativo 2.0</p>
+      </div>
+    </div>
+    <a href="LINK_DOWNLOAD_HCG" class="btn-download">DOWNLOAD</a>
+  </div>
+
+  <div class="app-card">
+    <div class="app-info">
+      <img class="app-icon" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8WBgt3lD4obuzIzJHWAvrPuxYCH7oosiY625urEFG6uY_N0fTcHhHIrdggGw_avWcxtwaEJBNolRKPVAZYdwkE66kiUtwkg8SnkbMF7c0CsxhzgqVIwnFoOIthLhxkSkCLgFvVZhyMz9kP8eLIsSMJn5EQwf3vJAL6oiev1t4GNMHfH-hsEHaE4oXhHH2/s1141/ic_stat_onesignal_default.jpeg" alt="Icone do App">
+      <div class="app-textos">
+        <h3 class="app-nome">Serafim JFO</h3>
+        <p class="app-versao">Versão do aplicativo 2.0</p>
+      </div>
+    </div>
+    <a href="LINK_DOWNLOAD_JFO" class="btn-download">DOWNLOAD</a>
+  </div>
+
+  <div class="app-card">
+    <div class="app-info">
+      <img class="app-icon" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8WBgt3lD4obuzIzJHWAvrPuxYCH7oosiY625urEFG6uY_N0fTcHhHIrdggGw_avWcxtwaEJBNolRKPVAZYdwkE66kiUtwkg8SnkbMF7c0CsxhzgqVIwnFoOIthLhxkSkCLgFvVZhyMz9kP8eLIsSMJn5EQwf3vJAL6oiev1t4GNMHfH-hsEHaE4oXhHH2/s1141/ic_stat_onesignal_default.jpeg" alt="Icone do App">
+      <div class="app-textos">
+        <h3 class="app-nome">Serafim BHP</h3>
+        <p class="app-versao">Versão do aplicativo 2.0</p>
+      </div>
+    </div>
+    <a href="LINK_DOWNLOAD_BHP" class="btn-download">DOWNLOAD</a>
+  </div>
+
+  <div class="app-card">
+    <div class="app-info">
+      <img class="app-icon" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8WBgt3lD4obuzIzJHWAvrPuxYCH7oosiY625urEFG6uY_N0fTcHhHIrdggGw_avWcxtwaEJBNolRKPVAZYdwkE66kiUtwkg8SnkbMF7c0CsxhzgqVIwnFoOIthLhxkSkCLgFvVZhyMz9kP8eLIsSMJn5EQwf3vJAL6oiev1t4GNMHfH-hsEHaE4oXhHH2/s1141/ic_stat_onesignal_default.jpeg" alt="Icone do App">
+      <div class="app-textos">
+        <h3 class="app-nome">Serafim VVS</h3>
+        <p class="app-versao">Versão do aplicativo 2.0</p>
+      </div>
+    </div>
+    <a href="LINK_DOWNLOAD_VVS" class="btn-download">DOWNLOAD</a>
+  </div>
+
+</div>
