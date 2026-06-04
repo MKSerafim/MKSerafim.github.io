@@ -1,30 +1,36 @@
 <style>
-  /* Reset básico para garantir que não haja margens estranhas */
+  /* Reset e Estilização Base */
   * { box-sizing: border-box; }
-  body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f9f9; }
 
   .loja-boas-vindas {
     text-align: center;
     margin: 20px auto;
     padding: 0 20px;
-    max-width: 600px;
+    max-width: 800px;
   }
 
   .loja-boas-vindas h2 { color: #333333; margin-bottom: 8px; font-size: 24px; }
   .loja-boas-vindas p { color: #666666; font-size: 15px; line-height: 1.5; }
 
-  /* Configuração do Grid para ser responsivo */
+  /* Container Principal */
   .loja-container {
     display: grid;
-    /* No celular (abaixo de 300px) ele tenta se ajustar, 
-       mas aqui definimos que ele ocupará todo o espaço disponível */
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 15px;
-    padding: 15px;
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas no computador */
+    gap: 20px;
+    padding: 20px;
     max-width: 800px;
     margin: 0 auto;
   }
 
+  /* Regra para Celular: 1 coluna ocupando 100% da largura */
+  @media (max-width: 600px) {
+    .loja-container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Card Individual */
   .app-card {
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
@@ -35,23 +41,11 @@
     overflow: hidden;
   }
 
-  .app-info {
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-
-  .app-icon {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 14px;
-  }
-
+  .app-info { padding: 20px; display: flex; align-items: center; gap: 15px; }
+  .app-icon { width: 70px; height: 70px; object-fit: cover; border-radius: 14px; }
   .app-nome { font-size: 18px; font-weight: bold; color: #333333; margin: 0 0 4px 0; }
   .app-versao { font-size: 14px; color: #777777; margin: 0; }
-
+  
   .btn-download {
     display: block;
     width: 100%;
@@ -72,6 +66,7 @@
 </div>
 
 <div class="loja-container">
+
   <div class="app-card">
     <div class="app-info">
       <img class="app-icon" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8WBgt3lD4obuzIzJHWAvrPuxYCH7oosiY625urEFG6uY_N0fTcHhHIrdggGw_avWcxtwaEJBNolRKPVAZYdwkE66kiUtwkg8SnkbMF7c0CsxhzgqVIwnFoOIthLhxkSkCLgFvVZhyMz9kP8eLIsSMJn5EQwf3vJAL6oiev1t4GNMHfH-hsEHaE4oXhHH2/s1141/ic_stat_onesignal_default.jpeg" alt="Icone">
@@ -137,4 +132,5 @@
     </div>
     <a href="LINK_DOWNLOAD_RJD" class="btn-download">DOWNLOAD</a>
   </div>
+
 </div>
