@@ -5,51 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solicitar Edição de Dados</title>
     <style>
-        /* Estilo Dark Mode igual ao seu site de APK */
-        * { box-sizing: border-box; }
+        /* Estilos idênticos ao código original enviado */
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #121212; 
-            color: #ffffff;
+            font-family: sans-serif; 
             margin: 0; 
             padding: 20px; 
-        }
-
-        .container {
-            max-width: 450px; 
+            max-width: 400px; 
             margin: 0 auto;
-            background-color: #1e1e1e;
-            padding: 25px;
-            border-radius: 15px;
-            border: 1px solid #333;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         
-        h2 { text-align: center; color: #ffffff; margin-bottom: 5px; }
-        .sub-titulo { text-align: center; color: #aaaaaa; font-size: 14px; margin-bottom: 25px; }
+        h2 { text-align: center; color: #333; margin-top: 20px; }
         
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #25d366; font-size: 14px; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        
+        .help-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
         
         input, textarea, select { 
             width: 100%; 
-            margin-bottom: 18px; 
+            margin-bottom: 1rem; 
             padding: 12px; 
-            border: 1px solid #444; 
+            box-sizing: border-box; 
+            border: 1px solid #ccc; 
             border-radius: 8px;
             font-size: 16px;
-            background-color: #2a2a2a;
-            color: #ffffff;
+            background-color: white;
         }
 
-        input::placeholder { color: #666; }
-
-        input:focus, textarea:focus, select:focus {
-            outline: 2px solid #25d366;
+        select:focus, input:focus, textarea:focus {
+            outline: 2px solid #007bff;
             border-color: transparent;
         }
         
         button { 
-            background: #25d366; 
+            background: #007bff; 
             color: white; 
             border: none; 
             padding: 15px; 
@@ -58,61 +51,50 @@
             border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
-            transition: 0.3s;
+            margin-bottom: 30px;
         }
         
-        button:hover { background: #1ebd57; }
-
-        .help-text {
-            font-size: 12px;
-            color: #888;
-            margin-top: -12px;
-            margin-bottom: 15px;
-            display: block;
-        }
+        button:hover { background: #0056b3; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Abrir Chamado</h2>
-        <p class="sub-titulo">Solicite a correção dos seus dados abaixo</p>
+    <h2>Solicitar Edição de Dados</h2>
+    
+    <form action="https://formspree.io/f/xnjyqkab" method="POST">
         
-        <form action="https://formspree.io/f/xnjyqkab" method="POST">
-            
-            <input type="hidden" name="_next" value="https://mkserafim.github.io/obrigado.html" />
-            <input type="hidden" name="_subject" value="Solicitação de Edição de Dados - Perfil" />
+        <input type="hidden" name="_next" value="https://mkserafim.github.io/obrigado.html" />
+        <input type="hidden" name="_subject" value="Solicitação de Edição de Dados - Perfil" />
+        
+        <label for="nome">Seu Nome Completo:</label>
+        <input type="text" id="nome" name="nome" required placeholder="Nome conforme documento" />
 
-            <label for="nome">Nome Completo:</label>
-            <input type="text" id="nome" name="nome" required placeholder="Seu nome correto" />
+        <label for="email">Seu E-mail:</label>
+        <input type="email" id="email" name="email" required placeholder="seuemail@exemplo.com" />
 
-            <label for="email">Seu E-mail:</label>
-            <input type="email" id="email" name="email" required placeholder="exemplo@gmail.com" />
+        <label for="drt">Seu DRT:</label>
+        <p class="help-text">O DRT é composto por 6 números.</p>
+        <input type="text" id="drt" name="drt" required placeholder="Ex: 286141" />
 
-            <label for="drt">Número do DRT:</label>
-            <input type="text" id="drt" name="drt" required placeholder="Digite seu DRT" />
-            <span class="help-text">O DRT possui 6 dígitos.</span>
+        <label for="cargo">Seu Cargo:</label>
+        <input type="text" id="cargo" name="cargo" required placeholder="Ex: Prevenção e Perdas" />
 
-            <label for="cargo">Cargo Atual:</label>
-            <input type="text" id="cargo" name="cargo" required placeholder="Ex: Prevenção e Perdas" />
+        <label for="loja">Sua Loja:</label>
+        <select id="loja" name="loja" required>
+            <option value="" disabled selected>Selecione sua loja...</option>
+            <option value="VVS">VVS - Hiper Vila Velha</option>
+            <option value="JFO">JFO - Hiper Juiz de Fora</option>
+            <option value="HMC">HMC - Hiper Macaé</option>
+            <option value="HCG">HCG - Hiper Campos dos Goytacazes</option>
+            <option value="BHP">BHP - Hiper Pampulha</option>
+            <option value="RJD">RJD - Washington Luiz</option>
+        </select>
 
-            <label for="loja">Sua Loja:</label>
-            <select id="loja" name="loja" required>
-                <option value="" disabled selected>Selecione sua loja...</option>
-                <option value="VVS">VVS - Hiper Vila Velha</option>
-                <option value="JFO">JFO - Hiper Juiz de Fora</option>
-                <option value="HMC">HMC - Hiper Macaé</option>
-                <option value="HCG">HCG - Hiper Campos dos Goytacazes</option>
-                <option value="BHP">BHP - Hiper Pampulha</option>
-                <option value="RJD">RJD - Washington Luiz</option>
-            </select>
+        <label for="message">O que precisa ser corrigido?</label>
+        <textarea id="message" name="message" rows="4" required placeholder="Descreva aqui o erro nos seus dados..."></textarea>
 
-            <label for="message">O que precisa ser corrigido?</label>
-            <textarea id="message" name="message" rows="3" required placeholder="Descreva qual informação está errada..."></textarea>
-
-            <button type="submit">Enviar Solicitação</button>
-        </form>
-    </div>
+        <button type="submit">Enviar Solicitação</button>
+    </form>
 
 </body>
 </html>
