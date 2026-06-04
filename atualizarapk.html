@@ -1,53 +1,38 @@
 <style>
-  /* Container do Texto de Boas-Vindas */
+  /* Reset básico para garantir que não haja margens estranhas */
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
   .loja-boas-vindas {
     text-align: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 20px auto 10px auto;
+    margin: 20px auto;
     padding: 0 20px;
     max-width: 600px;
   }
 
-  .loja-boas-vindas h2 {
-    color: #333333;
-    margin-bottom: 8px;
-    font-size: 24px;
-  }
+  .loja-boas-vindas h2 { color: #333333; margin-bottom: 8px; font-size: 24px; }
+  .loja-boas-vindas p { color: #666666; font-size: 15px; line-height: 1.5; }
 
-  .loja-boas-vindas p {
-    color: #666666;
-    font-size: 15px;
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  /* Container principal - Ajustado para melhor fluxo */
+  /* Configuração do Grid para ser responsivo */
   .loja-container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    /* No celular (abaixo de 300px) ele tenta se ajustar, 
+       mas aqui definimos que ele ocupará todo o espaço disponível */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 15px;
-    justify-content: center;
-    padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 15px;
+    max-width: 800px;
+    margin: 0 auto;
   }
 
-  /* Card individual - Responsividade aplicada aqui */
   .app-card {
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
-    width: 100%; /* Largura total em telas pequenas */
-    max-width: 300px; /* Largura máxima em telas grandes */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .app-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
   }
 
   .app-info {
@@ -55,35 +40,17 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    flex-grow: 1;
   }
 
   .app-icon {
-    width: 64px;
-    height: 64px;
+    width: 70px;
+    height: 70px;
     object-fit: cover;
     border-radius: 14px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
   }
 
-  .app-textos {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .app-nome {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333333;
-    margin: 0 0 4px 0;
-  }
-
-  .app-versao {
-    font-size: 13px;
-    color: #777777;
-    margin: 0;
-  }
+  .app-nome { font-size: 18px; font-weight: bold; color: #333333; margin: 0 0 4px 0; }
+  .app-versao { font-size: 14px; color: #777777; margin: 0; }
 
   .btn-download {
     display: block;
@@ -91,18 +58,11 @@
     background-color: #25d366;
     color: #ffffff;
     text-align: center;
-    padding: 12px 0;
-    font-size: 15px;
+    padding: 16px 0;
+    font-size: 16px;
     font-weight: bold;
     text-decoration: none;
     border: none;
-    transition: background-color 0.2s ease;
-    box-sizing: border-box;
-  }
-
-  .btn-download:hover {
-    background-color: #1ebd57;
-    text-decoration: none;
   }
 </style>
 
@@ -112,7 +72,6 @@
 </div>
 
 <div class="loja-container">
-
   <div class="app-card">
     <div class="app-info">
       <img class="app-icon" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8WBgt3lD4obuzIzJHWAvrPuxYCH7oosiY625urEFG6uY_N0fTcHhHIrdggGw_avWcxtwaEJBNolRKPVAZYdwkE66kiUtwkg8SnkbMF7c0CsxhzgqVIwnFoOIthLhxkSkCLgFvVZhyMz9kP8eLIsSMJn5EQwf3vJAL6oiev1t4GNMHfH-hsEHaE4oXhHH2/s1141/ic_stat_onesignal_default.jpeg" alt="Icone">
@@ -178,5 +137,4 @@
     </div>
     <a href="LINK_DOWNLOAD_RJD" class="btn-download">DOWNLOAD</a>
   </div>
-
 </div>
