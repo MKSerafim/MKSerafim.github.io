@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solicitar Edição de Dados</title>
     <style>
+        /* Estilos originais mantidos */
         body { 
             font-family: sans-serif; 
             margin: 0; 
@@ -16,13 +17,6 @@
         h2 { text-align: center; color: #333; margin-top: 20px; }
         
         label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-        
-        .help-text {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 0.5rem;
-            font-style: italic;
-        }
         
         input, textarea, select { 
             width: 100%; 
@@ -72,8 +66,8 @@
         <input type="email" id="email" name="email" required placeholder="seuemail@exemplo.com" />
 
         <label for="drt">Seu DRT:</label>
-        <p class="help-text">O DRT é composto por 6 números.</p>
-        <input type="text" id="drt" name="drt" required placeholder="Ex: 123456" />
+        <!-- Campo agora sem restrição de tamanho ou texto de ajuda limitante -->
+        <input type="text" id="drt" name="drt" required placeholder="Digite o número do seu DRT" />
 
         <label for="cargo">Seu Cargo:</label>
         <input type="text" id="cargo" name="cargo" required placeholder="Ex: Prevenção e Perdas" />
