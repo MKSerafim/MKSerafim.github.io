@@ -62,14 +62,20 @@
     .app-nome { font-size: 16px; font-weight: bold; color: #ffffff; margin: 0 0 4px 0; }
     .app-versao { font-size: 13px; color: #aaaaaa; margin: 0; }
     
-    .btn-download {
-      display: block;
+    /* Container dos botões lado a lado */
+    .container-botoes {
+      display: flex;
       width: 100%;
-      background-color: #25d366;
+      border-top: 1px solid #333333;
+    }
+
+    .btn-download {
+      flex: 1;
+      display: block;
       color: #ffffff;
       text-align: center;
       padding: 12px 0;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: bold;
       text-decoration: none;
       border: none;
@@ -77,9 +83,20 @@
       cursor: pointer;
     }
 
-    .btn-download:hover { background-color: #1ebd57; }
+    /* Botão Principal - Verde Clássico */
+    .btn-principal {
+      background-color: #25d366;
+    }
+    .btn-principal:hover { background-color: #1ebd57; }
 
-    /* --- ESTILOS DO NOVO POP-UP CUSTOMIZADO --- */
+    /* Botão Secundário - Cor grafite azulado elegante */
+    .btn-secundario {
+      background-color: #3a3f44;
+      border-left: 1px solid #2a2e32;
+    }
+    .btn-secundario:hover { background-color: #4f545a; }
+
+    /* --- ESTILOS DO POP-UP CUSTOMIZADO --- */
     .modal-overlay {
       display: none; /* Escondido por padrão */
       position: fixed;
@@ -132,11 +149,12 @@
 
   <div class="loja-boas-vindas">
     <h2>Bem-vindo!</h2>
-    <p>Mantenha seu aplicativo atualizado. Escolha a sua loja abaixo e baixe a versão mais recente.</p>
+    <p>Mantenha seu aplicativo updated. Escolha a sua loja abaixo e baixe a versão mais recente.</p>
   </div>
 
   <div class="loja-container">
 
+    <!-- HMC -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone HMC">
@@ -145,9 +163,13 @@
           <p class="app-versao">Versão 1.0</p>
         </div>
       </div>
-      <a href="#" onclick="abrirModal(); return false;" class="btn-download">DOWNLOAD</a>
+      <div class="container-botoes">
+        <a href="#" onclick="abrirModal(); return false;" class="btn-download btn-principal">DOWNLOAD</a>
+        <a href="#" onclick="abrirModal(); return false;" class="btn-download btn-secundario">OPÇÃO 2</a>
+      </div>
     </div>
 
+    <!-- HCG -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone HCG">
@@ -156,9 +178,13 @@
           <p class="app-versao">Versão 1.0</p>
         </div>
       </div>
-      <a href="#" onclick="abrirModal(); return false;" class="btn-download">DOWNLOAD</a>
+      <div class="container-botoes">
+        <a href="#" onclick="abrirModal(); return false;" class="btn-download btn-principal">DOWNLOAD</a>
+        <a href="#" onclick="abrirModal(); return false;" class="btn-download btn-secundario">OPÇÃO 2</a>
+      </div>
     </div>
 
+    <!-- JFO -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone JFO">
@@ -167,9 +193,13 @@
           <p class="app-versao">Versão 1.0</p>
         </div>
       </div>
-      <a href="#" onclick="abrirModal(); return false;" class="btn-download">DOWNLOAD</a>
+      <div class="container-botoes">
+        <a href="#" onclick="abrirModal(); return false;" class="btn-download btn-principal">DOWNLOAD</a>
+        <a href="#" onclick="abrirModal(); return false;" class="btn-download btn-secundario">OPÇÃO 2</a>
+      </div>
     </div>
 
+    <!-- BHP -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone BHP">
@@ -178,9 +208,13 @@
           <p class="app-versao">Versão 1.0</p>
         </div>
       </div>
-      <a href="#" onclick="abrirModal(); return false;" class="btn-download">DOWNLOAD</a>
+      <div class="container-botoes">
+        <a href="#" onclick="abrirModal(); return false;" class="btn-download btn-principal">DOWNLOAD</a>
+        <a href="#" onclick="abrirModal(); return false;" class="btn-download btn-secundario">OPÇÃO 2</a>
+      </div>
     </div>
 
+    <!-- VVS -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone VVS">
@@ -189,9 +223,13 @@
           <p class="app-versao">Versão 1.0</p>
         </div>
       </div>
-      <a href="#" onclick="abrirModal(); return false;" class="btn-download">DOWNLOAD</a>
+      <div class="container-botoes">
+        <a href="#" onclick="abrirModal(); return false;" class="btn-download btn-principal">DOWNLOAD</a>
+        <a href="#" onclick="abrirModal(); return false;" class="btn-download btn-secundario">OPÇÃO 2</a>
+      </div>
     </div>
 
+    <!-- RJD (Funcionando perfeitamente com os dois links) -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone RJD">
@@ -200,7 +238,10 @@
           <p class="app-versao">Versão 1.0</p>
         </div>
       </div>
-      <a href="https://drive.google.com/uc?export=download&id=1LPUKGtJFwEwhkSEZyJ2FdEp5GRua1C6P" class="btn-download">DOWNLOAD</a>
+      <div class="container-botoes">
+        <a href="https://drive.google.com/uc?export=download&id=1LPUKGtJFwEwhkSEZyJ2FdEp5GRua1C6P" class="btn-download btn-principal">DOWNLOAD</a>
+        <a href="https://drive.google.com/uc?export=download&id=1LgRm0nB6IwQEwKb4000DKjmvop4gEtCv" class="btn-download btn-secundario">OPÇÃO 2</a>
+      </div>
     </div>
 
   </div>
