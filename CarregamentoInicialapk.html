@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading - Prevenção de Perdas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Fundo escuro tecnológico combinando com a sua imagem */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: radial-gradient(circle at center, #01466d 0%, #001830 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* Container da animação */
+        .loader-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Anéis giratórios com efeito de neon */
+        .ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+        }
+
+        /* Anel externo (Azul Claro) */
+        .ring:nth-child(1) {
+            border-top: 3px solid #1eb0e9;
+            border-left: 3px solid #1eb0e9;
+            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+            box-shadow: 0 0 15px rgba(30, 176, 233, 0.4);
+        }
+
+        /* Anel interno (Vermelho) */
+        .ring:nth-child(2) {
+            width: 75%;
+            height: 75%;
+            border-bottom: 3px solid #fb131b;
+            border-right: 3px solid #fb131b;
+            animation: spin-reverse 1.5s linear infinite;
+            box-shadow: 0 0 10px rgba(251, 19, 27, 0.4);
+        }
+
+        /* Núcleo central pulsante (Branco) */
+        .core {
+            width: 25%;
+            height: 25%;
+            background-color: #ffffff;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Estilização do texto */
+        .loading-text {
+            margin-top: 35px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: fade-text 1.5s ease-in-out infinite;
+        }
+
+        .subtitle {
+            color: #1eb0e9;
+            font-size: 0.75rem;
+            margin-top: 8px;
+            letter-spacing: 2px;
+            font-weight: 400;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        /* Keyframes das animações */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes spin-reverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+
+        @keyframes fade-text {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader-container">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="core"></div>
+    </div>
+
+    <div class="loading-text">Carregando</div>
+    <div class="subtitle">Prevenção de Perdas</div>
+
+</body>
+</html>
