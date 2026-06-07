@@ -44,11 +44,9 @@
             padding-bottom: 8px;
         }
 
-        /* Linhas cinzas que representam o texto */
         .skeleton-line {
             height: 12px;
             background: #e2e8f0;
-            /* Cria o efeito de onda/brilho prateado com um toque sutil de azul */
             background-image: linear-gradient(90deg, #e2e8f0 0px, #f0f4f8 40px, #e2e8f0 80px);
             background-size: 250px 100%;
             background-repeat: no-repeat;
@@ -56,21 +54,17 @@
             animation: shimmer 1.2s infinite linear;
         }
 
-        /* Tamanhos diferentes para simular cabeçalho, título e os produtos */
         .skeleton-line.tag { width: 50px; height: 16px; border-radius: 12px; }
         .skeleton-line.data { width: 80px; height: 12px; }
         .skeleton-line.titulo { width: 65%; height: 16px; margin-top: 5px; font-weight: bold; }
         .skeleton-line.produto-1 { width: 90%; height: 12px; margin-top: 4px; }
         .skeleton-line.produto-2 { width: 85%; height: 12px; }
-        .skeleton-line.produto-3 { width: 70%; height: 12px; }
 
-        /* Animação que move o brilho da esquerda para a direita */
         @keyframes shimmer {
             0% { background-position: -150px 0; }
             100% { background-position: 150px 0; }
         }
 
-        /* Texto de carregamento centralizado abaixo dos cards */
         .loading-text {
             text-align: center;
             color: #4a5568;
@@ -106,9 +100,32 @@
         .card-date { font-size: 0.8rem; color: #718096; }
         .card-origin { background: #edf2f7; padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; color: #4a5568;}
         
-        /* Formatação da lista de produtos */
-        .produto-item { font-size: 0.85rem; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; }
-        .produto-item:last-child { border-bottom: none; }
+        /* --- NOVA FORMATAÇÃO MELHORADA DA LISTA DE PRODUTOS --- */
+        .produto-item { 
+            font-size: 0.88rem; 
+            padding: 10px 0 10px 15px; /* Aumentado o espaçamento para não embolar */
+            border-bottom: 1px solid #cbd5e0; /* Linha sólida e mais escura para separação real */
+            color: #2d3748;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        /* Marcador visual moderno antes do texto do produto */
+        .produto-item::before {
+            content: "▪";
+            position: absolute;
+            left: 0;
+            color: #718096;
+            font-size: 0.8rem;
+            top: 9px;
+        }
+
+        /* Remove a linha do último item para o card terminar limpo */
+        .produto-item:last-child { 
+            border-bottom: none; 
+            padding-bottom: 0;
+        }
+        /* ------------------------------------------------------ */
     </style>
 </head>
 <body>
@@ -125,17 +142,6 @@
             <div class="skeleton-line produto-1"></div>
             <div class="skeleton-line produto-2"></div>
         </div>
-
-        <div class="skeleton-card">
-            <div class="skeleton-header">
-                <div class="skeleton-line tag"></div>
-                <div class="skeleton-line data"></div>
-            </div>
-            <div class="skeleton-line titulo"></div>
-            <div class="skeleton-line produto-1"></div>
-            <div class="skeleton-line produto-3"></div>
-        </div>
-
         <div class="skeleton-card">
             <div class="skeleton-header">
                 <div class="skeleton-line tag"></div>
@@ -144,14 +150,12 @@
             <div class="skeleton-line titulo"></div>
             <div class="skeleton-line produto-1"></div>
         </div>
-
         <div class="loading-text">Carregando dados da planilha...</div>
     </div>
 
     <div id="historico-container"></div>
 
     <script>
-        // Link do seu Apps Script
         const scriptUrl = 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadHistorico';
 
         async function carregarHistorico() {
@@ -160,28 +164,26 @@
                 const data = await response.json();
                 
                 const container = document.getElementById('historico-container');
-                
-                // Esconde todo o bloco de carregamento (os 3 esqueletos + o texto)
                 document.getElementById('loading').style.display = 'none';
 
-                // Inverte o array para mostrar os mais recentes primeiro
                 data.reverse().forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'card';
                     
-                    // Define a cor do card baseado no título
                     if (item.titulo.includes('VENCIDOS')) card.classList.add('vencidos');
                     else if (item.titulo.includes('VENCIMENTO PRÓXIMO')) card.classList.add('proximo');
                     else if (item.titulo.includes('SEM DATA')) card.classList.add('sem-data');
 
-                    // Formata a data
                     const dataFormatada = new Date(item.dataHora).toLocaleString('pt-BR', {
                         day: '2-digit', month: '2-digit', year: 'numeric',
                         hour: '2-digit', minute: '2-digit'
                     });
 
-                    // Quebra a mensagem pelos \n para criar linhas separadas
-                    const linesMensagem = item.mensagem.split('\n').map(linha => `<div class="produto-item">${linha}</div>`).join('');
+                    // Filtra linhas vazias para evitar criar espaços em branco desnecessários
+                    const linesMensagem = item.mensagem.split('\n')
+                        .filter(linha => linha.trim() !== '')
+                        .map(linha => `<div class="produto-item">${linha}</div>`)
+                        .join('');
 
                     card.innerHTML = `
                         <div class="card-header">
@@ -189,7 +191,7 @@
                             <span class="card-date">${dataFormatada}</span>
                         </div>
                         <div class="card-title">${item.titulo}</div>
-                        <div style="margin-top: 10px;">
+                        <div style="margin-top: 5px;">
                             ${linesMensagem}
                         </div>
                     `;
@@ -197,13 +199,11 @@
                 });
 
             } catch (error) {
-                // Se der erro, limpa os esqueletos e mostra o aviso em vermelho
                 document.getElementById('loading').innerHTML = '<div class="loading-text" style="color: #e53e3e; animation: none;">Erro ao carregar os dados. Verifique a conexão.</div>';
                 console.error('Erro:', error);
             }
         }
 
-        // Inicia o carregamento assim que a página abre
         carregarHistorico();
     </script>
 </body>
