@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Prevenção de Perdas</title>
+    <title>Login - Gestão de Riscos e Perdas</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -20,23 +20,72 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             overflow: hidden; /* Evita barras de rolagem */
+            position: relative;
         }
 
+        /* ----- Barra de Status Superior (Simulada para visualização) ----- */
+        .status-bar {
+            width: 100%;
+            height: 24px;
+            background-color: transparent;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 0.75rem;
+            opacity: 0.8;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 20;
+        }
+
+        .status-bar-icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* ----- Cabeçalho com Logotipo e Título ----- */
         .header {
             text-align: center;
+            margin-top: 40px; /* Espaço para a barra de status */
             margin-bottom: 20px;
             color: white;
+            z-index: 10;
+        }
+
+        .header img {
+            width: 60px;
+            height: auto;
         }
 
         .header h1 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 500;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             margin-top: 10px;
         }
 
+        /* ----- Contêiner dos Robôs (A imagem gerada) ----- */
+        .robot-container {
+            width: 100%;
+            max-width: 400px; /* Ajuste para o tamanho da sua imagem */
+            margin-top: 10px;
+            margin-bottom: -50px; /* Sobrepõe levemente o cartão de login */
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+        }
+
+        .robot-container img {
+            width: 100%;
+            height: auto;
+            max-height: 180px; /* Ajuste a altura máxima desejada */
+        }
+
+        /* ----- Cartão de Login ----- */
         .login-card {
             background-color: white;
             width: 90%;
@@ -44,6 +93,7 @@
             border-radius: 12px;
             padding: 30px 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            z-index: 10;
         }
 
         .login-card h2 {
@@ -147,12 +197,14 @@
             cursor: pointer;
         }
 
+        /* ----- Rodapé ----- */
         .footer-text {
             position: absolute;
-            bottom: 20px;
+            bottom: 10px;
             color: rgba(255, 255, 255, 0.6);
             font-size: 0.75rem;
             text-align: center;
+            z-index: 10;
         }
 
         /* ----- ESTILO DO NOVO AVISO (TOAST) ----- */
@@ -165,7 +217,7 @@
             border-radius: 8px;
             padding: 16px;
             position: fixed;
-            z-index: 10;
+            z-index: 30;
             left: 50%;
             bottom: 20px;
             transform: translateX(-50%);
@@ -185,9 +237,23 @@
 </head>
 <body>
 
+    <div class="status-bar">
+        <span>16:55</span>
+        <div class="status-bar-icons">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <span>82%</span>
+        </div>
+    </div>
+
     <div class="header">
-        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <img src="path/to/your/carrefour_logo.png" alt="Carrefour Logo"> 
         <h1>SISTEMA DE GESTÃO DE RISCOS E PERDAS</h1>
+    </div>
+
+    <div class="robot-container">
+        <img src="bonequinhos.png" alt="Bonecos de Risco e Perda">
     </div>
 
     <div class="login-card">
