@@ -15,74 +15,61 @@
 
         body {
             background-color: #002244;
-            background-image: radial-gradient(circle at center, #01466d 0%, #001830 100%);
-            height: 100vh;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                radial-gradient(circle at center, #015b8c 0%, #001830 100%);
+            background-size: 40px 40px, 40px 40px, 100% 100%;
+            /* CORREÇÃO DO TECLADO: min-height permite que a tela cresça se precisar rolar */
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden; /* Evita barras de rolagem */
-            position: relative;
-        }
-
-        /* ----- Barra de Status Superior (Simulada para visualização) ----- */
-        .status-bar {
-            width: 100%;
-            height: 24px;
-            background-color: transparent;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 16px;
-            font-size: 0.75rem;
-            opacity: 0.8;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 20;
-        }
-
-        .status-bar-icons {
-            display: flex;
-            gap: 8px;
+            /* Permite rolagem para baixo quando o teclado abrir */
+            overflow-y: auto; 
+            overflow-x: hidden;
+            padding-bottom: 20px;
         }
 
         /* ----- Cabeçalho com Logotipo e Título ----- */
         .header {
             text-align: center;
-            margin-top: 40px; /* Espaço para a barra de status */
-            margin-bottom: 20px;
+            margin-top: 40px; 
+            margin-bottom: 10px;
             color: white;
             z-index: 10;
         }
 
         .header img {
-            width: 60px;
+            width: 50px;
             height: auto;
+            margin-bottom: 5px;
         }
 
         .header h1 {
             font-size: 1.1rem;
             font-weight: 500;
             letter-spacing: 0.5px;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
-        /* ----- Contêiner dos Robôs (A imagem gerada) ----- */
+        /* ----- Contêiner dos Robôs ----- */
         .robot-container {
             width: 100%;
-            max-width: 400px; /* Ajuste para o tamanho da sua imagem */
+            max-width: 380px; 
+            /* CORREÇÃO DO ACHATAMENTO: height auto faz a imagem manter a proporção original */
+            height: auto; 
             margin-top: 10px;
-            margin-bottom: -50px; /* Sobrepõe levemente o cartão de login */
+            margin-bottom: -35px; /* Faz os robôs ficarem levemente atrás do cartão */
             z-index: 5;
             display: flex;
             justify-content: center;
         }
 
         .robot-container img {
-            width: 100%;
+            width: 90%; /* Ajuste a porcentagem se quiser os robôs maiores ou menores */
             height: auto;
-            max-height: 180px; /* Ajuste a altura máxima desejada */
+            object-fit: contain; 
         }
 
         /* ----- Cartão de Login ----- */
@@ -91,27 +78,27 @@
             width: 90%;
             max-width: 360px;
             border-radius: 12px;
-            padding: 30px 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            padding: 25px 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
             z-index: 10;
         }
 
         .login-card h2 {
             text-align: center;
             color: #333;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-size: 1.5rem;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             position: relative;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #555;
+            margin-bottom: 5px;
+            color: #333;
             font-size: 0.9rem;
             font-weight: 500;
         }
@@ -119,21 +106,31 @@
         .input-group input {
             width: 100%;
             padding: 12px 15px;
-            border: 1px solid #ccc;
+            border: 1px solid #a0a0a0;
             border-radius: 8px;
             font-size: 1rem;
             outline: none;
             transition: border-color 0.3s;
+            color: #555;
         }
 
         .input-group input:focus {
             border-color: #003087;
         }
 
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 35px;
+            color: #003087;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
         .toggle-password {
             position: absolute;
             right: 15px;
-            top: 38px;
+            top: 35px;
             cursor: pointer;
             color: #666;
             font-size: 0.9rem;
@@ -157,10 +154,6 @@
             cursor: pointer;
         }
 
-        .terms-group label {
-            cursor: pointer;
-        }
-
         .terms-link {
             color: #333;
             text-decoration: underline;
@@ -173,7 +166,7 @@
             color: white;
             border: none;
             padding: 14px;
-            border-radius: 8px;
+            border-radius: 20px; 
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
@@ -199,9 +192,10 @@
 
         /* ----- Rodapé ----- */
         .footer-text {
-            position: absolute;
-            bottom: 10px;
-            color: rgba(255, 255, 255, 0.6);
+            /* CORREÇÃO DO RODAPÉ: margin-top auto empurra ele para o final sem quebrar a rolagem */
+            margin-top: auto;
+            padding-top: 20px;
+            color: rgba(255, 255, 255, 0.5);
             font-size: 0.75rem;
             text-align: center;
             z-index: 10;
@@ -237,23 +231,13 @@
 </head>
 <body>
 
-    <div class="status-bar">
-        <span>16:55</span>
-        <div class="status-bar-icons">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-            <span>82%</span>
-        </div>
-    </div>
-
     <div class="header">
-        <img src="path/to/your/carrefour_logo.png" alt="Carrefour Logo"> 
+        <img src="URL_DA_SUA_LOGO_AQUI" alt="Carrefour Logo"> 
         <h1>SISTEMA DE GESTÃO DE RISCOS E PERDAS</h1>
     </div>
 
     <div class="robot-container">
-        <img src="bonequinhos.png" alt="Bonecos de Risco e Perda">
+        <img src="https://mkserafim.github.io/robos.png" alt="Bonecos de Risco e Perda">
     </div>
 
     <div class="login-card">
@@ -262,6 +246,7 @@
         <div class="input-group">
             <label for="email">Endereço de e-mail</label>
             <input type="email" id="email" placeholder="exemplo@carrefour.com" required>
+            <span class="input-icon">✉</span>
         </div>
 
         <div class="input-group">
@@ -301,12 +286,10 @@
             }
         }
 
-        // Função que controla o visual do aviso
         function mostrarAviso(mensagem) {
             const toast = document.getElementById("aviso-toast");
             toast.textContent = mensagem;
             toast.className = "mostrar";
-            // Esconde o aviso automaticamente após 3.5 segundos
             setTimeout(function(){ 
                 toast.className = toast.className.replace("mostrar", ""); 
             }, 3500);
@@ -319,16 +302,14 @@
         async function fazerLogin() {
             const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value.trim();
-            const termosChecados = document.getElementById('termos').checked; // Pega o status do checkbox
+            const termosChecados = document.getElementById('termos').checked;
             const btn = document.getElementById('btnEntrar');
 
-            // Validações iniciais
             if (!email || !senha) {
                 mostrarAviso("Por favor, preencha o e-mail e a senha.");
                 return;
             }
 
-            // Validação dos Termos e Condições
             if (!termosChecados) {
                 mostrarAviso("Você precisa aceitar os Termos e Condições para entrar.");
                 return;
