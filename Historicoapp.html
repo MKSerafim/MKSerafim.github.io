@@ -13,48 +13,81 @@
             padding: 15px;
         }
         h2 { text-align: center; color: #1a202c; margin-bottom: 20px; font-size: 1.5rem; }
-        
         #historico-container { display: flex; flex-direction: column; gap: 15px; }
         
-        /* --- ESTILOS DA NOVA ANIMAÇÃO DE CARREGAMENTO --- */
+        /* ===================================================
+           ESTILOS DO CARREGAMENTO PREMIUM (SKELETON SHIMMER)
+           =================================================== */
         #loading {
             display: flex;
             flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .skeleton-card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .skeleton-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            height: 50vh; /* Ocupa metade da tela para ficar bem centralizado */
+            border-bottom: 1px solid #edf2f7;
+            padding-bottom: 8px;
         }
 
-        .spinner {
-            width: 45px;
-            height: 45px;
-            border: 5px solid #edf2f7; /* Cor de fundo clara */
-            border-top: 5px solid #3182ce; /* Azul combinando com o seu card */
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
+        /* Linhas cinzas que representam o texto */
+        .skeleton-line {
+            height: 12px;
+            background: #e2e8f0;
+            /* Cria o efeito de onda/brilho prateado com um toque sutil de azul */
+            background-image: linear-gradient(90deg, #e2e8f0 0px, #f0f4f8 40px, #e2e8f0 80px);
+            background-size: 250px 100%;
+            background-repeat: no-repeat;
+            border-radius: 4px;
+            animation: shimmer 1.2s infinite linear;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Tamanhos diferentes para simular cabeçalho, título e os produtos */
+        .skeleton-line.tag { width: 50px; height: 16px; border-radius: 12px; }
+        .skeleton-line.data { width: 80px; height: 12px; }
+        .skeleton-line.titulo { width: 65%; height: 16px; margin-top: 5px; font-weight: bold; }
+        .skeleton-line.produto-1 { width: 90%; height: 12px; margin-top: 4px; }
+        .skeleton-line.produto-2 { width: 85%; height: 12px; }
+        .skeleton-line.produto-3 { width: 70%; height: 12px; }
+
+        /* Animação que move o brilho da esquerda para a direita */
+        @keyframes shimmer {
+            0% { background-position: -150px 0; }
+            100% { background-position: 150px 0; }
         }
 
+        /* Texto de carregamento centralizado abaixo dos cards */
         .loading-text {
+            text-align: center;
             color: #4a5568;
             font-size: 0.95rem;
             font-weight: bold;
+            margin-top: 10px;
             animation: pulse 1.5s infinite ease-in-out;
         }
 
         @keyframes pulse {
-            0% { opacity: 0.5; }
+            0% { opacity: 0.6; }
             50% { opacity: 1; }
-            100% { opacity: 0.5; }
+            100% { opacity: 0.6; }
         }
-        /* ------------------------------------------------ */
-
-        /* Estilo dos Cartões */
+        /* =================================================== */
+        
+        /* Estilo dos Cartões Reais (Quando carregados) */
         .card {
             background: #ffffff;
             border-radius: 10px;
@@ -83,14 +116,42 @@
     <h2>Histórico de Alertas</h2>
     
     <div id="loading">
-        <div class="spinner"></div>
+        <div class="skeleton-card">
+            <div class="skeleton-header">
+                <div class="skeleton-line tag"></div>
+                <div class="skeleton-line data"></div>
+            </div>
+            <div class="skeleton-line titulo"></div>
+            <div class="skeleton-line produto-1"></div>
+            <div class="skeleton-line produto-2"></div>
+        </div>
+
+        <div class="skeleton-card">
+            <div class="skeleton-header">
+                <div class="skeleton-line tag"></div>
+                <div class="skeleton-line data"></div>
+            </div>
+            <div class="skeleton-line titulo"></div>
+            <div class="skeleton-line produto-1"></div>
+            <div class="skeleton-line produto-3"></div>
+        </div>
+
+        <div class="skeleton-card">
+            <div class="skeleton-header">
+                <div class="skeleton-line tag"></div>
+                <div class="skeleton-line data"></div>
+            </div>
+            <div class="skeleton-line titulo"></div>
+            <div class="skeleton-line produto-1"></div>
+        </div>
+
         <div class="loading-text">Carregando dados da planilha...</div>
     </div>
 
     <div id="historico-container"></div>
 
     <script>
-        // Link do seu Apps Script inserido corretamente no lugar do placeholder
+        // Link do seu Apps Script
         const scriptUrl = 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadHistorico';
 
         async function carregarHistorico() {
@@ -100,7 +161,7 @@
                 
                 const container = document.getElementById('historico-container');
                 
-                // Oculta a animação inteira quando os dados chegam
+                // Esconde todo o bloco de carregamento (os 3 esqueletos + o texto)
                 document.getElementById('loading').style.display = 'none';
 
                 // Inverte o array para mostrar os mais recentes primeiro
@@ -113,14 +174,14 @@
                     else if (item.titulo.includes('VENCIMENTO PRÓXIMO')) card.classList.add('proximo');
                     else if (item.titulo.includes('SEM DATA')) card.classList.add('sem-data');
 
-                    // Formata a data (se o Apps Script enviar um formato de data válido)
+                    // Formata a data
                     const dataFormatada = new Date(item.dataHora).toLocaleString('pt-BR', {
                         day: '2-digit', month: '2-digit', year: 'numeric',
                         hour: '2-digit', minute: '2-digit'
                     });
 
                     // Quebra a mensagem pelos \n para criar linhas separadas
-                    const linhasMensagem = item.mensagem.split('\n').map(linha => `<div class="produto-item">${linha}</div>`).join('');
+                    const linesMensagem = item.mensagem.split('\n').map(linha => `<div class="produto-item">${linha}</div>`).join('');
 
                     card.innerHTML = `
                         <div class="card-header">
@@ -129,15 +190,15 @@
                         </div>
                         <div class="card-title">${item.titulo}</div>
                         <div style="margin-top: 10px;">
-                            ${linhasMensagem}
+                            ${linesMensagem}
                         </div>
                     `;
                     container.appendChild(card);
                 });
 
             } catch (error) {
-                // Caso dê erro, remove o spinner e exibe a mensagem de erro
-                document.getElementById('loading').innerHTML = '<div class="loading-text" style="color: #e53e3e;">Erro ao carregar os dados. Verifique a conexão.</div>';
+                // Se der erro, limpa os esqueletos e mostra o aviso em vermelho
+                document.getElementById('loading').innerHTML = '<div class="loading-text" style="color: #e53e3e; animation: none;">Erro ao carregar os dados. Verifique a conexão.</div>';
                 console.error('Erro:', error);
             }
         }
