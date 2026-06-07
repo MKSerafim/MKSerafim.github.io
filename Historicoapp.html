@@ -13,9 +13,47 @@
             padding: 15px;
         }
         h2 { text-align: center; color: #1a202c; margin-bottom: 20px; font-size: 1.5rem; }
-        .loading { text-align: center; color: #666; font-style: italic; margin-top: 20px; }
+        
         #historico-container { display: flex; flex-direction: column; gap: 15px; }
         
+        /* --- ESTILOS DA NOVA ANIMAÇÃO DE CARREGAMENTO --- */
+        #loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 50vh; /* Ocupa metade da tela para ficar bem centralizado */
+        }
+
+        .spinner {
+            width: 45px;
+            height: 45px;
+            border: 5px solid #edf2f7; /* Cor de fundo clara */
+            border-top: 5px solid #3182ce; /* Azul combinando com o seu card */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #4a5568;
+            font-size: 0.95rem;
+            font-weight: bold;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        /* ------------------------------------------------ */
+
         /* Estilo dos Cartões */
         .card {
             background: #ffffff;
@@ -43,7 +81,12 @@
 <body>
 
     <h2>Histórico de Alertas</h2>
-    <div id="loading" class="loading">Carregando dados da planilha...</div>
+    
+    <div id="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Carregando dados da planilha...</div>
+    </div>
+
     <div id="historico-container"></div>
 
     <script>
@@ -56,6 +99,8 @@
                 const data = await response.json();
                 
                 const container = document.getElementById('historico-container');
+                
+                // Oculta a animação inteira quando os dados chegam
                 document.getElementById('loading').style.display = 'none';
 
                 // Inverte o array para mostrar os mais recentes primeiro
@@ -91,7 +136,8 @@
                 });
 
             } catch (error) {
-                document.getElementById('loading').innerText = 'Erro ao carregar os dados. Verifique a conexão.';
+                // Caso dê erro, remove o spinner e exibe a mensagem de erro
+                document.getElementById('loading').innerHTML = '<div class="loading-text" style="color: #e53e3e;">Erro ao carregar os dados. Verifique a conexão.</div>';
                 console.error('Erro:', error);
             }
         }
