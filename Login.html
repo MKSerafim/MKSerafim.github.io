@@ -14,16 +14,16 @@
         }
 
         body {
-            background-color: #002244; /* Azul escuro corporativo */
+            background-color: #002244;
             background-image: radial-gradient(circle at center, #01466d 0%, #001830 100%);
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            overflow: hidden; /* Evita barras de rolagem */
         }
 
-        /* Cabeçalho com Logo (usando um placeholder em texto, mas você pode trocar por imagem) */
         .header {
             text-align: center;
             margin-bottom: 20px;
@@ -37,7 +37,6 @@
             margin-top: 10px;
         }
 
-        /* Cartão de Login */
         .login-card {
             background-color: white;
             width: 90%;
@@ -81,7 +80,6 @@
             border-color: #003087;
         }
 
-        /* Botão de mostrar senha */
         .toggle-password {
             position: absolute;
             right: 15px;
@@ -95,7 +93,7 @@
 
         .btn-login {
             width: 100%;
-            background-color: #003087; /* Azul Carrefour */
+            background-color: #003087;
             color: white;
             border: none;
             padding: 14px;
@@ -118,6 +116,34 @@
             font-size: 0.75rem;
             text-align: center;
         }
+
+        /* ----- ESTILO DO NOVO AVISO (TOAST) ----- */
+        #aviso-toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #fb131b; /* Vermelho de alerta */
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 10;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+
+        #aviso-toast.mostrar {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+        /* ---------------------------------------- */
     </style>
 </head>
 <body>
@@ -148,8 +174,9 @@
         Versão (1.0) Alfa | DV: Maykom Rodrigues Serafim
     </div>
 
+    <div id="aviso-toast">Mensagem de erro aqui</div>
+
     <script>
-        // Função para mostrar/esconder senha
         function toggleSenha() {
             const inputSenha = document.getElementById('senha');
             const btnToggle = document.querySelector('.toggle-password');
@@ -162,7 +189,17 @@
             }
         }
 
-        // Credenciais do Baserow que você enviou
+        // Função que controla o visual do aviso
+        function mostrarAviso(mensagem) {
+            const toast = document.getElementById("aviso-toast");
+            toast.textContent = mensagem;
+            toast.className = "mostrar";
+            // Esconde o aviso automaticamente após 3.5 segundos
+            setTimeout(function(){ 
+                toast.className = toast.className.replace("mostrar", ""); 
+            }, 3500);
+        }
+
         const TOKEN = "x6rXtkpcBaAYlER6MMDo6Lfd0RSS28Ey";
         const TABLE_ID = "180827";
         const API_URL = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true`;
@@ -173,16 +210,14 @@
             const btn = document.getElementById('btnEntrar');
 
             if (!email || !senha) {
-                alert("Por favor, preencha o e-mail e a senha.");
+                mostrarAviso("Por favor, preencha o e-mail e a senha.");
                 return;
             }
 
-            // Muda o botão para estado de carregamento
             btn.textContent = "CARREGANDO...";
             btn.disabled = true;
 
             try {
-                // Faz a busca no Baserow pesquisando pelo E-mail
                 const resposta = await fetch(`${API_URL}&search=${encodeURIComponent(email)}`, {
                     headers: {
                         "Authorization": `Token ${TOKEN}`
@@ -191,19 +226,16 @@
 
                 const dados = await resposta.json();
 
-                // Verifica se encontrou algum usuário
                 if (dados.count === 0) {
-                    alert("E-mail ou senha incorretos.");
+                    mostrarAviso("E-mail ou senha incorretos.");
                     btn.textContent = "ENTRAR";
                     btn.disabled = false;
                     return;
                 }
 
-                // Procura na resposta a linha que tem o e-mail E a senha exatos
                 const usuario = dados.results.find(row => row.Email === email && row.Senha === senha);
 
                 if (usuario) {
-                    // Trata a foto caso seja um anexo (Array) no Baserow ou apenas um Link de texto
                     let urlFoto = "";
                     if (typeof usuario.Foto === "string") {
                         urlFoto = usuario.Foto;
@@ -211,8 +243,6 @@
                         urlFoto = usuario.Foto[0].url;
                     }
 
-                    // Monta a LISTA na EXATA ordem que a sua Tela_inicial espera:
-                    // 1: Nome, 2: Email, 3: DRT, 4: Cargo, 5: Foto, 6: Loja, 7: ID
                     const listaParaKodular = [
                         usuario.Nome || "Não informado",
                         usuario.Email || email,
@@ -220,30 +250,27 @@
                         usuario.Cargo || "Sem cargo",
                         urlFoto,
                         usuario.Loja || "Sem loja",
-                        usuario.ID || usuario.id // Pega a coluna ID ou o ID interno do Baserow
+                        usuario.ID || usuario.id
                     ];
 
-                    // Transforma a lista em formato de texto (JSON) para enviar pela linha secreta
                     const dadosEmTexto = JSON.stringify(listaParaKodular);
 
-                    // Envia para o Kodular
                     if (window.AppInventor) {
                         window.AppInventor.setWebViewString(dadosEmTexto);
                     } else {
-                        // Se abrir no computador só para testar:
-                        console.log("Sucesso! Dados que seriam enviados ao app:", dadosEmTexto);
-                        alert("Login efetuado com sucesso!");
+                        console.log("Sucesso:", dadosEmTexto);
+                        mostrarAviso("Login efetuado com sucesso!");
                         btn.textContent = "ENTRAR";
                         btn.disabled = false;
                     }
                 } else {
-                    alert("E-mail ou senha incorretos.");
+                    mostrarAviso("E-mail ou senha incorretos.");
                     btn.textContent = "ENTRAR";
                     btn.disabled = false;
                 }
 
             } catch (erro) {
-                alert("Erro de conexão. Verifique sua internet.");
+                mostrarAviso("Erro de conexão. Verifique sua internet.");
                 console.error(erro);
                 btn.textContent = "ENTRAR";
                 btn.disabled = false;
