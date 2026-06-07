@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Notificações</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            padding: 15px;
+        }
+        h2 { text-align: center; color: #1a202c; margin-bottom: 20px; font-size: 1.5rem; }
+        .loading { text-align: center; color: #666; font-style: italic; margin-top: 20px; }
+        #historico-container { display: flex; flex-direction: column; gap: 15px; }
+        
+        /* Estilo dos Cartões */
+        .card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #cbd5e0;
+        }
+        
+        /* Cores baseadas no tipo de alerta */
+        .card.vencidos { border-left-color: #e53e3e; } /* Vermelho */
+        .card.proximo { border-left-color: #3182ce; } /* Azul */
+        .card.sem-data { border-left-color: #ecc94b; } /* Amarelo */
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #edf2f7; padding-bottom: 8px;}
+        .card-title { font-weight: bold; font-size: 0.95rem; color: #2d3748; }
+        .card-date { font-size: 0.8rem; color: #718096; }
+        .card-origin { background: #edf2f7; padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; color: #4a5568;}
+        
+        /* Formatação da lista de produtos */
+        .produto-item { font-size: 0.85rem; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; }
+        .produto-item:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+
+    <h2>Histórico de Alertas</h2>
+    <div id="loading" class="loading">Carregando dados da planilha...</div>
+    <div id="historico-container"></div>
+
+    <script>
+        // Substitua pelo link do seu Apps Script
+        const scriptUrl = 'COLOQUE_AQUI_A_URL_DO_SEU_WEB_APP?func=ReadHistorico';
+
+        async function carregarHistorico() {
+            try {
+                const response = await fetch(scriptUrl);
+                const data = await response.json();
+                
+                const container = document.getElementById('historico-container');
+                document.getElementById('loading').style.display = 'none';
+
+                // Inverte o array para mostrar os mais recentes primeiro
+                data.reverse().forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    
+                    // Define a cor do card baseado no título
+                    if (item.titulo.includes('VENCIDOS')) card.classList.add('vencidos');
+                    else if (item.titulo.includes('VENCIMENTO PRÓXIMO')) card.classList.add('proximo');
+                    else if (item.titulo.includes('SEM DATA')) card.classList.add('sem-data');
+
+                    // Formata a data (se o Apps Script enviar um formato de data válido)
+                    const dataFormatada = new Date(item.dataHora).toLocaleString('pt-BR', {
+                        day: '2-digit', month: '2-digit', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit'
+                    });
+
+                    // Quebra a mensagem pelos \n para criar linhas separadas
+                    const linhasMensagem = item.mensagem.split('\n').map(linha => `<div class="produto-item">${linha}</div>`).join('');
+
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <span class="card-origin">${item.origem}</span>
+                            <span class="card-date">${dataFormatada}</span>
+                        </div>
+                        <div class="card-title">${item.titulo}</div>
+                        <div style="margin-top: 10px;">
+                            ${linhasMensagem}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+                document.getElementById('loading').innerText = 'Erro ao carregar os dados. Verifique a conexão.';
+                console.error('Erro:', error);
+            }
+        }
+
+        // Inicia o carregamento assim que a página abre
+        carregarHistorico();
+    </script>
+</body>
+</html>
