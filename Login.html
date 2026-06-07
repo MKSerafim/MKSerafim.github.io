@@ -21,7 +21,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden; 
+            overflow: hidden; /* Evita barras de rolagem */
         }
 
         .header {
@@ -66,8 +66,7 @@
             font-weight: 500;
         }
 
-        .input-group input[type="email"],
-        .input-group input[type="password"] {
+        .input-group input {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid #ccc;
@@ -92,29 +91,6 @@
             border: none;
         }
 
-        /* ----- ESTILO DOS TERMOS E CONDIÇÕES ----- */
-        .termos-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            color: #333;
-        }
-
-        .termos-group input[type="checkbox"] {
-            margin-right: 10px;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .termos-group a {
-            color: #003087;
-            text-decoration: underline;
-            font-weight: 500;
-        }
-        /* ----------------------------------------- */
-
         .btn-login {
             width: 100%;
             background-color: #003087;
@@ -126,6 +102,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-top: 10px;
         }
 
         .btn-login:disabled {
@@ -140,10 +117,11 @@
             text-align: center;
         }
 
+        /* ----- ESTILO DO NOVO AVISO (TOAST) ----- */
         #aviso-toast {
             visibility: hidden;
             min-width: 250px;
-            background-color: #fb131b; 
+            background-color: #fb131b; /* Vermelho de alerta */
             color: #fff;
             text-align: center;
             border-radius: 8px;
@@ -165,6 +143,7 @@
             opacity: 1;
             bottom: 50px;
         }
+        /* ---------------------------------------- */
     </style>
 </head>
 <body>
@@ -186,11 +165,6 @@
             <label for="senha">Senha</label>
             <input type="password" id="senha" placeholder="••••••••••" required>
             <button type="button" class="toggle-password" onclick="toggleSenha()">Mostrar</button>
-        </div>
-
-        <div class="termos-group">
-            <input type="checkbox" id="termos">
-            <label for="termos">Aceito os <a href="https://mkserafim.github.io/Termos.html" target="_blank">Termos e Condições</a></label>
         </div>
 
         <button class="btn-login" id="btnEntrar" onclick="fazerLogin()">ENTRAR</button>
@@ -215,10 +189,12 @@
             }
         }
 
+        // Função que controla o visual do aviso
         function mostrarAviso(mensagem) {
             const toast = document.getElementById("aviso-toast");
             toast.textContent = mensagem;
             toast.className = "mostrar";
+            // Esconde o aviso automaticamente após 3.5 segundos
             setTimeout(function(){ 
                 toast.className = toast.className.replace("mostrar", ""); 
             }, 3500);
@@ -231,18 +207,10 @@
         async function fazerLogin() {
             const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value.trim();
-            const termosAceitos = document.getElementById('termos').checked;
             const btn = document.getElementById('btnEntrar');
 
-            // Verifica se os campos estão preenchidos
             if (!email || !senha) {
                 mostrarAviso("Por favor, preencha o e-mail e a senha.");
-                return;
-            }
-
-            // Verifica se os termos foram aceitos
-            if (!termosAceitos) {
-                mostrarAviso("Você precisa aceitar os Termos e Condições para entrar.");
                 return;
             }
 
