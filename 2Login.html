@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Principal - Gestão de Riscos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #001830;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* ----- BARRA SUPERIOR (Perfil do Usuário) ----- */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            padding: 20px 15px;
+            background: linear-gradient(to bottom, #01466d, #002244);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .profile-pic-container {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 2px solid #0056b3;
+            overflow: hidden;
+            margin-right: 15px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info h2 {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #a0c0d0;
+        }
+
+        .profile-info h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            margin-top: 2px;
+        }
+
+        /* ----- ABAS DE NAVEGAÇÃO ----- */
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            padding: 15px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+
+        .tab-btn:active {
+            transform: scale(0.95);
+        }
+
+        .tab-inicio {
+            background-color: #28a745; /* Verde do Início */
+        }
+
+        .tab-perfil {
+            background-color: #17a2b8; /* Azul do Perfil */
+        }
+
+        /* ----- CONTEÚDO / LISTA DE LOJAS ----- */
+        .main-content {
+            padding: 10px 15px 30px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* BANNER EM DESTAQUE (Washington Luiz) */
+        .featured-banner {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            background-color: #002244;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .featured-banner:active {
+            transform: scale(0.98);
+        }
+
+        .featured-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+        }
+
+        .featured-overlay-btn {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #0056b3, #003087);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-align: center;
+            width: 85%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* LISTA DAS OUTRAS LOJAS */
+        .store-item {
+            display: flex;
+            align-items: center;
+            background-color: #002244;
+            padding: 12px 15px;
+            border-radius: 50px; /* Mantém o visual de pílula da sua foto */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .store-item:hover {
+            background-color: #002d5c;
+        }
+
+        .store-item:active {
+            transform: scale(0.98);
+        }
+
+        .store-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #17a2b8;
+        }
+
+        .store-btn-text {
+            flex: 1;
+            background: linear-gradient(135deg, #0056b3, #003087);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: inset 0 1px 3px rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-header">
+        <div class="profile-pic-container">
+            <img id="user-pic" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" alt="Foto de Perfil">
+        </div>
+        <div class="profile-info">
+            <h2>Olá 😁</h2>
+            <h1 id="user-name">Usuário</h1>
+        </div>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="tab-btn tab-inicio" onclick="alert('Você já está no Início')">Início</button>
+        <button class="tab-btn tab-perfil" onclick="alert('Tela de Perfil em desenvolvimento')">Perfil</button>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="featured-banner" onclick="selecionarLoja('RJD - Hiper Washington Luiz')">
+            <img src="carrefour_fachada.jpg" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80'" alt="Carrefour">
+            <div class="featured-overlay-btn">RJD - Hiper Washington Luiz</div>
+        </div>
+
+        <div class="store-item" onclick="selecionarLoja('HMC - Hiper Macaé')">
+            <div class="store-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <div class="store-btn-text">HMC - Hiper Macaé</div>
+        </div>
+
+        <div class="store-item" onclick="selecionarLoja('HCG - Hiper Campos dos Goytacazes')">
+            <div class="store-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <div class="store-btn-text">HCG - Hiper Campos dos Goytacazes</div>
+        </div>
+
+        <div class="store-item" onclick="selecionarLoja('BHP - Hiper Pampulha')">
+            <div class="store-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <div class="store-btn-text">BHP - Hiper Pampulha</div>
+        </div>
+
+        <div class="store-item" onclick="selecionarLoja('JFO - Hiper Juiz de Fora')">
+            <div class="store-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <div class="store-btn-text">JFO - Hiper Juiz de Fora</div>
+        </div>
+
+        <div class="store-item" onclick="selecionarLoja('VVS - Hiper Vila Velha')">
+            <div class="store-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <div class="store-btn-text">VVS - Hiper Vila Velha</div>
+        </div>
+
+    </div>
+
+    <script>
+        // Carrega os dados assim que entra na tela
+        window.onload = function() {
+            const dadosSalvos = localStorage.getItem("dadosUsuarioLogado");
+
+            if (dadosSalvos) {
+                const listaUsuario = JSON.parse(dadosSalvos);
+                
+                // Extrai Nome (Índice 0) e URL da Foto (Índice 4)
+                const nomeUsuario = listaUsuario[0];
+                const urlFoto = listaUsuario[4];
+
+                // Atualiza o HTML dinamicamente
+                document.getElementById("user-name").textContent = nomeUsuario;
+                
+                if (urlFoto && urlFoto.trim() !== "") {
+                    document.getElementById("user-pic").src = urlFoto;
+                }
+            } else {
+                // Segurança: Se for acessado sem login, volta para a raiz
+                window.location.href = "index.html";
+            }
+        };
+
+        // Função executada ao clicar em qualquer loja
+        function selecionarLoja(nomeLoja) {
+            const dadosSalvos = localStorage.getItem("dadosUsuarioLogado");
+            
+            if (dadosSalvos) {
+                let listaUsuario = JSON.parse(dadosSalvos);
+                
+                // Aqui você decide: Você pode substituir a loja padrão do usuário da lista pela selecionada
+                listaUsuario[5] = nomeLoja; // Índice 5 é o campo "Loja" no seu Array
+
+                // Atualiza o dado no localStorage com a nova loja escolhida
+                const dadosAtualizados = JSON.stringify(listaUsuario);
+                localStorage.setItem("dadosUsuarioLogado", dadosAtualizados);
+
+                // --- LOGICA DE DIRECIONAMENTO ---
+                // Se você quiser que o clique na loja já ENVIE imediatamente pro Kodular:
+                if (window.AppInventor) {
+                    window.AppInventor.setWebViewString(dadosAtualizados);
+                } else {
+                    alert("Loja selecionada: " + nomeLoja + "\nDados prontos para o Kodular!");
+                    // Se você for criar mais uma tela web intermédia antes do Kodular, mude aqui:
+                    // window.location.href = "proxima_tela.html";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
