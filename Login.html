@@ -27,6 +27,36 @@
             padding-bottom: 30px;
         }
 
+        /* ----- Botões Superiores (Topo Direito) ----- */
+        .top-bar-actions {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 15px;
+            z-index: 50;
+        }
+
+        .btn-top-icon {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-top-icon:hover {
+            opacity: 1;
+        }
+
+        .btn-top-icon:active {
+            transform: scale(0.9);
+        }
+
         /* ----- Cabeçalho ----- */
         .header {
             text-align: center;
@@ -184,35 +214,81 @@
             z-index: 10;
         }
 
-        /* ----- Toast de Aviso ----- */
-        #aviso-toast {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: #fb131b;
-            color: #fff;
-            text-align: center;
-            border-radius: 8px;
-            padding: 16px;
+        /* ----- Janela Alerta (Modal Customizado) ----- */
+        .modal-overlay {
             position: fixed;
-            z-index: 30;
-            left: 50%;
-            bottom: 20px;
-            transform: translateX(-50%);
-            font-size: 0.95rem;
-            font-weight: 500;
-            box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
             opacity: 0;
-            transition: opacity 0.3s, bottom 0.3s;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
-        #aviso-toast.mostrar {
-            visibility: visible;
+        .modal-overlay.active {
             opacity: 1;
-            bottom: 50px;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background-color: white;
+            width: 85%;
+            max-width: 320px;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-box p {
+            color: #333;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 22px;
+            font-weight: 500;
+        }
+
+        .btn-modal-ok {
+            background-color: #003087;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-modal-ok:hover {
+            background-color: #001f5c;
         }
     </style>
 </head>
 <body>
+
+    <div class="top-bar-actions">
+        <button class="btn-top-icon" onclick="mostrarAviso('Central de Ajuda em desenvolvimento.')" title="Ajuda">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+        <button class="btn-top-icon" onclick="window.location.reload()" title="Recarregar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        </button>
+    </div>
 
     <div class="header">
         <img src="logocarrefour.png" alt="Carrefour Logo"> 
@@ -253,7 +329,12 @@
         Versão (1.0) Alfa | DV: Maykom Rodrigues Serafim
     </div>
 
-    <div id="aviso-toast">Mensagem de erro aqui</div>
+    <div id="custom-modal" class="modal-overlay">
+        <div class="modal-box">
+            <p id="modal-text">Mensagem de erro aqui</p>
+            <button class="btn-modal-ok" onclick="fecharModal()">OK</button>
+        </div>
+    </div>
 
     <script>
         function toggleSenha() {
@@ -268,13 +349,18 @@
             }
         }
 
+        // Nova função que abre a janelinha bonita
         function mostrarAviso(mensagem) {
-            const toast = document.getElementById("aviso-toast");
-            toast.textContent = mensagem;
-            toast.className = "mostrar";
-            setTimeout(function(){ 
-                toast.className = toast.className.replace("mostrar", ""); 
-            }, 3500);
+            const modal = document.getElementById("custom-modal");
+            const modalText = document.getElementById("modal-text");
+            modalText.textContent = mensagem;
+            modal.classList.add("active");
+        }
+
+        // Função para fechar a janelinha ao clicar em OK
+        function fecharModal() {
+            const modal = document.getElementById("custom-modal");
+            modal.classList.remove("active");
         }
 
         const TOKEN = "x6rXtkpcBaAYlER6MMDo6Lfd0RSS28Ey";
