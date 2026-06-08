@@ -25,7 +25,6 @@
             overflow-y: auto;
         }
 
-        /* Topbar com Logo */
         .topbar {
             width: 100%;
             max-width: 400px;
@@ -47,7 +46,6 @@
             color: #ffffff;
         }
 
-        /* Cartão de Perfil do Usuário Simplificado */
         .profile-card {
             background-color: rgba(255, 255, 255, 0.95);
             width: 100%;
@@ -90,7 +88,6 @@
             margin-top: 2px;
         }
 
-        /* Grade de Módulos/Botões */
         .menu-grid {
             width: 100%;
             max-width: 400px;
@@ -99,7 +96,6 @@
             gap: 15px;
         }
 
-        /* Botão Premium do RJD */
         .menu-btn {
             background: linear-gradient(135deg, #003087 0%, #001830 100%);
             border: 1px solid rgba(255,255,255,0.1);
@@ -145,7 +141,6 @@
             margin-top: 2px;
         }
 
-        /* Rodapé */
         .footer-text {
             margin-top: auto;
             padding-top: 30px;
@@ -187,7 +182,6 @@
     </div>
 
     <script>
-        // Mantém a string JSON completa intacta para a ponte de dados
         let dadosOriginaisSalvos = "";
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -198,11 +192,10 @@
             if (window.AppInventor) {
                 const dadosTexto = window.AppInventor.getWebViewString();
                 if (dadosTexto) {
-                    dadosOriginaisSalvos = dadosTexto; // Salvando tudo!
+                    dadosOriginaisSalvos = dadosTexto;
                     importarDadosDoApp(dadosTexto);
                 }
             } else {
-                // Modo de testes local
                 document.getElementById('userNome').textContent = "Maykom Rodrigues";
                 document.getElementById('userFoto').src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
             }
@@ -212,7 +205,6 @@
             try {
                 const listaUsuario = JSON.parse(stringJson);
 
-                // Atualiza somente os dois elementos visuais da tela
                 document.getElementById('userNome').textContent = listaUsuario[0] || "Não informado";
                 
                 if (listaUsuario[4] && listaUsuario[4].trim() !== "") {
@@ -222,21 +214,23 @@
                 }
             } catch (erro) {
                 console.error("Erro ao processar dados do usuário:", erro);
-                document.getElementById('userNome').textContent = "Erro ao carregar dados";
+                
+                // MUDANÇA AQUI: Mostra o texto real recebido para acharmos o erro
+                document.getElementById('userNome').textContent = stringJson;
+                document.getElementById('userNome').style.fontSize = "11px";
+                document.getElementById('userNome').style.wordBreak = "break-all";
             }
         }
 
         function dispararRJD() {
             if (window.AppInventor) {
-                // Monta o pacote levando a ação e os dados completos salvos em segundo plano
                 const payload = {
                     acao: "abrir_tela_rjd",
                     dadosUsuario: dadosOriginaisSalvos
                 };
-                
                 window.AppInventor.setWebViewString(JSON.stringify(payload));
             } else {
-                alert("Botão RJD clicado! Payload contendo todos os dados ocultos foi gerado.");
+                alert("Botão RJD clicado!");
             }
         }
     </script>
