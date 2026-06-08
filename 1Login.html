@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Gestão de Riscos e Perdas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #002244;
+            background-image: radial-gradient(circle at top, #01466d 0%, #001830 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto; 
+            overflow-x: hidden;
+            padding-bottom: 30px;
+        }
+
+        /* ----- Botões Superiores (Topo Direito) ----- */
+        .top-bar-actions {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 15px;
+            z-index: 50;
+        }
+
+        .btn-top-icon {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-top-icon:hover {
+            opacity: 1;
+        }
+
+        .btn-top-icon:active {
+            transform: scale(0.9);
+        }
+
+        /* ----- Cabeçalho ----- */
+        .header {
+            text-align: center;
+            margin-top: 50px; 
+            margin-bottom: 5px;
+            color: white;
+            z-index: 10;
+        }
+
+        .header img {
+            width: 50px;
+            height: auto;
+            margin-bottom: 5px;
+        }
+
+        .header h1 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-top: 5px;
+        }
+
+        /* ----- Contêiner dos Robôs Ajustado para 597x400 ----- */
+        .robot-container {
+            width: 100%;
+            max-width: 320px;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            margin-bottom: -20px;
+        }
+
+        .robot-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ----- Cartão de Login ----- */
+        .login-card {
+            background-color: white;
+            width: 90%;
+            max-width: 360px;
+            border-radius: 12px;
+            padding: 25px 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            z-index: 10;
+            position: relative;
+        }
+
+        .login-card h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #a0a0a0;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+            color: #555;
+        }
+
+        .input-group input:focus {
+            border-color: #003087;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 35px;
+            cursor: pointer;
+            color: #666;
+            font-size: 0.9rem;
+            background: none;
+            border: none;
+        }
+
+        /* ----- Termos e Condições ----- */
+        .terms-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        .terms-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .terms-link {
+            color: #333;
+            text-decoration: underline;
+        }
+
+        /* ----- Botão e Links ----- */
+        .btn-login {
+            width: 100%;
+            background-color: #003087;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px; 
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-login:disabled {
+            background-color: #7f98c2;
+        }
+
+        .forgot-password-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .forgot-password {
+            color: #003087;
+            text-decoration: underline;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        /* ----- Rodapé ----- */
+        .footer-text {
+            margin-top: auto;
+            padding-top: 30px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.75rem;
+            text-align: center;
+            z-index: 10;
+        }
+
+        /* ----- Janela Alerta (Modal Customizado) ----- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background-color: white;
+            width: 85%;
+            max-width: 320px;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-box p {
+            color: #333;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 22px;
+            font-weight: 500;
+        }
+
+        .btn-modal-ok {
+            background-color: #003087;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-modal-ok:hover {
+            background-color: #001f5c;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar-actions">
+        <button class="btn-top-icon" onclick="mostrarAviso('Central de Ajuda em desenvolvimento.')" title="Ajuda">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+        <button class="btn-top-icon" onclick="window.location.reload()" title="Recarregar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        </button>
+    </div>
+
+    <div class="header">
+        <img src="logocarrefour.png" alt="Carrefour Logo"> 
+        <h1>SISTEMA DE GESTÃO DE RISCOS E PERDAS</h1>
+    </div>
+
+    <div class="robot-container">
+        <img src="bonequinhos.png" alt="Bonecos de Risco e Perda">
+    </div>
+
+    <div class="login-card">
+        <h2>Entrar</h2>
+         
+        <div class="input-group">
+            <label for="email">Endereço de e-mail</label>
+            <input type="email" id="email" placeholder="exemplo@carrefour.com" required>
+        </div>
+
+        <div class="input-group">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" placeholder="••••••••••" required>
+            <button type="button" class="toggle-password" onclick="toggleSenha()">Mostrar</button>
+        </div>
+
+        <div class="terms-group">
+            <input type="checkbox" id="termos">
+            <label for="termos">Aceito os <a href="Termos.html" class="terms-link">Termos e Condições</a></label>
+        </div>
+
+        <button class="btn-login" id="btnEntrar" onclick="fazerLogin()">ENTRAR</button>
+
+        <div class="forgot-password-container">
+            <a href="#" class="forgot-password" onclick="mostrarAviso('Função de recuperação em desenvolvimento.')">Esqueci a senha?</a>
+        </div>
+    </div>
+
+    <div class="footer-text">
+        Versão (1.0) Alfa | DV: Maykom Rodrigues Serafim
+    </div>
+
+    <div id="custom-modal" class="modal-overlay">
+        <div class="modal-box">
+            <p id="modal-text">Mensagem de erro aqui</p>
+            <button class="btn-modal-ok" onclick="fecharModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleSenha() {
+            const inputSenha = document.getElementById('senha');
+            const btnToggle = document.querySelector('.toggle-password');
+            if (inputSenha.type === 'password') {
+                inputSenha.type = 'text';
+                btnToggle.textContent = 'Ocultar';
+            } else {
+                inputSenha.type = 'password';
+                btnToggle.textContent = 'Mostrar';
+            }
+        }
+
+        function mostrarAviso(mensagem) {
+            const modal = document.getElementById("custom-modal");
+            const modalText = document.getElementById("modal-text");
+            modalText.textContent = message = mensagem;
+            modal.classList.add("active");
+        }
+
+        function fecharModal() {
+            const modal = document.getElementById("custom-modal");
+            modal.classList.remove("active");
+        }
+
+        const TOKEN = "x6rXtkpcBaAYlER6MMDo6Lfd0RSS28Ey";
+        const TABLE_ID = "180827";
+        const API_URL = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true`;
+
+        async function fazerLogin() {
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+            const termosChecados = document.getElementById('termos').checked;
+            const btn = document.getElementById('btnEntrar');
+
+            if (!email || !senha) {
+                mostrarAviso("Por favor, preencha o e-mail e a senha.");
+                return;
+            }
+
+            if (!termosChecados) {
+                mostrarAviso("Você precisa aceitar os Termos e Condições para entrar.");
+                return;
+            }
+
+            btn.textContent = "CARREGANDO...";
+            btn.disabled = true;
+
+            try {
+                const resposta = await fetch(`${API_URL}&search=${encodeURIComponent(email)}`, {
+                    headers: {
+                        "Authorization": `Token ${TOKEN}`
+                    }
+                });
+
+                const dados = await resposta.json();
+
+                if (dados.count === 0) {
+                    mostrarAviso("E-mail ou senha incorretos.");
+                    btn.textContent = "ENTRAR";
+                    btn.disabled = false;
+                    return;
+                }
+
+                const usuario = dados.results.find(row => row.Email === email && row.Senha === senha);
+
+                if (usuario) {
+                    let urlFoto = "";
+                    if (typeof usuario.Foto === "string") {
+                        urlFoto = usuario.Foto;
+                    } else if (Array.isArray(usuario.Foto) && usuario.Foto.length > 0) {
+                        urlFoto = usuario.Foto[0].url;
+                    }
+
+                    const listaParaKodular = [
+                        usuario.Nome || "Não informado",
+                        usuario.Email || email,
+                        usuario.DRT || "Sem DRT",
+                        usuario.Cargo || "Sem cargo",
+                        urlFoto,
+                        usuario.Loja || "Sem loja",
+                        usuario.ID || usuario.id
+                    ];
+
+                    const dadosEmTexto = JSON.stringify(listaParaKodular);
+
+                    // SALVA OS DADOS NO NAVEGADOR (FICA GUARDADO PARA AS PRÓXIMAS TELAS)
+                    localStorage.setItem("dadosUsuarioLogado", dadosEmTexto);
+
+                    mostrarAviso("Login efetuado com sucesso! Entrando...");
+
+                    // Aguarda 1.5 segundos para o usuário ver o aviso e depois muda de página
+                    setTimeout(() => {
+                        window.location.href = "menu.html"; 
+                    }, 1500);
+
+                } else {
+                    mostrarAviso("E-mail ou senha incorretos.");
+                    btn.textContent = "ENTRAR";
+                    btn.disabled = false;
+                }
+
+            } catch (erro) {
+                mostrarAviso("Erro de conexão. Verifique sua internet.");
+                console.error(erro);
+                btn.textContent = "ENTRAR";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
