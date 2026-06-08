@@ -367,27 +367,6 @@
         const TABLE_ID = "180827";
         const API_URL = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true`;
 
-        // --- CORREÇÃO DO BUG DO TECLADO (AUTOFILL / SAMSUNG PASS) ---
-document.addEventListener("DOMContentLoaded", () => {
-    const emailInput = document.getElementById('email');
-    const senhaInput = document.getElementById('senha');
-
-    function fecharTecladoAutofill(e) {
-        // O Android dispara 'insertReplacementText' ou evento sem tipo quando o gerenciador de senhas age
-        if (e.inputType === 'insertReplacementText' || !e.inputType) {
-            // Um leve delay de 50ms para garantir que o dado foi inserido antes de tirar o foco
-            setTimeout(() => {
-                emailInput.blur();
-                senhaInput.blur();
-            }, 50);
-        }
-    }
-
-    // Monitora ambos os campos para recolher o teclado assim que a digital preencher os dados
-    emailInput.addEventListener('input', fecharTecladoAutofill);
-    senhaInput.addEventListener('input', fecharTecladoAutofill);
-});
-
         async function fazerLogin() {
             const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value.trim();
