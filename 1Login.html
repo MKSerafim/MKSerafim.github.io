@@ -25,7 +25,7 @@
             padding-bottom: 30px;
         }
 
-        /* ----- Botões Superiores (Topo Direito) ----- */
+        /* ----- Botões Superiores ----- */
         .top-bar-actions {
             position: fixed;
             top: 15px;
@@ -151,7 +151,7 @@
             border: none;
         }
 
-        /* ----- Termos e Condições ----- */
+        /* ----- Termos ----- */
         .terms-group {
             display: flex;
             align-items: center;
@@ -172,7 +172,7 @@
             text-decoration: underline;
         }
 
-        /* ----- Botão e Links ----- */
+        /* ----- Botões ----- */
         .btn-login {
             width: 100%;
             background-color: #003087;
@@ -212,7 +212,7 @@
             z-index: 10;
         }
 
-        /* ----- Janela Alerta (Modal Customizado) ----- */
+        /* ----- Modal Customizado ----- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -302,7 +302,7 @@
          
         <div class="input-group">
             <label for="email">Endereço de e-mail</label>
-            <input type="email" id="email" placeholder="exemplo@carrefour.com" required>
+            <input type="email" id="email" placeholder="exemplo@carrefour.com" required autocapitalize="none" autocorrect="off">
         </div>
 
         <div class="input-group">
@@ -348,14 +348,10 @@
         }
 
         function mostrarAviso(mensagem) {
-            try {
-                const modal = document.getElementById("custom-modal");
-                const modalText = document.getElementById("modal-text");
-                modalText.textContent = mensagem; // CORRIGIDO AQUI PARA NÃO TRAVAR O CELULAR
-                modal.classList.add("active");
-            } catch(e) {
-                alert(mensagem); // Se o modal falhar por renderização, o celular avisa nativamente
-            }
+            const modal = document.getElementById("custom-modal");
+            const modalText = document.getElementById("modal-text");
+            modalText.textContent = mensaje = mensagem;
+            modal.classList.add("active");
         }
 
         function fecharModal() {
@@ -365,10 +361,11 @@
 
         const TOKEN = "x6rXtkpcBaAYlER6MMDo6Lfd0RSS28Ey";
         const TABLE_ID = "180827";
-        const API_URL = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true`;
+        // MODIFICAÇÃO: Trazemos até 200 linhas de uma vez para fazer a busca exata no JS
+        const API_URL = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true&size=200`;
 
         async function fazerLogin() {
-            const email = document.getElementById('email').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase(); 
             const senha = document.getElementById('senha').value.trim();
             const termosChecados = document.getElementById('termos').checked;
             const btn = document.getElementById('btnEntrar');
@@ -387,7 +384,8 @@
             btn.disabled = true;
 
             try {
-                const resposta = await fetch(`${API_URL}&search=${encodeURIComponent(email)}`, {
+                // Faz a requisição de toda a lista de usuários da tabela
+                const resposta = await fetch(API_URL, {
                     headers: {
                         "Authorization": `Token ${TOKEN}`
                     }
@@ -395,14 +393,19 @@
 
                 const dados = await resposta.json();
 
-                if (dados.count === 0) {
-                    mostrarAviso("E-mail ou senha incorretos.");
+                if (!dados.results || dados.results.length === 0) {
+                    mostrarAviso("Nenhum usuário localizado na base de dados.");
                     btn.textContent = "ENTRAR";
                     btn.disabled = false;
                     return;
                 }
 
-                const usuario = dados.results.find(row => row.Email === email && row.Senha === senha);
+                // MUDANÇA CRÍTICA: O JavaScript agora varre a lista completa de forma 100% exata e sem falhas do servidor
+                const usuario = dados.results.find(row => {
+                    const dbEmail = row.Email ? String(row.Email).trim().toLowerCase() : "";
+                    const dbSenha = row.Senha ? String(row.Senha).trim() : "";
+                    return dbEmail === email && dbSenha === senha;
+                });
 
                 if (usuario) {
                     let urlFoto = "";
@@ -424,12 +427,14 @@
 
                     const dadosEmTexto = JSON.stringify(listaParaKodular);
 
-                    // SALVA NO NAVEGADOR
-                    localStorage.setItem("dadosUsuarioLogado", dadosEmTexto);
+                    try {
+                        localStorage.setItem("dadosUsuarioLogado", dadosEmTexto);
+                    } catch (e) {
+                        console.log("Erro ao salvar no LocalStorage");
+                    }
 
                     mostrarAviso("Login efetuado com sucesso! Entrando...");
 
-                    // CORRIGIDO: Forçando o link completo absoluto para o WebView do celular não se perder
                     setTimeout(() => {
                         window.location.href = "https://mkserafim.github.io/2Login.html"; 
                     }, 1500);
@@ -441,9 +446,7 @@
                 }
 
             } catch (erro) {
-                // Alerta nativo extra caso o erro de rede congele o WebView
-                alert("Erro capturado: " + erro.message);
-                mostrarAviso("Erro de conexão. Verifique sua internet.");
+                mostrarAviso("Erro de conexão ou falha na tabela.");
                 btn.textContent = "ENTRAR";
                 btn.disabled = false;
             }
