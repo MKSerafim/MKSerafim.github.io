@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário - Gestão de Riscos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #001830;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-bottom: 30px;
+        }
+
+        /* ----- BARRA SUPERIOR (Igual à tela 2 para manter o padrão) ----- */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            padding: 20px 15px;
+            background: linear-gradient(to bottom, #01466d, #002244);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .profile-pic-container {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 2px solid #0056b3;
+            overflow: hidden;
+            margin-right: 15px;
+            background-color: #333;
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info h2 {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #a0c0d0;
+        }
+
+        .profile-info h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        /* ----- NAVEGAÇÃO ----- */
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            padding: 15px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            text-decoration: none;
+        }
+
+        .tab-inicio { background-color: #28a745; opacity: 0.7; } /* Opacidade para mostrar que não é a ativa */
+        .tab-perfil { background-color: #17a2b8; } /* Ativa */
+
+        /* ----- HERO DE PERFIL (FOTO GRANDE E NOME) ----- */
+        .hero-section {
+            display: flex;
+            align-items: center;
+            padding: 20px 15px;
+            gap: 20px;
+        }
+
+        .hero-section .large-pic {
+            width: 130px;
+            height: 130px;
+            border-radius: 12px;
+            border: 3px solid #0056b3;
+            object-fit: cover;
+            background-color: #002244;
+        }
+
+        .hero-section .hero-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            flex: 1;
+        }
+
+        /* ----- BOTÕES DE AÇÃO ----- */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            padding: 0 15px 20px 15px;
+        }
+
+        .btn-action {
+            flex: 1;
+            background: linear-gradient(135deg, #0056b3, #003087);
+            color: white;
+            padding: 12px;
+            border-radius: 25px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+        }
+
+        /* ----- SEÇÃO DE INFORMAÇÕES PESSOAIS ----- */
+        .info-header {
+            background-color: #37474f;
+            padding: 12px 15px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .info-list {
+            padding: 0 15px;
+        }
+
+        .info-item {
+            margin-bottom: 18px;
+            border-bottom: 2px solid #17a2b8; /* Linha azul característica da sua foto */
+            padding-bottom: 5px;
+        }
+
+        .info-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 3px;
+        }
+
+        .info-value {
+            display: block;
+            font-size: 1rem;
+            color: white;
+            opacity: 0.9;
+        }
+
+        /* Rodapé fixo ou final da página */
+        .footer-text {
+            text-align: center;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.3);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-header">
+        <div class="profile-pic-container">
+            <img id="header-pic" src="avatar.png" alt="Perfil">
+        </div>
+        <div class="profile-info">
+            <h2>Olá 😁</h2>
+            <h1 id="header-name">Carregando...</h1>
+        </div>
+    </div>
+
+    <div class="nav-tabs">
+        <a href="https://mkserafim.github.io/2Login.html" class="tab-btn tab-inicio">Início</a>
+        <div class="tab-btn tab-perfil">Perfil</div>
+    </div>
+
+    <div class="hero-section">
+        <img id="hero-pic" class="large-pic" src="avatar.png" alt="Foto Perfil">
+        <div class="hero-name" id="hero-name">Nome do Usuário</div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn-action" onclick="alert('Função de edição em breve.')">Editar Perfil</button>
+        <button class="btn-action" onclick="alert('Abrindo Suporte...')">Suporte</button>
+    </div>
+
+    <div class="info-header">Informações pessoais</div>
+
+    <div class="info-list">
+        <div class="info-item">
+            <span class="info-label">Nome</span>
+            <span class="info-value" id="val-nome">...</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">E_mail</span>
+            <span class="info-value" id="val-email">...</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Cargo</span>
+            <span class="info-value" id="val-cargo">...</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Loja</span>
+            <span class="info-value" id="val-loja">...</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">DRT</span>
+            <span class="info-value" id="val-drt">...</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">ID</span>
+            <span class="info-value" id="val-id">...</span>
+        </div>
+    </div>
+
+    <div class="footer-text">Versão 1.0 Alfa | DV: Maykom Rodrigues Serafim</div>
+
+    <script>
+        window.onload = function() {
+            const dados = localStorage.getItem("dadosUsuarioLogado");
+
+            if (dados) {
+                const lista = JSON.parse(dados);
+
+                // Mapeamento dos dados (baseado na ordem que você salvou no login)
+                // 0:Nome, 1:Email, 2:DRT, 3:Cargo, 4:Foto, 5:Loja, 6:ID
+                const nome = lista[0];
+                const email = lista[1];
+                const drt = lista[2];
+                const cargo = lista[3];
+                const foto = lista[4];
+                const loja = lista[5];
+                const id = lista[6];
+
+                // Preencher Header
+                document.getElementById("header-name").textContent = nome;
+                document.getElementById("hero-name").textContent = nome;
+                
+                // Preencher Fotos
+                if (foto && foto !== "") {
+                    document.getElementById("header-pic").src = foto;
+                    document.getElementById("hero-pic").src = foto;
+                }
+
+                // Preencher Lista de Detalhes
+                document.getElementById("val-nome").textContent = nome;
+                document.getElementById("val-email").textContent = email;
+                document.getElementById("val-cargo").textContent = cargo;
+                document.getElementById("val-loja").textContent = loja;
+                document.getElementById("val-drt").textContent = drt;
+                document.getElementById("val-id").textContent = id;
+
+            } else {
+                // Se não houver dados, volta para o login
+                window.location.href = "https://mkserafim.github.io/1Login.html";
+            }
+        };
+    </script>
+</body>
+</html>
