@@ -77,7 +77,7 @@
             margin-top: 5px;
         }
 
-        /* ----- Contêiner dos Robôs Ajustado para 597x400 ----- */
+        /* ----- Contêiner dos Robôs ----- */
         .robot-container {
             width: 100%;
             max-width: 320px;
@@ -289,12 +289,12 @@
     </div>
 
     <div class="header">
-        <img src="logocarrefour.png" alt="Carrefour Logo"> 
+        <img src="logocarrefour.png" alt="Carrefour Logo" onerror="this.style.display='none'"> 
         <h1>SISTEMA DE GESTÃO DE RISCOS E PERDAS</h1>
     </div>
 
     <div class="robot-container">
-        <img src="bonequinhos.png" alt="Bonecos de Risco e Perda">
+        <img src="bonequinhos.png" alt="Bonecos" onerror="this.style.display='none'">
     </div>
 
     <div class="login-card">
@@ -348,10 +348,14 @@
         }
 
         function mostrarAviso(mensagem) {
-            const modal = document.getElementById("custom-modal");
-            const modalText = document.getElementById("modal-text");
-            modalText.textContent = message = mensagem;
-            modal.classList.add("active");
+            try {
+                const modal = document.getElementById("custom-modal");
+                const modalText = document.getElementById("modal-text");
+                modalText.textContent = mensagem; // CORRIGIDO AQUI PARA NÃO TRAVAR O CELULAR
+                modal.classList.add("active");
+            } catch(e) {
+                alert(mensagem); // Se o modal falhar por renderização, o celular avisa nativamente
+            }
         }
 
         function fecharModal() {
@@ -420,14 +424,14 @@
 
                     const dadosEmTexto = JSON.stringify(listaParaKodular);
 
-                    // SALVA OS DADOS NO NAVEGADOR (FICA GUARDADO PARA AS PRÓXIMAS TELAS)
+                    // SALVA NO NAVEGADOR
                     localStorage.setItem("dadosUsuarioLogado", dadosEmTexto);
 
                     mostrarAviso("Login efetuado com sucesso! Entrando...");
 
-                    // Aguarda 1.5 segundos para o usuário ver o aviso e depois muda de página
+                    // CORRIGIDO: Forçando o link completo absoluto para o WebView do celular não se perder
                     setTimeout(() => {
-                        window.location.href = "2Login.html"; 
+                        window.location.href = "https://mkserafim.github.io/2Login.html"; 
                     }, 1500);
 
                 } else {
@@ -437,8 +441,9 @@
                 }
 
             } catch (erro) {
+                // Alerta nativo extra caso o erro de rede congele o WebView
+                alert("Erro capturado: " + erro.message);
                 mostrarAviso("Erro de conexão. Verifique sua internet.");
-                console.error(erro);
                 btn.textContent = "ENTRAR";
                 btn.disabled = false;
             }
