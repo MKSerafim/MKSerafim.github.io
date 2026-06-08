@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel - Prevenção de Perdas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #002244;
+            background-image: radial-gradient(circle at center, #01466d 0%, #001830 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+            overflow-y: auto;
+        }
+
+        /* Topbar com Logo */
+        .topbar {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .topbar svg {
+            margin-bottom: 10px;
+        }
+
+        .topbar h1 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+
+        /* Cartão de Perfil do Usuário */
+        .profile-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 16px;
+            padding: 20px;
+            color: #333;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .profile-card img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #003087;
+            background-color: #ccc;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .profile-info .welcome {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .profile-info .name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #002244;
+            margin-bottom: 4px;
+        }
+
+        .profile-info .role {
+            font-size: 0.85rem;
+            background-color: #003087;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            width: fit-content;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .profile-details {
+            font-size: 0.8rem;
+            color: #555;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Grade de Módulos/Botões */
+        .menu-grid {
+            width: 100%;
+            max-width: 400px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        /* Botão Premium do RJD */
+        .menu-btn {
+            background: linear-gradient(135deg, #003087 0%, #001830 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            text-align: left;
+            width: 100%;
+        }
+
+        .menu-btn:active {
+            transform: scale(0.98);
+        }
+
+        .menu-btn .icon-container {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 12px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-btn .btn-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-btn .btn-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .menu-btn .btn-desc {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.7);
+            margin-top: 2px;
+        }
+
+        /* Rodapé */
+        .footer-text {
+            margin-top: auto;
+            padding-top: 30px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.75rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <h1>SISTEMA DE GESTÃO DE RISCOS E PERDAS</h1>
+    </div>
+
+    <div class="profile-card">
+        <img id="userFoto" src="" alt="Foto">
+        <div class="profile-info">
+            <span class="welcome">BEM-VINDO(A)</span>
+            <span id="userNome" class="name">Carregando...</span>
+            <span id="userCargo" class="role">---</span>
+            <div class="profile-details">
+                <span><strong>DRT:</strong> <span id="userDRT">---</span></span>
+                <span>|</span>
+                <span><strong>Loja:</strong> <span id="userLoja">---</span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="menu-grid">
+        <button class="menu-btn" onclick="dispararRJD()">
+            <div class="icon-container">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </div>
+            <div class="btn-text">
+                <span class="btn-title">Módulo RJD</span>
+                <span class="btn-desc">Registrar ocorrências e envio de relatórios</span>
+            </div>
+        </button>
+    </div>
+
+    <div class="footer-text">
+        Versão (1.0) Alfa | DV: Maykom Rodrigues Serafim
+    </div>
+
+    <script>
+        // Variável global para reter os dados originais recebidos do Kodular
+        let dadosOriginaisSalvos = "";
+
+        // Executado assim que a página termina de carregar
+        window.addEventListener('DOMContentLoaded', () => {
+            inicializarPainel();
+        });
+
+        function inicializarPainel() {
+            if (window.AppInventor) {
+                // Captura o valor inicial enviado pelo Kodular
+                const dadosTexto = window.AppInventor.getWebViewString();
+                if (dadosTexto) {
+                    dadosOriginaisSalvos = dadosTexto;
+                    importarDadosDoApp(dadosTexto);
+                }
+            } else {
+                // Modo de testes no navegador comum
+                document.getElementById('userNome').textContent = "Maykom Rodrigues";
+                document.getElementById('userCargo').textContent = "Prevenção de Perdas";
+                document.getElementById('userDRT').textContent = "123456";
+                document.getElementById('userLoja').textContent = "Macaé 1";
+            }
+        }
+
+        function importarDadosDoApp(stringJson) {
+            try {
+                // Transforma o texto JSON de volta em uma Lista/Array do JavaScript
+                // Índices: 0=Nome, 1=Email, 2=DRT, 3=Cargo, 4=Foto, 5=Loja, 6=ID
+                const listaUsuario = JSON.parse(stringJson);
+
+                document.getElementById('userNome').textContent = listaUsuario[0] || "Não informado";
+                document.getElementById('userDRT').textContent = listaUsuario[2] || "---";
+                document.getElementById('userCargo').textContent = listaUsuario[3] || "Colaborador";
+                document.getElementById('userLoja').textContent = listaUsuario[5] || "---";
+                
+                // Trata a imagem de perfil
+                if (listaUsuario[4] && listaUsuario[4].trim() !== "") {
+                    document.getElementById('userFoto').src = listaUsuario[4];
+                } else {
+                    // Fallback se não houver foto cadastrada
+                    document.getElementById('userFoto').src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                }
+            } catch (erro) {
+                console.error("Erro ao processar dados do usuário:", erro);
+                document.getElementById('userNome').textContent = "Erro ao carregar dados";
+            }
+        }
+
+        // Função vital: Envia o comando de abertura e os dados juntos
+        function dispararRJD() {
+            if (window.AppInventor) {
+                // Criamos um objeto estruturado contendo a ação que o Kodular deve tomar
+                // e repassamos a string original contendo a lista dos dados do usuário
+                const payload = {
+                    acao: "abrir_tela_rjd",
+                    dadosUsuario: dadosOriginaisSalvos
+                };
+                
+                // Devolve para o App através do setWebViewString
+                window.AppInventor.setWebViewString(JSON.stringify(payload));
+            } else {
+                alert("Botão RJD clicado! Payload simulado enviado.");
+            }
+        }
+    </script>
+</body>
+</html>
