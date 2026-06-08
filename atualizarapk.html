@@ -6,14 +6,14 @@
   <title>Atualizar APK</title>
 
   <style>
-    /* Reset e Estilização Base - Fundo Escuro */
+    /* Reset e Estilização Base - Fundo Claro */
     * { box-sizing: border-box; }
     body { 
       margin: 0; 
       padding: 0; 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background-color: #121212;
-      color: #ffffff;
+      background-color: #f4f6f9;
+      color: #212529;
     }
 
     .loja-boas-vindas {
@@ -23,8 +23,8 @@
       max-width: 800px;
     }
 
-    .loja-boas-vindas h2 { color: #ffffff; margin-bottom: 8px; font-size: 24px; }
-    .loja-boas-vindas p { color: #aaaaaa; font-size: 14px; line-height: 1.5; margin: 0; }
+    .loja-boas-vindas h2 { color: #212529; margin-bottom: 8px; font-size: 24px; }
+    .loja-boas-vindas p { color: #6c757d; font-size: 14px; line-height: 1.5; margin: 0; }
 
     /* Container Principal */
     .loja-container {
@@ -43,14 +43,14 @@
       }
     }
 
-    /* Card Individual Escuro */
+    /* Card Individual Claro */
     .app-card {
-      background-color: #1e1e1e;
-      border: 1px solid #333333;
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
       border-radius: 12px;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
       overflow: hidden;
     }
 
@@ -59,20 +59,19 @@
     .app-icon { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; }
     
     .app-textos { display: flex; flex-direction: column; justify-content: center; }
-    .app-nome { font-size: 16px; font-weight: bold; color: #ffffff; margin: 0 0 4px 0; }
-    .app-versao { font-size: 13px; color: #aaaaaa; margin: 0; }
+    .app-nome { font-size: 16px; font-weight: bold; color: #212529; margin: 0 0 4px 0; }
+    .app-versao { font-size: 13px; color: #6c757d; margin: 0; }
     
     /* Container dos botões lado a lado */
     .container-botoes {
       display: flex;
       width: 100%;
-      border-top: 1px solid #333333;
+      border-top: 1px solid #e2e8f0;
     }
 
     .btn-download {
       flex: 1;
       display: block;
-      color: #ffffff;
       text-align: center;
       padding: 12px 0;
       font-size: 14px;
@@ -86,15 +85,17 @@
     /* Botão Principal - Verde Clássico */
     .btn-principal {
       background-color: #25d366;
+      color: #ffffff;
     }
     .btn-principal:hover { background-color: #1ebd57; }
 
-    /* Botão Secundário - Cor grafite azulado elegante */
+    /* Botão Secundário - Cinza claro com texto escuro */
     .btn-secundario {
-      background-color: #3a3f44;
-      border-left: 1px solid #2a2e32;
+      background-color: #f1f3f5;
+      color: #495057;
+      border-left: 1px solid #e2e8f0;
     }
-    .btn-secundario:hover { background-color: #4f545a; }
+    .btn-secundario:hover { background-color: #e9ecef; }
 
     /* --- ESTILOS DO POP-UP CUSTOMIZADO --- */
     .modal-overlay {
@@ -104,7 +105,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.8); /* Fundo escuro transparente */
+      background-color: rgba(0, 0, 0, 0.4); /* Fundo escurecido suave */
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -112,17 +113,17 @@
     }
 
     .modal-content {
-      background-color: #242424; /* Cor da caixinha */
-      border: 1px solid #444;
+      background-color: #ffffff; /* Fundo do Pop-up branco */
+      border: 1px solid #e2e8f0;
       border-radius: 12px;
       padding: 25px;
       max-width: 320px;
       text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
     }
 
     .modal-content p {
-      color: #e0e0e0;
+      color: #212529;
       font-size: 15px;
       line-height: 1.5;
       margin: 0 0 20px 0;
@@ -154,7 +155,6 @@
 
   <div class="loja-container">
 
-    <!-- HMC -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone HMC">
@@ -169,7 +169,6 @@
       </div>
     </div>
 
-    <!-- HCG -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone HCG">
@@ -184,7 +183,6 @@
       </div>
     </div>
 
-    <!-- JFO -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone JFO">
@@ -199,7 +197,6 @@
       </div>
     </div>
 
-    <!-- BHP -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone BHP">
@@ -214,7 +211,6 @@
       </div>
     </div>
 
-    <!-- VVS -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone VVS">
@@ -229,7 +225,6 @@
       </div>
     </div>
 
-    <!-- RJD (Funcionando perfeitamente com os dois links) -->
     <div class="app-card">
       <div class="app-info">
         <img class="app-icon" src="apk.png" alt="Icone RJD">
