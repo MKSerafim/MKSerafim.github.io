@@ -47,7 +47,7 @@
             color: #ffffff;
         }
 
-        /* Cartão de Perfil do Usuário */
+        /* Cartão de Perfil do Usuário Simplificado */
         .profile-card {
             background-color: rgba(255, 255, 255, 0.95);
             width: 100%;
@@ -84,28 +84,10 @@
         }
 
         .profile-info .name {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #002244;
-            margin-bottom: 4px;
-        }
-
-        .profile-info .role {
-            font-size: 0.85rem;
-            background-color: #003087;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
-            width: fit-content;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-
-        .profile-details {
-            font-size: 0.8rem;
-            color: #555;
-            display: flex;
-            gap: 10px;
+            margin-top: 2px;
         }
 
         /* Grade de Módulos/Botões */
@@ -185,12 +167,6 @@
         <div class="profile-info">
             <span class="welcome">BEM-VINDO(A)</span>
             <span id="userNome" class="name">Carregando...</span>
-            <span id="userCargo" class="role">---</span>
-            <div class="profile-details">
-                <span><strong>DRT:</strong> <span id="userDRT">---</span></span>
-                <span>|</span>
-                <span><strong>Loja:</strong> <span id="userLoja">---</span></span>
-            </div>
         </div>
     </div>
 
@@ -211,47 +187,37 @@
     </div>
 
     <script>
-        // Variável global para reter os dados originais recebidos do Kodular
+        // Mantém a string JSON completa intacta para a ponte de dados
         let dadosOriginaisSalvos = "";
 
-        // Executado assim que a página termina de carregar
         window.addEventListener('DOMContentLoaded', () => {
             inicializarPainel();
         });
 
         function inicializarPainel() {
             if (window.AppInventor) {
-                // Captura o valor inicial enviado pelo Kodular
                 const dadosTexto = window.AppInventor.getWebViewString();
                 if (dadosTexto) {
-                    dadosOriginaisSalvos = dadosTexto;
+                    dadosOriginaisSalvos = dadosTexto; // Salvando tudo!
                     importarDadosDoApp(dadosTexto);
                 }
             } else {
-                // Modo de testes no navegador comum
+                // Modo de testes local
                 document.getElementById('userNome').textContent = "Maykom Rodrigues";
-                document.getElementById('userCargo').textContent = "Prevenção de Perdas";
-                document.getElementById('userDRT').textContent = "123456";
-                document.getElementById('userLoja').textContent = "Macaé 1";
+                document.getElementById('userFoto').src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
             }
         }
 
         function importarDadosDoApp(stringJson) {
             try {
-                // Transforma o texto JSON de volta em uma Lista/Array do JavaScript
-                // Índices: 0=Nome, 1=Email, 2=DRT, 3=Cargo, 4=Foto, 5=Loja, 6=ID
                 const listaUsuario = JSON.parse(stringJson);
 
+                // Atualiza somente os dois elementos visuais da tela
                 document.getElementById('userNome').textContent = listaUsuario[0] || "Não informado";
-                document.getElementById('userDRT').textContent = listaUsuario[2] || "---";
-                document.getElementById('userCargo').textContent = listaUsuario[3] || "Colaborador";
-                document.getElementById('userLoja').textContent = listaUsuario[5] || "---";
                 
-                // Trata a imagem de perfil
                 if (listaUsuario[4] && listaUsuario[4].trim() !== "") {
                     document.getElementById('userFoto').src = listaUsuario[4];
                 } else {
-                    // Fallback se não houver foto cadastrada
                     document.getElementById('userFoto').src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
                 }
             } catch (erro) {
@@ -260,20 +226,17 @@
             }
         }
 
-        // Função vital: Envia o comando de abertura e os dados juntos
         function dispararRJD() {
             if (window.AppInventor) {
-                // Criamos um objeto estruturado contendo a ação que o Kodular deve tomar
-                // e repassamos a string original contendo a lista dos dados do usuário
+                // Monta o pacote levando a ação e os dados completos salvos em segundo plano
                 const payload = {
                     acao: "abrir_tela_rjd",
                     dadosUsuario: dadosOriginaisSalvos
                 };
                 
-                // Devolve para o App através do setWebViewString
                 window.AppInventor.setWebViewString(JSON.stringify(payload));
             } else {
-                alert("Botão RJD clicado! Payload simulado enviado.");
+                alert("Botão RJD clicado! Payload contendo todos os dados ocultos foi gerado.");
             }
         }
     </script>
