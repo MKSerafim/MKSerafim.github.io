@@ -203,22 +203,42 @@
 
         function importarDadosDoApp(stringJson) {
             try {
+                // Tenta ler como JSON perfeitinho primeiro
                 const listaUsuario = JSON.parse(stringJson);
-
                 document.getElementById('userNome').textContent = listaUsuario[0] || "Não informado";
-                
                 if (listaUsuario[4] && listaUsuario[4].trim() !== "") {
                     document.getElementById('userFoto').src = listaUsuario[4];
-                } else {
-                    document.getElementById('userFoto').src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
                 }
             } catch (erro) {
-                console.error("Erro ao processar dados do usuário:", erro);
+                // Se der erro (formato do Kodular), ele entra neste plano B automático!
+                let texto = stringJson;
                 
-                // MUDANÇA AQUI: Mostra o texto real recebido para acharmos o erro
-                document.getElementById('userNome').textContent = stringJson;
-                document.getElementById('userNome').style.fontSize = "11px";
-                document.getElementById('userNome').style.wordBreak = "break-all";
+                // 1. Limpa os parênteses do começo e do fim
+                if (texto.startsWith("(")) texto = texto.substring(1);
+                if (texto.endsWith(")")) texto = texto.substring(0, texto.length - 1);
+                
+                // 2. Acha a URL da foto (tudo que começa com http até o final)
+                let fotoUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                let indexHttp = texto.indexOf("http");
+                if (indexHttp !== -1) {
+                    fotoUrl = texto.substring(indexHttp).trim(); 
+                    texto = texto.substring(0, indexHttp).trim(); 
+                }
+                
+                // 3. Pega o nome (Junta as duas primeiras palavras)
+                let partes = texto.split(" ");
+                let nome = "Usuário";
+                if (partes.length >= 2) {
+                    nome = partes[0] + " " + partes[1]; // Vai juntar o seu nome e sobrenome
+                } else if (partes.length === 1) {
+                    nome = partes[0];
+                }
+                
+                // 4. Manda as informações prontas para a tela e volta a letra ao tamanho normal
+                document.getElementById('userNome').textContent = nome;
+                document.getElementById('userFoto').src = fotoUrl;
+                document.getElementById('userNome').style.fontSize = "1.3rem";
+                document.getElementById('userNome').style.wordBreak = "normal";
             }
         }
 
