@@ -6,14 +6,14 @@
   <title>Atualizar APK</title>
 
   <style>
-    /* Reset e Estilização Base - Fundo Claro */
+    /* Reset e Estilização Base - Fundo Oficial Blindado */
     * { box-sizing: border-box; }
     body { 
       margin: 0; 
       padding: 0; 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background-color: #f4f6f9;
-      color: #212529;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      background-color: #001f42; /* Azul escuro oficial do seu app */
+      color: #ffffff;
     }
 
     .loja-boas-vindas {
@@ -23,8 +23,8 @@
       max-width: 800px;
     }
 
-    .loja-boas-vindas h2 { color: #212529; margin-bottom: 8px; font-size: 24px; }
-    .loja-boas-vindas p { color: #6c757d; font-size: 14px; line-height: 1.5; margin: 0; }
+    .loja-boas-vindas h2 { color: #ffffff; margin-bottom: 8px; font-size: 24px; }
+    .loja-boas-vindas p { color: #00b4d8; font-size: 14px; line-height: 1.5; margin: 0; }
 
     /* Container Principal */
     .loja-container {
@@ -43,69 +43,78 @@
       }
     }
 
-    /* Card Individual Claro */
+    /* Card Individual Estilo HUD */
     .app-card {
-      background-color: #ffffff;
-      border: 1px solid #e2e8f0;
+      background-color: #001630; /* Camada escura interna para dar profundidade */
+      border: 1px solid #002d5e; /* Borda sutil de sistema */
       border-radius: 12px;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       overflow: hidden;
     }
 
     .app-info { padding: 15px; display: flex; align-items: center; gap: 15px; }
     
-    .app-icon { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; }
+    .app-icon { 
+      width: 64px; 
+      height: 64px; 
+      object-fit: cover; 
+      border-radius: 12px;
+      border: 1px solid #002d5e;
+    }
     
     .app-textos { display: flex; flex-direction: column; justify-content: center; }
-    .app-nome { font-size: 16px; font-weight: bold; color: #212529; margin: 0 0 4px 0; }
-    .app-versao { font-size: 13px; color: #6c757d; margin: 0; }
+    .app-nome { font-size: 16px; font-weight: bold; color: #ffffff; margin: 0 0 4px 0; }
+    .app-versao { font-size: 13px; color: #00b4d8; margin: 0; font-weight: 500; }
     
     /* Container dos botões lado a lado */
     .container-botoes {
       display: flex;
       width: 100%;
-      border-top: 1px solid #e2e8f0;
+      border-top: 1px solid #002d5e;
     }
 
     .btn-download {
       flex: 1;
       display: block;
       text-align: center;
-      padding: 12px 0;
+      padding: 14px 0;
       font-size: 14px;
       font-weight: bold;
       text-decoration: none;
       border: none;
-      transition: background-color 0.2s ease;
+      transition: all 0.2s ease;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* Botão Principal - Verde Clássico */
+    /* Botão Principal - Verde Vibrante Comercial */
     .btn-principal {
       background-color: #25d366;
       color: #ffffff;
     }
     .btn-principal:hover { background-color: #1ebd57; }
+    .btn-principal:active { transform: scale(0.98); }
 
-    /* Botão Secundário - Cinza claro com texto escuro */
+    /* Botão Secundário - Azul Escuro de Sistema */
     .btn-secundario {
-      background-color: #f1f3f5;
-      color: #495057;
-      border-left: 1px solid #e2e8f0;
+      background-color: #002244;
+      color: #ffffff;
+      border-left: 1px solid #002d5e;
     }
-    .btn-secundario:hover { background-color: #e9ecef; }
+    .btn-secundario:hover { background-color: #002d5e; }
+    .btn-secundario:active { transform: scale(0.98); }
 
-    /* --- ESTILOS DO POP-UP CUSTOMIZADO --- */
+    /* --- ESTILOS DO POP-UP CUSTOMIZADO DARK --- */
     .modal-overlay {
-      display: none; /* Escondido por padrão */
+      display: none; 
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.4); /* Fundo escurecido suave */
+      background-color: rgba(0, 0, 0, 0.7); /* Cortina escura mais densa */
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -113,36 +122,37 @@
     }
 
     .modal-content {
-      background-color: #ffffff; /* Fundo do Pop-up branco */
-      border: 1px solid #e2e8f0;
+      background-color: #001630; 
+      border: 1px solid #00b4d8; /* Destaque Neon no Pop-up */
       border-radius: 12px;
       padding: 25px;
       max-width: 320px;
       text-align: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
     }
 
     .modal-content p {
-      color: #212529;
+      color: #ffffff;
       font-size: 15px;
       line-height: 1.5;
       margin: 0 0 20px 0;
     }
 
     .modal-btn-fechar {
-      background-color: #25d366;
-      color: white;
+      background-color: #00b4d8; /* Botão do modal acompanhando o cian */
+      color: #001f42;
       border: none;
-      padding: 10px 30px;
+      padding: 12px 30px;
       border-radius: 8px;
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
       width: 100%;
+      transition: background-color 0.1s ease;
     }
 
     .modal-btn-fechar:hover {
-      background-color: #1ebd57;
+      background-color: #0096b4;
     }
   </style>
 </head>
@@ -150,7 +160,7 @@
 
   <div class="loja-boas-vindas">
     <h2>Bem-vindo!</h2>
-    <p>Mantenha seu aplicativo updated. Escolha a sua loja abaixo e baixe a versão mais recente.</p>
+    <p>Mantenha seu aplicativo atualizado. Escolha a sua loja abaixo e baixe a versão mais recente.</p>
   </div>
 
   <div class="loja-container">
