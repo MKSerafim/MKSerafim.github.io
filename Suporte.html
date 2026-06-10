@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Contato</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            max-width: 400px; 
+            margin: 0 auto;
+        }
+        
+        h2 { text-align: center; color: #333; margin-top: 20px; }
+        
+        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        
+        .help-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+        
+        input, textarea, select { 
+            width: 100%; 
+            margin-bottom: 1rem; 
+            padding: 12px; 
+            box-sizing: border-box; 
+            border: 1px solid #ccc; 
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: white;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: 2px solid #007bff;
+            border-color: transparent;
+        }
+        
+        button { 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            cursor: pointer; 
+            width: 100%; 
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+    <h2>Entre em Contato</h2>
+    
+    <form action="https://formspree.io/f/mpqngqll" method="POST">
+        
+        <input type="hidden" name="_next" value="https://mkserafim.github.io/obrigado.html" />
+        
+        <label for="email">Seu E-mail:</label>
+        <input type="email" id="email" name="email" required placeholder="seuemail@exemplo.com" />
+
+        <label for="loja">Escolha sua Loja:</label>
+        <select id="loja" name="loja" required>
+            <option value="" disabled selected>Selecione uma loja...</option>
+            <option value="VVS">VVS - Hiper Vila Velha</option>
+            <option value="JFO">JFO - Hiper Juiz de Fora</option>
+            <option value="HMC">HMC - Hiper Macaé</option>
+            <option value="HCG">HCG - Hiper Campos dos Goytacazes</option>
+            <option value="BHP">BHP - Hiper Pampulha</option>
+            <option value="RJD">RJD - Washington Luiz</option>
+        </select>
+
+        <label for="id_conta">ID da Conta:</label>
+        <p class="help-text">Não sabe seu ID? Acesse seu perfil, role até o final da página e copie a última informação exibida.</p>
+        <input type="text" id="id_conta" name="id_conta" required placeholder="Digite seu ID aqui" />
+
+        <label for="assunto">Assunto:</label>
+        <select id="assunto" name="assunto" required>
+            <option value="" disabled selected>Selecione o motivo...</option>
+            <option value="suporte">Suporte</option>
+            <option value="erro_ortografia">Relatar erro de ortografia</option>
+            <option value="bug_login">Relatar bug de login</option>
+            <option value="novo_colaborador">Pedir acesso para novo colaborador</option>
+            <option value="excluir_conta">Excluir minha conta</option>
+            <option value="erro_carregamento">Relatar erro de carregamento</option>
+            <option value="novo_app_loja">Pedir o aplicativo pra outra loja</option>
+            <option value="outros">Outros assuntos</option>
+        </select>
+
+        <label for="message">Sua Mensagem:</label>
+        <textarea id="message" name="message" rows="4" required placeholder="Digite sua mensagem aqui..."></textarea>
+
+        <button type="submit">Enviar Mensagem</button>
+    </form>
+
+</body>
+</html>
