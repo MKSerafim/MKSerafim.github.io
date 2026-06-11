@@ -277,6 +277,58 @@
         .btn-modal-ok:hover {
             background-color: #001f5c;
         }
+
+        /* ----- TELA DE CARREGAMENTO (NOVO) ----- */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 34, 68, 0.85); /* Fundo escuro com transparência */
+            backdrop-filter: blur(6px); /* Efeito de desfoque elegante no fundo */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .loading-screen.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-top: 5px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
     </style>
 </head>
 <body>
@@ -336,6 +388,11 @@
         </div>
     </div>
 
+    <div id="loading-screen" class="loading-screen">
+        <div class="spinner"></div>
+        <div class="loading-text">Conectando...</div>
+    </div>
+
     <script>
         function toggleSenha() {
             const inputSenha = document.getElementById('senha');
@@ -349,7 +406,6 @@
             }
         }
 
-        // Nova função que abre a janelinha bonita
         function mostrarAviso(mensagem) {
             const modal = document.getElementById("custom-modal");
             const modalText = document.getElementById("modal-text");
@@ -357,10 +413,18 @@
             modal.classList.add("active");
         }
 
-        // Função para fechar a janelinha ao clicar em OK
         function fecharModal() {
             const modal = document.getElementById("custom-modal");
             modal.classList.remove("active");
+        }
+
+        // Funções para a tela de carregamento
+        function iniciarCarregamento() {
+            document.getElementById('loading-screen').classList.add('active');
+        }
+
+        function pararCarregamento() {
+            document.getElementById('loading-screen').classList.remove('active');
         }
 
         const TOKEN = "x6rXtkpcBaAYlER6MMDo6Lfd0RSS28Ey";
@@ -383,8 +447,9 @@
                 return;
             }
 
-            btn.textContent = "CARREGANDO...";
-            btn.disabled = true;
+            // ATIVA A TELA DE CARREGAMENTO LINDA AQUI
+            iniciarCarregamento();
+            btn.disabled = true; // Impede que a pessoa clique 2 vezes
 
             try {
                 const resposta = await fetch(`${API_URL}&search=${encodeURIComponent(email)}`, {
@@ -396,8 +461,8 @@
                 const dados = await resposta.json();
 
                 if (dados.count === 0) {
+                    pararCarregamento(); // PARA O CARREGAMENTO
                     mostrarAviso("E-mail ou senha incorretos.");
-                    btn.textContent = "ENTRAR";
                     btn.disabled = false;
                     return;
                 }
@@ -426,22 +491,23 @@
 
                     if (window.AppInventor) {
                         window.AppInventor.setWebViewString(dadosEmTexto);
+                        pararCarregamento(); // PARA O CARREGAMENTO
                     } else {
+                        pararCarregamento(); // PARA O CARREGAMENTO
                         console.log("Sucesso:", dadosEmTexto);
                         mostrarAviso("Login efetuado com sucesso!");
-                        btn.textContent = "ENTRAR";
                         btn.disabled = false;
                     }
                 } else {
+                    pararCarregamento(); // PARA O CARREGAMENTO
                     mostrarAviso("E-mail ou senha incorretos.");
-                    btn.textContent = "ENTRAR";
                     btn.disabled = false;
                 }
 
             } catch (erro) {
+                pararCarregamento(); // PARA O CARREGAMENTO EM CASO DE ERRO
                 mostrarAviso("Erro de conexão. Verifique sua internet.");
                 console.error(erro);
-                btn.textContent = "ENTRAR";
                 btn.disabled = false;
             }
         }
