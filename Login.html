@@ -418,7 +418,6 @@
             modal.classList.remove("active");
         }
 
-        // Funções para a tela de carregamento
         function iniciarCarregamento() {
             document.getElementById('loading-screen').classList.add('active');
         }
@@ -427,78 +426,54 @@
             document.getElementById('loading-screen').classList.remove('active');
         }
 
-        const TOKEN = "x6rXtkpcBaAYlER6MMDo6Lfd0RSS28Ey";
-        const TABLE_ID = "180827";
-        const API_URL = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true`;
+        async function fazerLogin() {
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+            const termosChecados = document.getElementById('termos').checked;
+            const btn = document.getElementById('btnEntrar');
 
-       async function fazerLogin() {
-    const email = document.getElementById('email').value.trim();
-    const senha = document.getElementById('senha').value.trim();
-    const termosChecados = document.getElementById('termos').checked;
-    const btn = document.getElementById('btnEntrar');
-
-    if (!email || !senha) {
-        mostrarAviso("Por favor, preencha o e-mail e a senha.");
-        return;
-    }
-
-    if (!termosChecados) {
-        mostrarAviso("Você precisa aceitar os Termos e Condições para entrar.");
-        return;
-    }
-
-    iniciarCarregamento();
-    btn.disabled = true;
-
-    try {
-        // ATENÇÃO: Aqui você vai trocar pelo link que a Vercel vai te dar no final
-        const URL_DA_SUA_API = "/api/login"; 
-
-        const resposta = await fetch(URL_DA_SUA_API, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, senha }) // Envia os dados mascarados
-        });
-
-        const resultado = await resposta.json();
-
-        if (resposta.ok && resultado.success) {
-            const usuario = resultado.usuario;
-            
-            // Sua lógica com o Kodular/AppInventor continua igual
-            let urlFoto = "";
-            if (typeof usuario.Foto === "string") urlFoto = usuario.Foto;
-            else if (Array.isArray(usuario.Foto) && usuario.Foto.length > 0) urlFoto = usuario.Foto[0].url;
-
-            const listaParaKodular = [
-                usuario.Nome || "Não informado",
-                usuario.Email || email,
-                usuario.DRT || "Sem DRT",
-                usuario.Cargo || "Sem cargo",
-                urlFoto,
-                usuario.Loja || "Sem loja",
-                usuario.ID || usuario.id
-            ];
-
-            const dadosEmTexto = JSON.stringify(listaParaKodular);
-
-            if (window.AppInventor) {
-                window.AppInventor.setWebViewString(dadosEmTexto);
-                pararCarregamento();
-            } else {
-                pararCarregamento();
-                mostrarAviso("Login efetuado com sucesso!");
-                btn.disabled = false;
+            if (!email || !senha) {
+                mostrarAviso("Por favor, preencha o e-mail e a senha.");
+                return;
             }
-        } else {
-            pararCarregamento();
-            mostrarAviso(resultado.message || "E-mail ou senha incorretos.");
-            btn.disabled = false;
-        }
 
-    } catch (erro) {
-        pararCarregamento();
-        mostrarAviso("Erro de conexão. Verifique sua internet.");
-        btn.disabled = false;
-    }
-}
+            if (!termosChecados) {
+                mostrarAviso("Você precisa aceitar os Termos e Condições para entrar.");
+                return;
+            }
+
+            iniciarCarregamento();
+            btn.disabled = true;
+
+            try {
+                // ATENÇÃO: Aqui fica o caminho para a sua API no Vercel
+                const URL_DA_SUA_API = "/api/login"; 
+
+                const resposta = await fetch(URL_DA_SUA_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha }) 
+                });
+
+                const resultado = await resposta.json();
+
+                if (resposta.ok && resultado.success) {
+                    const usuario = resultado.usuario;
+                    
+                    let urlFoto = "";
+                    if (typeof usuario.Foto === "string") urlFoto = usuario.Foto;
+                    else if (Array.isArray(usuario.Foto) && usuario.Foto.length > 0) urlFoto = usuario.Foto[0].url;
+
+                    const listaParaKodular = [
+                        usuario.Nome || "Não informado",
+                        usuario.Email || email,
+                        usuario.DRT || "Sem DRT",
+                        usuario.Cargo || "Sem cargo",
+                        urlFoto,
+                        usuario.Loja || "Sem loja",
+                        usuario.ID || usuario.id
+                    ];
+
+                    const dadosEmTexto = JSON.stringify(listaParaKodular);
+
+                    if (
