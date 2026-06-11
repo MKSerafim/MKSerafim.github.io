@@ -3,428 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Gestão de Riscos e Perdas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Sistema de Gestão de Riscos e Perdas</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        body {
-            background-color: #002244;
-            background-image: radial-gradient(circle at top, #01466d 0%, #001830 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-y: auto; 
-            overflow-x: hidden;
-            padding-bottom: 30px;
-        }
-
-        /* ----- Botões Superiores ----- */
-        .top-bar-actions {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            display: flex;
-            gap: 15px;
-            z-index: 50;
-        }
-
-        .btn-top-icon {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            opacity: 0.8;
-            transition: opacity 0.2s, transform 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-top-icon:hover { opacity: 1; }
-        .btn-top-icon:active { transform: scale(0.9); }
-
-        /* ----- Cabeçalho ----- */
-        .header {
-            text-align: center;
-            margin-top: 50px; 
-            margin-bottom: 5px;
-            color: white;
-            z-index: 10;
-        }
-
-        .header img {
-            width: 50px;
-            height: auto;
-            margin-bottom: 5px;
-        }
-
-        .header h1 {
-            font-size: 1.1rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            margin-top: 5px;
-        }
-
-        /* ----- Contêiner dos Robôs ----- */
-        .robot-container {
-            width: 100%;
-            max-width: 320px;
-            z-index: 5;
-            display: flex;
-            justify-content: center;
-            margin-bottom: -20px;
-        }
-
-        .robot-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        /* ----- Cartão de Login ----- */
-        .login-card {
-            background-color: white;
-            width: 90%;
-            max-width: 360px;
-            border-radius: 12px;
-            padding: 25px 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            z-index: 10;
-            position: relative;
-        }
-
-        .login-card h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #a0a0a0;
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-            color: #555;
-        }
-
-        .input-group input:focus { border-color: #003087; }
-
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 35px;
-            cursor: pointer;
-            color: #666;
-            font-size: 0.9rem;
-            background: none;
-            border: none;
-        }
-
-        /* ----- Termos e Condições ----- */
-        .terms-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            font-size: 0.95rem;
-            color: #333;
-        }
-
-        .terms-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin-right: 10px;
-            cursor: pointer;
-        }
-
-        .terms-link {
-            color: #333;
-            text-decoration: underline;
-        }
-
-        /* ----- Botões e Links ----- */
-        .btn-login {
-            width: 100%;
-            background-color: #003087;
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 8px; 
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .btn-login:disabled { background-color: #7f98c2; }
-        .forgot-password-container { text-align: center; margin-top: 15px; }
-        .forgot-password { color: #003087; text-decoration: underline; font-size: 0.95rem; cursor: pointer; }
-
-        /* ----- Rodapé ----- */
-        .footer-text {
-            margin-top: auto;
-            padding-top: 30px;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.75rem;
-            text-align: center;
-            z-index: 10;
-        }
-
-        /* ----- Custom Modal ----- */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 100; opacity: 0; visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-
-        .modal-box {
-            background-color: white; width: 85%; max-width: 320px;
-            border-radius: 12px; padding: 25px; text-align: center;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-            transform: scale(0.8); transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .modal-box { transform: scale(1); }
-        .modal-box p { color: #333; font-size: 1rem; line-height: 1.5; margin-bottom: 22px; font-weight: 500; }
-
-        .btn-modal-ok {
-            background-color: #003087; color: white; border: none;
-            padding: 12px; border-radius: 8px; font-size: 1rem;
-            font-weight: bold; cursor: pointer; transition: background-color 0.2s;
-            width: 100%; letter-spacing: 0.5px;
-        }
-
-        .btn-modal-ok:hover { background-color: #001f5c; }
-
-        /* ----- Tela de Carregamento ----- */
-        .loading-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 34, 68, 0.85);
-            backdrop-filter: blur(6px);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 9999; opacity: 0; visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .loading-screen.active { opacity: 1; visibility: visible; }
-
-        .spinner {
-            width: 60px; height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.2);
-            border-top: 5px solid #ffffff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: white; font-size: 1.2rem; font-weight: 500;
-            letter-spacing: 1.5px; animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #052d49 0%, #001c30 100%); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; color: white; }
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h3 { font-size: 14px; letter-spacing: 2px; color: #a0c4ff; text-transform: uppercase; margin-bottom: 5px; }
+        .header h1 { font-size: 20px; font-weight: bold; letter-spacing: 0.5px; }
+        .card { background: #ffffff; color: #333; width: 100%; max-width: 400px; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .input-group { margin-bottom: 20px; position: relative; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #555; }
+        .input-group input { width: 100%; padding: 12px 16px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; background: #f9f9f9; transition: all 0.3s; }
+        .input-group input:focus { border-color: #052d49; background: #fff; outline: none; }
+        .password-toggle { position: absolute; right: 16px; top: 38px; color: #777; cursor: pointer; font-size: 14px; user-select: none; }
+        .checkbox-group { display: flex; align-items: center; margin-bottom: 25px; font-size: 14px; color: #555; }
+        .checkbox-group input { margin-right: 10px; width: 18px; height: 18px; cursor: pointer; }
+        .checkbox-group a { color: #052d49; text-decoration: underline; }
+        .btn-submit { width: 100%; padding: 14px; background: #002244; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .btn-submit:hover { background: #052d49; }
+        .btn-submit:disabled { background: #cccccc; cursor: not-allowed; }
+        
+        /* Modal Customizado igual ao erro do App */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 1000; }
+        .modal { background: white; color: #333; width: 85%; max-width: 320px; border-radius: 16px; padding: 24px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.4); animation: popup 0.2s ease-out; }
+        @keyframes popup { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-text { font-size: 16px; margin-bottom: 20px; color: #333; line-height: 1.4; font-weight: 500; }
+        .modal-btn { width: 100%; padding: 12px; background: #002663; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="top-bar-actions">
-        <button class="btn-top-icon" onclick="mostrarAviso('Central de Ajuda em desenvolvimento.')" title="Ajuda">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        </button>
-        <button class="btn-top-icon" onclick="window.location.reload()" title="Recarregar">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-        </button>
-    </div>
-
     <div class="header">
-        <img src="logocarrefour.png" alt="Carrefour Logo"> 
+        <h3>Carrefour</h3>
         <h1>SISTEMA DE GESTÃO DE RISCOS E PERDAS</h1>
     </div>
 
-    <div class="robot-container">
-        <img src="bonequinhos.png" alt="Bonecos de Risco e Perda">
+    <div class="card">
+        <form id="loginForm" onsubmit="executarLogin(event)">
+            <div class="input-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" required placeholder="seuemail@carrefour.com">
+            </div>
+            
+            <div class="input-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" required placeholder="Digite sua senha">
+                <span class="password-toggle" onclick="toggleSenha()">Mostrar</span>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="termos" required checked>
+                <label for="termos">Aceito os <a href="#">Termos e Condições</a></label>
+            </div>
+
+            <button type="submit" id="btnEntrar" class="btn-submit">ENTRAR</button>
+        </form>
     </div>
 
-    <div class="login-card">
-        <h2>Entrar</h2>
-        
-        <div class="input-group">
-            <label for="email">Endereço de e-mail</label>
-            <input type="email" id="email" placeholder="exemplo@carrefour.com" required>
+    <div id="errorModal" class="modal-overlay">
+        <div class="modal">
+            <div id="modalMsg" class="modal-text">Erro no sistema: Failed to fetch</div>
+            <button class="modal-btn" onclick="fecharModal()">OK</button>
         </div>
-
-        <div class="input-group">
-            <label for="senha">Senha</label>
-            <input type="password" id="senha" placeholder="••••••••••" required>
-            <button type="button" class="toggle-password" onclick="toggleSenha()">Mostrar</button>
-        </div>
-
-        <div class="terms-group">
-            <input type="checkbox" id="termos">
-            <label for="termos">Aceito os <a href="Termos.html" class="terms-link">Termos e Condições</a></label>
-        </div>
-
-        <button class="btn-login" id="btnEntrar" onclick="fazerLogin()">ENTRAR</button>
-
-        <div class="forgot-password-container">
-            <a href="#" class="forgot-password" onclick="mostrarAviso('Função de recuperação em desenvolvimento.')">Esqueci a senha?</a>
-        </div>
-    </div>
-
-    <div class="footer-text">
-        Versão (1.0) Alfa | DV: Maykom Rodrigues Serafim
-    </div>
-
-    <div id="custom-modal" class="modal-overlay">
-        <div class="modal-box">
-            <p id="modal-text">Mensagem de erro aqui</p>
-            <button class="btn-modal-ok" onclick="fecharModal()">OK</button>
-        </div>
-    </div>
-
-    <div id="loading-screen" class="loading-screen">
-        <div class="spinner"></div>
-        <div class="loading-text">Conectando...</div>
     </div>
 
     <script>
+        // Endpoint absoluto do seu projeto hospedado no Vercel
+        const URL_DA_SUA_API = "https://mk-serfim-github-io.vercel.app/api/login";
+
         function toggleSenha() {
-            const inputSenha = document.getElementById('senha');
-            const btnToggle = document.querySelector('.toggle-password');
-            if (inputSenha.type === 'password') {
-                inputSenha.type = 'text';
-                btnToggle.textContent = 'Ocultar';
+            const senhaInput = document.getElementById('senha');
+            const toggleText = document.querySelector('.password-toggle');
+            if (senhaInput.type === 'password') {
+                senhaInput.type = 'text';
+                toggleText.textContent = 'Ocultar';
             } else {
-                inputSenha.type = 'password';
-                btnToggle.textContent = 'Mostrar';
+                senhaInput.type = 'password';
+                toggleText.textContent = 'Mostrar';
             }
         }
 
-        function mostrarAviso(mensagem) {
-            const modal = document.getElementById("custom-modal");
-            const modalText = document.getElementById("modal-text");
-            modalText.textContent = mensagem;
-            modal.classList.add("active");
+        function mostrarErro(mensagem) {
+            document.getElementById('modalMsg').textContent = mensagem;
+            document.getElementById('errorModal').style.display = 'flex';
         }
 
         function fecharModal() {
-            const modal = document.getElementById("custom-modal");
-            modal.classList.remove("active");
+            document.getElementById('errorModal').style.display = 'none';
         }
 
-        function iniciarCarregamento() {
-            document.getElementById('loading-screen').classList.add('active');
-        }
+        async function executarLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            const btnEntrar = document.getElementById('btnEntrar');
 
-        function pararCarregamento() {
-            document.getElementById('loading-screen').classList.remove('active');
-        }
-
-        async function fazerLogin() {
-            const email = document.getElementById('email').value.trim();
-            const senha = document.getElementById('senha').value.trim();
-            const termosChecados = document.getElementById('termos').checked;
-            const btn = document.getElementById('btnEntrar');
-
-            if (!email || !senha) {
-                mostrarAviso("Por favor, preencha o e-mail e a senha.");
-                return;
-            }
-
-            if (!termosChecados) {
-                mostrarAviso("Você precisa aceitar os Termos e Condições para entrar.");
-                return;
-            }
-
-            iniciarCarregamento();
-            btn.disabled = true;
+            // Ativa o estado visual de carregamento
+            btnEntrar.disabled = true;
+            btnEntrar.textContent = "CARREGANDO...";
 
             try {
-                // ATENÇÃO: Substitua pela URL real do seu servidor de produção/testes externo
-                const URL_DA_SUA_API = "https://sua-api-real.com/api/login"; 
-
                 const resposta = await fetch(URL_DA_SUA_API, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, senha }) 
+                    body: JSON.stringify({ email, senha })
                 });
 
                 const resultado = await resposta.json();
 
                 if (resposta.ok && resultado.success) {
-                    const usuario = resultado.usuario || {};
+                    const u = resultado.usuario;
                     
-                    let urlFoto = "";
-                    if (typeof usuario.Foto === "string") urlFoto = usuario.Foto;
-                    else if (Array.isArray(usuario.Foto) && usuario.Foto.length > 0) urlFoto = usuario.Foto[0].url;
+                    // Estruturação do Array de dados do usuário exatamente como esperado pelo app
+                    const listaParaKodular = [u.Nome, u.Email, u.DRT, u.Cargo, u.Foto, u.Loja, u.id];
 
-                    const listaParaKodular = [
-                        usuario.Nome || "Não informado",
-                        usuario.Email || email,
-                        usuario.DRT || "Sem DRT",
-                        usuario.Cargo || "Sem cargo",
-                        urlFoto,
-                        usuario.Loja || "Sem loja",
-                        usuario.ID || usuario.id || "Sem ID"
-                    ];
+                    // Objeto envelopado contendo o status explícito de sucesso
+                    const pacoteKodular = {
+                        status: "sucesso",
+                        payload: listaParaKodular
+                    };
 
-                    const dadosEmTexto = JSON.stringify(listaParaKodular);
-
+                    // Transmite os dados de volta para o componente WebView do Kodular
                     if (window.AppInventor) {
-                        window.AppInventor.setWebViewString(dadosEmTexto);
-                        pararCarregamento();
+                        window.AppInventor.setWebViewString(JSON.stringify(pacoteKodular));
                     } else {
-                        pararCarregamento();
-                        mostrarAviso("Login efetuado com sucesso (modo web)!");
-                        btn.disabled = false;
+                        console.log("Sucesso! Dados prontos para o Kodular:", pacoteKodular);
+                        alert("Login efetuado com sucesso (Executado fora do App).");
                     }
                 } else {
-                    pararCarregamento();
-                    mostrarAviso(resultado.message || "E-mail ou senha incorretos.");
-                    btn.disabled = false;
+                    mostrarErro(resultado.message || "E-mail ou senha incorretos.");
                 }
 
-            } catch (erro) {
-                pararCarregamento();
-                mostrarAviso("Erro no sistema: " + erro.message);
-                btn.disabled = false;
+            } catch (error) {
+                mostrarErro("Erro no sistema: Failed to fetch");
+            } finally {
+                btnEntrar.disabled = false;
+                btnEntrar.textContent = "ENTRAR";
             }
         }
     </script>
