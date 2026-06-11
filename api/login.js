@@ -1,66 +1,117 @@
-export default async function handler(req, res) {
-    // Configuração de CORS para permitir requisições seguras do aplicativo
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
+function toggleSenha() {
+    const inputSenha = document.getElementById('senha');
+    const btnToggle = document.querySelector('.toggle-password');
+    if (inputSenha.type === 'password') {
+        inputSenha.type = 'text';
+        btnToggle.textContent = 'Ocultar';
+    } else {
+        inputSenha.type = 'password';
+        btnToggle.textContent = 'Mostrar';
     }
+}
 
-    if (req.method !== 'POST') {
-        return res.status(405).json({ message: 'Método não permitido' });
-    }
+function mostrarAviso(mensagem) {
+    const modal = document.getElementById("custom-modal");
+    const modalText = document.getElementById("modal-text");
+    modalText.textContent = mensagem;
+    modal.classList.add("active");
+}
 
-    const { email, senha } = req.body;
-    const token = process.env.BASEROW_TOKEN;
-    const tableId = "180827"; 
+function fecharModal() {
+    const modal = document.getElementById("custom-modal");
+    modal.classList.remove("active");
+}
+
+// Funções para a tela de carregamento
+function iniciarCarregamento() {
+    document.getElementById('loading-screen').classList.add('active');
+}
+
+function pararCarregamento() {
+    document.getElementById('loading-screen').classList.remove('active');
+}
+
+const TOKEN = "x6rXtkpcBaAYlER6MMDo6Lfd0RSS28Ey";
+const TABLE_ID = "180827";
+const API_URL = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true`;
+
+async function fazerLogin() {
+    const email = document.getElementById('email').value.trim();
+    const senha = document.getElementById('senha').value.trim();
+    const termosChecados = document.getElementById('termos').checked;
+    const btn = document.getElementById('btnEntrar');
 
     if (!email || !senha) {
-        return res.status(400).json({ success: false, message: 'E-mail e senha são obrigatórios.' });
+        mostrarAviso("Por favor, preencha o e-mail e a senha.");
+        return;
     }
 
+    if (!termosChecados) {
+        mostrarAviso("Você precisa aceitar os Termos e Condições para entrar.");
+        return;
+    }
+
+    // ATIVA A TELA DE CARREGAMENTO LINDA AQUI
+    iniciarCarregamento();
+    btn.disabled = true; // Impede que a pessoa clique 2 vezes
+
     try {
-        // Busca os usuários cadastrados no banco de dados do Baserow
-        const respostaBaserow = await fetch(`https://api.baserow.io/api/database/rows/table/${tableId}/?user_field_names=true`, {
-            method: 'GET',
+        const resposta = await fetch(`${API_URL}&search=${encodeURIComponent(email)}`, {
             headers: {
-                'Authorization': `Token ${token}`,
-                'Content-Type': 'application/json'
+                "Authorization": `Token ${TOKEN}`
             }
         });
 
-        if (!respostaBaserow.ok) {
-            return res.status(500).json({ success: false, message: 'Erro na integração com o banco de dados.' });
+        const dados = await resposta.json();
+
+        if (dados.count === 0) {
+            pararCarregamento(); // PARA O CARREGAMENTO
+            mostrarAviso("E-mail ou senha incorretos.");
+            btn.disabled = false;
+            return;
         }
 
-        const dados = await respostaBaserow.json();
-        
-        // Localiza o usuário correspondente (Validação sem distinção de maiúsculas/minúsculas)
-        const usuarioEncontrado = dados.results.find(u => 
-            u.Email && u.Email.toLowerCase().trim() === email.toLowerCase().trim() && 
-            u.Senha && String(u.Senha).trim() === String(senha).trim()
-        );
+        const usuario = dados.results.find(row => row.Email === email && row.Senha === senha);
 
-        if (usuarioEncontrado) {
-            return res.status(200).json({
-                success: true,
-                usuario: {
-                    Nome: usuarioEncontrado.Nome || "Não informado",
-                    Email: usuarioEncontrado.Email || email,
-                    DRT: usuarioEncontrado.DRT || "Sem DRT",
-                    Cargo: usuarioEncontrado.Cargo || "Sem cargo",
-                    Foto: usuarioEncontrado.Foto || "",
-                    Loja: usuarioEncontrado.Loja || "Sem loja",
-                    id: String(usuarioEncontrado.id)
-                }
-            });
+        if (usuario) {
+            let urlFoto = "";
+            if (typeof usuario.Foto === "string") {
+                urlFoto = usuario.Foto;
+            } else if (Array.isArray(usuario.Foto) && usuario.Foto.length > 0) {
+                urlFoto = usuario.Foto[0].url;
+            }
+
+            const listaParaKodular = [
+                usuario.Nome || "Não informado",
+                usuario.Email || email,
+                usuario.DRT || "Sem DRT",
+                usuario.Cargo || "Sem cargo",
+                urlFoto,
+                usuario.Loja || "Sem loja",
+                usuario.ID || usuario.id
+            ];
+
+            const dadosEmTexto = JSON.stringify(listaParaKodular);
+
+            if (window.AppInventor) {
+                window.AppInventor.setWebViewString(dadosEmTexto);
+                pararCarregamento(); // PARA O CARREGAMENTO
+            } else {
+                pararCarregamento(); // PARA O CARREGAMENTO
+                console.log("Sucesso:", dadosEmTexto);
+                mostrarAviso("Login efetuado com sucesso!");
+                btn.disabled = false;
+            }
         } else {
-            return res.status(401).json({ success: false, message: 'E-mail ou senha incorretos.' });
+            pararCarregamento(); // PARA O CARREGAMENTO
+            mostrarAviso("E-mail ou senha incorretos.");
+            btn.disabled = false;
         }
 
-    } catch (error) {
-        return res.status(500).json({ success: false, message: 'Erro interno no servidor: ' + error.message });
+    } catch (erro) {
+        pararCarregamento(); // PARA O CARREGAMENTO EM CASO DE ERRO
+        mostrarAviso("Erro de conexão. Verifique sua internet.");
+        console.error(erro);
+        btn.disabled = false;
     }
 }
