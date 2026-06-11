@@ -5,55 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário de Contato</title>
     <style>
+        /* Fundo Blindado e Fonte do Sistema */
         body { 
-            font-family: sans-serif; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             margin: 0; 
             padding: 20px; 
             max-width: 400px; 
             margin: 0 auto;
+            background-color: #001f42; /* Azul oficial do app */
+            color: #ffffff;
         }
         
-        h2 { text-align: center; color: #333; margin-top: 20px; }
+        /* Título com leve efeito Neon */
+        h2 { 
+            text-align: center; 
+            color: #ffffff; 
+            margin-top: 10px; 
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 6px rgba(0, 180, 216, 0.4);
+        }
         
-        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        /* Labels em Cian e Maiúsculas */
+        label { 
+            display: block; 
+            margin-bottom: 0.5rem; 
+            font-weight: bold; 
+            color: #00b4d8;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
         
+        /* Texto de Ajuda Escurecido */
         .help-text {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+            color: #8fa3b0;
+            margin-bottom: 0.8rem;
             font-style: italic;
         }
         
+        /* Caixas de Digitação Estilo HUD */
         input, textarea, select { 
             width: 100%; 
-            margin-bottom: 1rem; 
-            padding: 12px; 
+            margin-bottom: 1.5rem; 
+            padding: 14px; 
             box-sizing: border-box; 
-            border: 1px solid #ccc; 
+            border: 1px solid #002d5e; 
             border-radius: 8px;
-            font-size: 16px;
-            background-color: white;
+            font-size: 15px;
+            background-color: #001630; /* Fundo mais escuro para o campo */
+            color: #ffffff;
+            transition: all 0.2s ease;
         }
 
+        /* Cor do texto quando o campo está vazio */
+        input::placeholder, textarea::placeholder {
+            color: #4a627a;
+        }
+
+        /* Cor de fundo das opções do seletor */
+        option {
+            background-color: #001630;
+            color: #ffffff;
+        }
+
+        /* Efeito ao clicar no campo para digitar */
         select:focus, input:focus, textarea:focus {
-            outline: 2px solid #007bff;
-            border-color: transparent;
+            outline: none;
+            border-color: #00b4d8;
+            box-shadow: 0 0 8px rgba(0, 180, 216, 0.4);
         }
         
+        /* Botão Pílula Tático */
         button { 
-            background: #007bff; 
+            background: linear-gradient(180deg, #0072ff 0%, #0044cc 100%);
             color: white; 
             border: none; 
-            padding: 15px; 
+            padding: 16px; 
             cursor: pointer; 
             width: 100%; 
-            border-radius: 8px;
+            border-radius: 50px;
             font-size: 16px;
             font-weight: bold;
+            text-transform: uppercase;
             margin-bottom: 30px;
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.1s ease;
+            -webkit-tap-highlight-color: transparent;
         }
         
-        button:hover { background: #0056b3; }
+        /* Efeito de clique no botão */
+        button:active { 
+            transform: scale(0.98);
+            background: linear-gradient(180deg, #0044cc 0%, #002288 100%);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -102,4 +150,4 @@
     </form>
 
 </body>
-</html>
+</html>v
