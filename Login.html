@@ -476,4 +476,26 @@
 
                     const dadosEmTexto = JSON.stringify(listaParaKodular);
 
-                    if (
+                    if (window.AppInventor) {
+                        window.AppInventor.setWebViewString(dadosEmTexto);
+                        pararCarregamento();
+                    } else {
+                        pararCarregamento();
+                        mostrarAviso("Login efetuado com sucesso!");
+                        btn.disabled = false;
+                    }
+                } else {
+                    pararCarregamento();
+                    mostrarAviso(resultado.message || "E-mail ou senha incorretos.");
+                    btn.disabled = false;
+                }
+
+            } catch (erro) {
+                pararCarregamento();
+                mostrarAviso("Erro de conexão. Verifique sua internet.");
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
