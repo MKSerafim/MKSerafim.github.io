@@ -1,37 +1,66 @@
 export default async function handler(req, res) {
-    // Só aceita requisições do tipo POST
+    // Configuração de CORS para permitir requisições seguras do aplicativo
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Método não permitido' });
+        return res.status(405).json({ message: 'Método não permitido' });
     }
 
     const { email, senha } = req.body;
+    const token = process.env.BASEROW_TOKEN;
+    const tableId = "180827"; 
 
-    // O Token fica escondido nas configurações da Vercel!
-    const TOKEN = process.env.BASEROW_TOKEN; 
-    const TABLE_ID = "180827";
-    const API_URL = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true&search=${encodeURIComponent(email)}`;
+    if (!email || !senha) {
+        return res.status(400).json({ success: false, message: 'E-mail e senha são obrigatórios.' });
+    }
 
     try {
-        const resposta = await fetch(API_URL, {
-            headers: { "Authorization": `Token ${TOKEN}` }
+        // Busca os usuários cadastrados no banco de dados do Baserow
+        const respostaBaserow = await fetch(`https://api.baserow.io/api/database/rows/table/${tableId}/?user_field_names=true`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json'
+            }
         });
-        const dados = await resposta.json();
 
-        if (dados.count === 0) {
-            return res.status(401).json({ success: false, message: "E-mail ou senha incorretos." });
+        if (!respostaBaserow.ok) {
+            return res.status(500).json({ success: false, message: 'Erro na integração com o banco de dados.' });
         }
 
-        // A validação da senha acontece AQUI no servidor
-        const usuario = dados.results.find(row => row.Email === email && row.Senha === senha);
+        const dados = await respostaBaserow.json();
+        
+        // Localiza o usuário correspondente (Validação sem distinção de maiúsculas/minúsculas)
+        const usuarioEncontrado = dados.results.find(u => 
+            u.Email && u.Email.toLowerCase().trim() === email.toLowerCase().trim() && 
+            u.Senha && String(u.Senha).trim() === String(senha).trim()
+        );
 
-        if (usuario) {
-            delete usuario.Senha; // Limpa a senha antes de devolver pro celular
-            return res.status(200).json({ success: true, usuario });
+        if (usuarioEncontrado) {
+            return res.status(200).json({
+                success: true,
+                usuario: {
+                    Nome: usuarioEncontrado.Nome || "Não informado",
+                    Email: usuarioEncontrado.Email || email,
+                    DRT: usuarioEncontrado.DRT || "Sem DRT",
+                    Cargo: usuarioEncontrado.Cargo || "Sem cargo",
+                    Foto: usuarioEncontrado.Foto || "",
+                    Loja: usuarioEncontrado.Loja || "Sem loja",
+                    id: String(usuarioEncontrado.id)
+                }
+            });
         } else {
-            return res.status(401).json({ success: false, message: "E-mail ou senha incorretos." });
+            return res.status(401).json({ success: false, message: 'E-mail ou senha incorretos.' });
         }
 
-    } catch (erro) {
-        return res.status(500).json({ success: false, message: "Erro interno no servidor." });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Erro interno no servidor: ' + error.message });
     }
 }
