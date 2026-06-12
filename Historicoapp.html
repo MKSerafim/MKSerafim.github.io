@@ -5,12 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico de Notificações</title>
     <style>
-        /* Reset e Estilização Base - Fundo Oficial Blindado */
+        /* Reset e Estilização Base */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #001f42; /* Azul escuro oficial */
             color: #ffffff;
+            /* Removemos o padding geral do body para não atrapalhar o carregamento centralizado */
+        }
+        
+        /* ===================================================
+           TELA DE CARREGAMENTO (SPLASH SCREEN CENTRALIZADA)
+           =================================================== */
+        #tela-carregamento {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #001f42;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Garante que fique por cima de tudo */
+        }
+
+        /* Efeito de processamento de dados (Equalizador) */
+        .bars-loader {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .bars-loader div {
+            width: 6px;
+            height: 35px;
+            background-color: #00b4d8;
+            border-radius: 4px;
+            animation: pulse-bars 1.2s infinite ease-in-out;
+            box-shadow: 0 0 12px rgba(0, 180, 216, 0.6);
+        }
+
+        /* Atrasos diferentes para criar a onda */
+        .bars-loader div:nth-child(1) { animation-delay: -1.2s; }
+        .bars-loader div:nth-child(2) { animation-delay: -1.1s; }
+        .bars-loader div:nth-child(3) { animation-delay: -1.0s; }
+        .bars-loader div:nth-child(4) { animation-delay: -0.9s; }
+        .bars-loader div:nth-child(5) { animation-delay: -0.8s; }
+
+        @keyframes pulse-bars {
+            0%, 40%, 100% { transform: scaleY(0.4); opacity: 0.5; }
+            20% { transform: scaleY(1); opacity: 1; }
+        }
+
+        .loading-text {
+            text-align: center;
+            color: #00b4d8;
+            font-size: 0.95rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: pulseText 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulseText {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        /* =================================================== */
+
+        /* Container Principal (Oculto inicialmente) */
+        #conteudo-principal {
+            display: none; /* Só aparece quando o JS mandar */
             padding: 15px;
             max-width: 800px;
             margin: 0 auto;
@@ -29,87 +96,21 @@
             gap: 15px; 
         }
         
-        /* ===================================================
-           ESTILOS DO CARREGAMENTO HIGH-TECH (SPINNER)
-           =================================================== */
-        #loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 0;
-            gap: 20px;
-            width: 100%;
-        }
-
-        /* O anel externo ciano com brilho */
-        .spinner {
-            position: relative;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 4px solid #002d5e; /* Fundo do trilho */
-            border-top: 4px solid #00b4d8; /* Cor que gira */
-            box-shadow: 0 0 15px rgba(0, 180, 216, 0.4); /* Efeito Neon */
-            animation: spin 1s linear infinite;
-        }
-
-        /* O anel interno branco girando ao contrário */
-        .spinner::before {
-            content: "";
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            right: 6px;
-            bottom: 6px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-bottom: 3px solid #ffffff;
-            animation: spinReverse 1.5s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes spinReverse {
-            0% { transform: rotate(360deg); }
-            100% { transform: rotate(0deg); }
-        }
-
-        /* Texto de carregamento */
-        .loading-text {
-            text-align: center;
-            color: #00b4d8; /* Ciano de destaque */
-            font-size: 0.95rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            animation: pulseText 1.5s infinite ease-in-out;
-        }
-
-        @keyframes pulseText {
-            0% { opacity: 0.5; transform: scale(0.98); }
-            50% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0.5; transform: scale(0.98); }
-        }
-        /* =================================================== */
-        
-        /* Estilo dos Cartões Reais (Quando carregados) */
+        /* Estilo dos Cartões Reais */
         .card {
             background-color: #001630;
             border-radius: 12px;
             padding: 15px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             border: 1px solid #002d5e;
-            border-left: 5px solid #00b4d8; /* Borda esquerda base */
+            border-left: 5px solid #00b4d8;
             transition: transform 0.2s ease;
         }
         
         /* Cores baseadas no tipo de alerta adaptadas para Dark Mode */
-        .card.vencidos { border-left-color: #ff4757; } /* Vermelho Neon para Vencidos */
-        .card.proximo { border-left-color: #00b4d8; } /* Ciano para Próximo */
-        .card.sem-data { border-left-color: #ffa502; } /* Amarelo/Laranja para Sem Data */
+        .card.vencidos { border-left-color: #ff4757; } 
+        .card.proximo { border-left-color: #00b4d8; } 
+        .card.sem-data { border-left-color: #ffa502; } 
 
         .card-header { 
             display: flex; 
@@ -129,25 +130,24 @@
         
         .card-date { 
             font-size: 0.85rem; 
-            color: #8c9baf; /* Cinza azulado claro para data */
+            color: #8c9baf; 
         }
         
         .card-origin { 
-            background-color: #002d5e; /* Fundo da tag no dark mode */
+            background-color: #002d5e; 
             padding: 4px 10px; 
             border-radius: 12px; 
             font-size: 0.75rem; 
             font-weight: bold; 
-            color: #00b4d8; /* Texto em ciano */
+            color: #00b4d8; 
             border: 1px solid rgba(0, 180, 216, 0.3);
         }
         
-        /* Formatação da lista de produtos */
         .produto-item { 
             font-size: 0.9rem; 
             padding: 8px 0; 
             border-bottom: 1px dashed #002d5e; 
-            color: #cccccc; /* Texto descritivo claro */
+            color: #cccccc; 
         }
         
         .produto-item:last-child { 
@@ -155,7 +155,6 @@
             padding-bottom: 0;
         }
 
-        /* Classes de cores nos títulos dos cards para combinar com as bordas */
         .card.vencidos .card-title { color: #ff4757; }
         .card.proximo .card-title { color: #00b4d8; }
         .card.sem-data .card-title { color: #ffa502; }
@@ -164,17 +163,19 @@
 </head>
 <body>
 
-    <h2>Histórico de Alertas</h2>
-    
-    <div id="loading">
-        <div class="spinner"></div>
-        <div class="loading-text">Sincronizando dados...</div>
+    <div id="tela-carregamento">
+        <div class="bars-loader">
+            <div></div><div></div><div></div><div></div><div></div>
+        </div>
+        <div class="loading-text">Buscando alertas do sistema...</div>
     </div>
 
-    <div id="historico-container"></div>
+    <div id="conteudo-principal">
+        <h2>Histórico de Alertas</h2>
+        <div id="historico-container"></div>
+    </div>
 
     <script>
-        // Link do seu Apps Script
         const scriptUrl = 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadHistorico';
 
         async function carregarHistorico() {
@@ -184,26 +185,25 @@
                 
                 const container = document.getElementById('historico-container');
                 
-                // Esconde todo o bloco de carregamento (spinner + texto)
-                document.getElementById('loading').style.display = 'none';
+                // === A MÁGICA ACONTECE AQUI ===
+                // Oculta a tela de carregamento inteira
+                document.getElementById('tela-carregamento').style.display = 'none';
+                // Mostra o título e os cards de uma vez só
+                document.getElementById('conteudo-principal').style.display = 'block';
 
-                // Inverte o array para mostrar os mais recentes primeiro
                 data.reverse().forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'card';
                     
-                    // Define a cor do card baseado no título
                     if (item.titulo.includes('VENCIDOS')) card.classList.add('vencidos');
                     else if (item.titulo.includes('VENCIMENTO PRÓXIMO')) card.classList.add('proximo');
                     else if (item.titulo.includes('SEM DATA')) card.classList.add('sem-data');
 
-                    // Formata a data
                     const dataFormatada = new Date(item.dataHora).toLocaleString('pt-BR', {
                         day: '2-digit', month: '2-digit', year: 'numeric',
                         hour: '2-digit', minute: '2-digit'
                     });
 
-                    // Quebra a mensagem pelos \n para criar linhas separadas
                     const linesMensagem = item.mensagem.split('\n').map(linha => `<div class="produto-item">${linha}</div>`).join('');
 
                     card.innerHTML = `
@@ -220,13 +220,13 @@
                 });
 
             } catch (error) {
-                // Se der erro, para o spinner e mostra o aviso em vermelho
-                document.getElementById('loading').innerHTML = '<div class="loading-text" style="color: #ff4757; animation: none;">Falha na sincronização. Verifique a conexão de rede.</div>';
+                // Se der erro, mantém centralizado mas mostra a mensagem de erro em vermelho
+                const telaCarregamento = document.getElementById('tela-carregamento');
+                telaCarregamento.innerHTML = '<div class="loading-text" style="color: #ff4757; animation: none;">Falha na sincronização. Verifique sua conexão.</div>';
                 console.error('Erro:', error);
             }
         }
 
-        // Inicia o carregamento assim que a página abre
         carregarHistorico();
     </script>
 </body>
