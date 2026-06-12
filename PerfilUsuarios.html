@@ -3,239 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Tático - Colaboradores</title>
+    <title>Monitoramento Tático - Equipe</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: #001F42;
+            background-color: #001226;
             color: #ffffff;
             font-family: 'Rajdhani', sans-serif;
             padding: 20px;
-            background-image: linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(0, 245, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 245, 255, 0.02) 1px, transparent 1px);
             background-size: 20px 20px;
         }
 
+        .container { max-width: 1200px; margin: 0 auto; }
+
         .header {
-            text-align: center; margin-bottom: 30px; border-bottom: 1px dashed rgba(0, 245, 255, 0.3); padding-bottom: 20px;
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            background: rgba(0, 31, 66, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            position: relative;
         }
-
-        .header h1 {
-            font-size: 2rem; text-transform: uppercase; letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0, 245, 255, 0.6); color: #fff;
-            border-left: 4px solid #00f5ff; padding-left: 10px; display: inline-block;
+        .header::before {
+            content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 4px; background: #00f5ff; box-shadow: 0 0 10px #00f5ff;
         }
+        .header h1 { font-size: 1.8rem; text-transform: uppercase; letter-spacing: 2px; color: #fff; }
 
-        /* Cards Superiores (Resumo) */
-        .resumo-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto;
+        /* Grid de Resumos */
+        .grid-stats {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px;
         }
-
-        .resumo-card {
-            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(0, 245, 255, 0.3);
-            border-radius: 8px; padding: 15px; text-align: center;
-            box-shadow: 0 0 15px rgba(0, 245, 255, 0.05);
+        .card-stat {
+            background: rgba(0, 20, 40, 0.6); border: 1px solid rgba(0, 245, 255, 0.15);
+            padding: 20px; border-radius: 6px; text-align: center; position: relative;
         }
+        .card-stat h3 { font-size: 0.9rem; color: #88a8c8; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        .card-stat .num { font-family: 'Share Tech Mono', monospace; font-size: 2.8rem; color: #00f5ff; text-shadow: 0 0 10px rgba(0, 245, 255, 0.4); }
 
-        .resumo-card h3 { color: #88a8c8; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 5px; }
-        .resumo-card .valor { font-family: 'Share Tech Mono', monospace; font-size: 2.5rem; color: #00f5ff; text-shadow: 0 0 10px rgba(0, 245, 255, 0.5); }
-
-        /* Blocos das Lojas */
-        .loja-section {
-            background: rgba(0, 31, 66, 0.8); border: 1px solid rgba(0, 180, 216, 0.3);
-            border-radius: 10px; padding: 20px; margin-bottom: 30px;
+        /* Seções de Lojas */
+        .loja-box {
+            background: rgba(0, 25, 51, 0.4); border: 1px solid rgba(0, 180, 216, 0.25);
+            border-radius: 8px; padding: 20px; margin-bottom: 25px;
         }
-
-        .loja-header {
+        .loja-title-bar {
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(0, 245, 255, 0.2); padding-bottom: 10px; margin-bottom: 15px;
+            border-bottom: 1px dashed rgba(0, 245, 255, 0.2); padding-bottom: 10px; margin-bottom: 20px;
+        }
+        .loja-title-bar h2 { color: #00f5ff; font-size: 1.4rem; text-transform: uppercase; }
+        .counter-badge {
+            background: rgba(0, 245, 255, 0.1); border: 1px solid #00f5ff;
+            color: #fff; padding: 3px 12px; border-radius: 4px; font-size: 0.85rem; font-weight: bold;
         }
 
-        .loja-header h2 { color: #00f5ff; font-size: 1.5rem; text-transform: uppercase; }
-        .badge-qtd {
-            background: rgba(0, 245, 255, 0.15); border: 1px solid #00f5ff;
-            padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 700; color: #fff;
-        }
-
-        /* Grid de Colaboradores */
-        .colaboradores-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;
-        }
-
+        /* Grid de Usuários */
+        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .user-card {
-            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 15px;
-            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px; padding: 15px; display: flex; align-items: center; gap: 15px;
+            transition: all 0.25s ease;
         }
+        .user-card:hover { border-color: #00f5ff; background: rgba(0, 245, 255, 0.04); transform: translateY(-1px); }
         
-        .user-card:hover { border-color: #00f5ff; transform: translateY(-2px); background: rgba(0, 245, 255, 0.05); }
+        .avatar img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid #88a8c8; background: #001226; }
+        .info { display: flex; flex-direction: column; min-width: 0; }
+        .info .name { font-size: 1.1rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .info .role { font-size: 0.85rem; color: #00b4d8; font-weight: bold; text-transform: uppercase; margin-top: 2px; }
+        .info .drt { font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: #708fa6; margin-top: 4px; }
 
-        .foto-container img {
-            width: 60px; height: 60px; border-radius: 50%; object-fit: cover;
-            border: 2px solid #88a8c8; background-color: #111;
+        /* Status & Debugger Tool */
+        .status-panel { text-align: center; padding: 40px; font-size: 1.2rem; color: #ffcc00; }
+        
+        .debug-container {
+            background: rgba(255, 51, 51, 0.08); border: 1px solid #ff3333;
+            border-radius: 8px; padding: 25px; margin: 20px 0; display: none;
         }
-
-        .user-info { display: flex; flex-direction: column; overflow: hidden; }
-        .user-info h4 { font-size: 1.1rem; margin: 0 0 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
-        .user-info .cargo { font-size: 0.8rem; color: #00f5ff; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
-        .user-info .drt { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: #88a8c8; }
-
-        /* Mensagens de Status e Erro */
-        #status-msg { text-align: center; font-size: 1.2rem; margin: 20px 0; color: #ffcc00; }
-        #error-box { display: none; background: rgba(255, 51, 51, 0.1); border: 1px solid #ff3333; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #ff3333; text-align: center; }
+        .debug-container h4 { color: #ff3333; text-transform: uppercase; margin-bottom: 15px; font-size: 1.2rem; }
+        .debug-form { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 6px; }
+        .debug-form input {
+            background: #001226; border: 1px solid rgba(255,255,255,0.2); color: #fff;
+            padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 0.9rem; flex: 1; min-width: 200px;
+        }
+        .debug-form input:focus { border-color: #00f5ff; outline: none; }
+        .debug-form button {
+            background: #ff3333; color: #fff; border: none; padding: 8px 20px;
+            border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase;
+        }
+        .debug-form button:hover { background: #ff5555; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Gestão Tática de Equipe</h1>
-    </div>
+    <div class="container">
+        <div class="header">
+            <h1>Monitoramento Tático de Equipe</h1>
+        </div>
 
-    <div id="status-msg">Iniciando conexão com o servidor...</div>
-    
-    <div id="error-box"></div>
+        <div id="status-display" class="status-panel">Estabelecendo link de dados...</div>
 
-    <div id="painel-conteudo" style="display: none;">
-        <div class="resumo-grid" id="resumo-geral">
+        <div id="debug-box" class="debug-container">
+            <h4>⚠️ Erro de Autenticação (HTTP 401)</h4>
+            <p>O Baserow rejeitou as credenciais fornecidas. Como você mencionou que o token funciona no seu app, ajuste os campos abaixo para testar em tempo real:</p>
+            <div class="debug-form">
+                <input type="text" id="input-token" placeholder="Cole o Token Aqui">
+                <input type="text" id="input-table" placeholder="ID da Tabela">
+                <button onclick="testarNovasCredenciais()">Forçar Conexão</button>
             </div>
-        <div id="lojas-container">
-            </div>
+        </div>
+
+        <div id="main-content" style="display: none;">
+            <div class="grid-stats" id="stats-summary"></div>
+            <div id="lojas-render-target"></div>
+        </div>
     </div>
 
     <script>
-        // CONFIGURAÇÕES DA API BASEROW
-        const TABLE_ID = "180827";
-        const TOKEN = "x6rXtkpcBaAYIER6MMDo6Lfd0RSS28Ey";
-        const API_URL = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true&size=100`;
+        // CREDENCIAIS PADRÃO
+        let CONFIG = {
+            TABLE_ID: "180827",
+            TOKEN: "x6rXtkpcBaAYIER6MMDo6Lfd0RSS28Ey"
+        };
 
-        // Elementos da tela
-        const statusMsg = document.getElementById('status-msg');
-        const errorBox = document.getElementById('error-box');
-        const painelConteudo = document.getElementById('painel-conteudo');
-        const resumoGeral = document.getElementById('resumo-geral');
-        const lojasContainer = document.getElementById('lojas-container');
+        const statusDisplay = document.getElementById('status-display');
+        const debugBox = document.getElementById('debug-box');
+        const mainContent = document.getElementById('main-content');
 
-        function mostrarErro(mensagem, detalhe = "") {
-            statusMsg.style.display = 'none';
-            errorBox.style.display = 'block';
-            errorBox.innerHTML = `<strong>FALHA CRÍTICA:</strong> ${mensagem} <br><small>${detalhe}</small>`;
-        }
-
-        async function iniciarSistema() {
+        async function puxarDadosServidor() {
             try {
-                statusMsg.innerText = "Conectando ao Baserow...";
-
-                const response = await fetch(API_URL, {
+                statusDisplay.style.display = 'block';
+                statusDisplay.innerText = "Sincronizando com a API Baserow...";
+                
+                const url = `https://api.baserow.io/api/database/rows/table/${CONFIG.TABLE_ID}/?user_field_names=true&size=100`;
+                
+                const response = await fetch(url, {
                     method: "GET",
-                    headers: { 'Authorization': `Token ${TOKEN}` }
+                    headers: { 'Authorization': `Token ${CONFIG.TOKEN}` }
                 });
 
-                if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status} - Verifique se o Token e o Table ID estão corretos.`);
-                }
-
-                const data = await response.json();
-                
-                if (!data.results || data.results.length === 0) {
-                    mostrarErro("A tabela está vazia ou não possui registros.");
+                if (response.status === 401) {
+                    statusDisplay.style.display = 'none';
+                    debugBox.style.display = 'block';
+                    document.getElementById('input-token').value = CONFIG.TOKEN;
+                    document.getElementById('input-table').value = CONFIG.TABLE_ID;
                     return;
                 }
 
-                processarDados(data.results);
+                if (!response.ok) throw new Error(`Status HTTP: ${response.status}`);
 
-            } catch (error) {
-                mostrarErro("Erro ao carregar os dados.", error.message);
-                console.error("Erro técnico:", error);
+                const data = await response.json();
+                debugBox.style.display = 'none';
+                statusDisplay.style.display = 'none';
+                
+                renderizarPainel(data.results || []);
+
+            } catch (err) {
+                statusDisplay.innerHTML = `<span style="color:#ff3333">Erro de Conexão: ${err.message}</span>`;
             }
         }
 
-        function processarDados(usuarios) {
-            // 1. Agrupar os usuários por Loja
-            const lojas = {};
-            let totalColaboradores = 0;
+        function testarNovasCredenciais() {
+            CONFIG.TOKEN = document.getElementById('input-token').value.trim();
+            CONFIG.TABLE_ID = document.getElementById('input-table').value.trim();
+            puxarDadosServidor();
+        }
 
-            usuarios.forEach(user => {
-                // Tenta pegar a loja. Se estiver vazio, joga em "SEM LOJA"
-                const nomeLoja = user.Loja ? user.Loja.trim() : "LOJA NÃO INFORMADA";
-                
-                if (!lojas[nomeLoja]) {
-                    lojas[nomeLoja] = [];
-                }
-                lojas[nomeLoja].push(user);
-                totalColaboradores++;
+        function renderizarPainel(registros) {
+            if(registros.length === 0) {
+                statusDisplay.style.display = 'block';
+                statusDisplay.innerText = "Aviso: Nenhum colaborador cadastrado nesta tabela.";
+                return;
+            }
+
+            // Agrupamento
+            const mapaLojas = {};
+            let contagemTotal = 0;
+
+            registros.forEach(item => {
+                const local = item.Loja ? item.Loja.trim() : "LOJA NÃO DEFINIDA";
+                if (!mapaLojas[local]) mapaLojas[local] = [];
+                mapaLojas[local].push(item);
+                contagemTotal++;
             });
 
-            const totalLojas = Object.keys(lojas).length;
-
-            // 2. Preencher os blocos superiores
-            resumoGeral.innerHTML = `
-                <div class="resumo-card">
-                    <h3>Colaboradores Ativos</h3>
-                    <div class="valor">${totalColaboradores}</div>
-                </div>
-                <div class="resumo-card">
-                    <h3>Lojas Monitoradas</h3>
-                    <div class="valor">${totalLojas}</div>
-                </div>
+            // Renderizar estatísticas superiores
+            document.getElementById('stats-summary').innerHTML = `
+                <div class="card-stat"><h3>Total Colaboradores</h3><div class="num">${contagemTotal}</div></div>
+                <div class="card-stat"><h3>Lojas Conectadas</h3><div class="num">${Object.keys(mapaLojas).length}</div></div>
             `;
 
-            // 3. Criar as seções para cada loja
-            let htmlLojas = "";
-
-            // Organizar em ordem alfabética pelo nome da loja
-            const lojasOrdenadas = Object.keys(lojas).sort();
-
-            lojasOrdenadas.forEach(lojaNome => {
-                const equipe = lojas[lojaNome];
-                
-                htmlLojas += `
-                    <div class="loja-section">
-                        <div class="loja-header">
-                            <h2>${lojaNome}</h2>
-                            <div class="badge-qtd">${equipe.length} PESSOA(S)</div>
+            // Renderizar seções por loja
+            let htmlHTML = "";
+            Object.keys(mapaLojas).sort().forEach(nomeLoja => {
+                const equipe = mapaLojas[nomeLoja];
+                htmlHTML += `
+                    <div class="loja-box">
+                        <div class="loja-title-bar">
+                            <h2>${nomeLoja}</h2>
+                            <div class="counter-badge">${equipe.length} INTEGRANTE(S)</div>
                         </div>
-                        <div class="colaboradores-grid">
+                        <div class="user-grid">
                 `;
 
-                equipe.forEach(u => {
-                    // Trata os campos caso estejam em branco no Baserow
-                    const nome = u.Nome || u.Email || "Colaborador sem nome";
-                    const cargo = u.Cargo || "Cargo não definido";
-                    const drt = u.DRT ? `DRT: ${u.DRT}` : "Sem DRT";
-                    const fotoUrl = u.Foto || "https://ui-avatars.com/api/?name=" + encodeURIComponent(nome) + "&background=001F42&color=00f5ff";
+                equipe.forEach(colab => {
+                    // Mapeamento dinâmico inteligente (Aceita Nome ou Email se Nome faltar)
+                    const displayNome = colab.Nome || colab.Email || "Sem identificação";
+                    const displayCargo = colab.Cargo || "Cargo não informado";
+                    const displayDRT = colab.DRT ? `DRT: ${colab.DRT}` : "Sem Registro DRT";
+                    
+                    // Fallback de imagem usando as iniciais do nome caso a foto falhe ou venha vazia
+                    const fotoValida = colab.Foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayNome)}&background=002347&color=00f5ff&bold=true`;
 
-                    htmlLojas += `
+                    htmlHTML += `
                         <div class="user-card">
-                            <div class="foto-container">
-                                <img src="${fotoUrl}" onerror="this.src='https://ui-avatars.com/api/?name=Erro&background=ff3333&color=fff'">
+                            <div class="avatar">
+                                <img src="${fotoValida}" onerror="this.src='https://ui-avatars.com/api/?name=Erro&background=ff3333&color=fff'">
                             </div>
-                            <div class="user-info">
-                                <h4>${nome}</h4>
-                                <div class="cargo">${cargo}</div>
-                                <div class="drt">${drt}</div>
+                            <div class="info">
+                                <div class="name">${displayNome}</div>
+                                <div class="role">${displayCargo}</div>
+                                <div class="drt">${displayDRT}</div>
                             </div>
                         </div>
                     `;
                 });
 
-                htmlLojas += `
-                        </div>
-                    </div>
-                `;
+                htmlHTML += `</div></div>`;
             });
 
-            lojasContainer.innerHTML = htmlLojas;
-
-            // Oculta mensagem de status e exibe o painel
-            statusMsg.style.display = 'none';
-            painelConteudo.style.display = 'block';
+            document.getElementById('lojas-render-target').innerHTML = htmlHTML;
+            mainContent.style.display = 'block';
         }
 
-        // Inicia a aplicação ao carregar a página
-        window.onload = iniciarSistema;
+        window.onload = puxarDadosServidor;
     </script>
 </body>
 </html>
