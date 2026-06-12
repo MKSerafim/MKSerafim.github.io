@@ -48,6 +48,23 @@
             border-left: 3px solid #ff3333; padding-left: 8px;
         }
 
+        /* Seletor de Fontes HUD (PGC / PRC) */
+        .fonte-selector {
+            display: flex; gap: 6px; margin-top: 10px;
+        }
+        .btn-toggle {
+            flex: 1; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(0, 245, 255, 0.2);
+            color: #88a8c8; padding: 5px; font-size: 0.68rem; font-weight: 700;
+            border-radius: 4px; cursor: pointer; transition: all 0.2s;
+            font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .btn-toggle:hover { background: rgba(0, 245, 255, 0.08); color: #00f5ff; }
+        .btn-toggle.active {
+            background: rgba(0, 245, 255, 0.15); border-color: #00f5ff; color: #ffffff;
+            box-shadow: 0 0 8px rgba(0, 245, 255, 0.3);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
         /* Grid Superior */
         .content-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 10px; }
 
@@ -155,7 +172,7 @@
 
         .status-dot { display: inline-block; width: 5px; height: 5px; background: #00ff66; border-radius: 50%; box-shadow: 0 0 8px #00ff66; margin-right: 4px; animation: nodeFlicker 0.6s infinite alternate; }
         .status-text { color: #00ff66; font-size: 0.62rem; font-weight: 700; display: flex; align-items: center; text-align: center; }
-        .criterio { color: #88a8c8; font-size: 0.58rem; margin-top: 2px; }
+        .criterio { color: #88a8c8; font-size: 0.58rem; margin-top: 2px; text-transform: uppercase; font-weight: bold; }
         
         .timer-update { font-family: 'Share Tech Mono', monospace; color: #00b4d8; font-size: 0.55rem; margin-top: 4px; font-weight: bold; }
 
@@ -178,6 +195,10 @@
         
         <div class="header">
             <h1>Monitoramento Tático<br>De Vencimentos</h1>
+            <div class="fonte-selector">
+                <button class="btn-toggle active" id="btn-PGC" onclick="mudarFonte('PGC')">Filtro PGC</button>
+                <button class="btn-toggle" id="btn-PRC" onclick="mudarFonte('PRC')">PRC (Perecíveis)</button>
+            </div>
         </div>
 
         <div class="content-grid">
@@ -264,7 +285,7 @@
                 <div class="btn-analise" onclick="forcarSincronizacao()">FORÇAR SYNC</div>
                 <div class="status-text" id="status-conexao"><span class="status-dot"></span>AGUARDANDO DADOS</div>
                 <div class="timer-update" id="contador-tempo">AUTO-SYNC EM: 30s</div>
-                <div class="criterio">Origem: Google Sheets</div>
+                <div class="criterio" id="din-origem">SYS: PGC ACTIVE</div>
             </div>
 
         </div>
@@ -272,8 +293,13 @@
     </div>
 
     <script>
-        const baseUrl = 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadHistorico';
+        // Objeto centralizando os links das duas fontes enviadas
+        const fontesDados = {
+            PGC: 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadAll',
+            PRC: 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadAll1'
+        };
         
+        let fonteAtual = 'PGC'; // Estado inicial
         const INTERVALO_SEGUNDOS = 30; 
         let tempoRestante = INTERVALO_SEGUNDOS;
 
@@ -286,13 +312,14 @@
                 statusEl.style.color = '#ffcc00';
                 contadorEl.innerText = 'PROCESSANDO...';
                 
-                // Força o link a mudar a cada requisição gerando um link único com timestamp
-                const urlSemCache = `${baseUrl}&_=${new Date().getTime()}`;
+                // Escolhe dinamicamente a URL ativa com base na seleção do usuário
+                const baseUrlAtiva = fontesDados[fonteAtual];
+                const urlSemCache = `${baseUrlAtiva}&_=${new Date().getTime()}`;
                 
                 const response = await fetch(urlSemCache);
                 const data = await response.json();
 
-                console.log("Dados do Sheets:", data);
+                console.log(`Dados carregados (${fonteAtual}):`, data);
 
                 let totalItens = 0;
                 let qtdVencidos = 0;
@@ -330,6 +357,24 @@
             }
             
             tempoRestante = INTERVALO_SEGUNDOS;
+        }
+
+        // Nova Função Tática: Alternar Fontes diretamente pela Interface
+        function mudarFonte(novaFonte) {
+            if (fonteAtual === novaFonte) return; // Se já estiver nela, ignora
+            
+            fonteAtual = novaFonte;
+            
+            // Atualizar classes visuais dos botões
+            document.getElementById('btn-PGC').classList.remove('active');
+            document.getElementById('btn-PRC').classList.remove('active');
+            document.getElementById(`btn-${novaFonte}`).classList.add('active');
+            
+            // Atualizar indicador de sistema ativo no rodapé direito
+            document.getElementById('din-origem').innerText = `SYS: ${novaFonte} ACTIVE`;
+            
+            // Zera o tempo e força a busca imediata da nova planilha
+            forcarSincronizacao();
         }
 
         function atualizarRelogio() {
