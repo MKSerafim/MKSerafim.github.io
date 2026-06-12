@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>Painel Hiper-Ativo - Prevenção</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap');
@@ -153,7 +157,6 @@
         .status-text { color: #00ff66; font-size: 0.62rem; font-weight: 700; display: flex; align-items: center; text-align: center; }
         .criterio { color: #88a8c8; font-size: 0.58rem; margin-top: 2px; }
         
-        /* Estilo do timer de auto-update */
         .timer-update { font-family: 'Share Tech Mono', monospace; color: #00b4d8; font-size: 0.55rem; margin-top: 4px; font-weight: bold; }
 
         /* ANIMAÇÕES GERAIS */
@@ -269,23 +272,27 @@
     </div>
 
     <script>
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadHistorico';
+        const baseUrl = 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadHistorico';
         
-        const INTERVALO_SEGUNDOS = 30; // Tempo entre cada atualização automática (30 segundos)
+        const INTERVALO_SEGUNDOS = 30; 
         let tempoRestante = INTERVALO_SEGUNDOS;
-        let timerId = null;
 
         async function buscarDados() {
             const statusEl = document.getElementById('status-conexao');
             const contadorEl = document.getElementById('contador-tempo');
             
             try {
-                statusEl.innerHTML = '<span class="status-dot" style="background:#ffcc00; box-shadow:0 0 8px #ffcc00;"></span>BAIXANDO DADOS...';
+                statusEl.innerHTML = '<span class="status-dot" style="background:#ffcc00; box-shadow:0 0 8px #ffcc00;"></span>LIVE FETCH...';
                 statusEl.style.color = '#ffcc00';
                 contadorEl.innerText = 'PROCESSANDO...';
                 
-                const response = await fetch(scriptUrl);
+                // Força o link a mudar a cada requisição gerando um link único com timestamp
+                const urlSemCache = `${baseUrl}&_=${new Date().getTime()}`;
+                
+                const response = await fetch(urlSemCache);
                 const data = await response.json();
+
+                console.log("Dados do Sheets:", data);
 
                 let totalItens = 0;
                 let qtdVencidos = 0;
@@ -296,11 +303,13 @@
                     let linhasDoAlerta = item.mensagem.split('\n').filter(linha => linha.trim() !== '').length;
                     totalItens += linhasDoAlerta;
 
-                    if (item.titulo.includes('VENCIDOS')) {
+                    const tituloFormatado = item.titulo.toUpperCase();
+
+                    if (tituloFormatado.includes('VENCIDO')) {
                         qtdVencidos += linhasDoAlerta;
-                    } else if (item.titulo.includes('VENCIMENTO PRÓXIMO')) {
+                    } else if (tituloFormatado.includes('PRÓXIMO') || tituloFormatado.includes('PROXIMO')) {
                         qtdProximos += linhasDoAlerta;
-                    } else if (item.titulo.includes('SEM DATA')) {
+                    } else if (tituloFormatado.includes('SEM DATA')) {
                         qtdSemData += linhasDoAlerta;
                     }
                 });
@@ -312,27 +321,22 @@
                 document.getElementById('din-r2').innerText = qtdProximos;
                 document.getElementById('din-r3').innerText = qtdSemData;
 
-                statusEl.innerHTML = '<span class="status-dot"></span>TERMINAL ATUALIZADO';
+                statusEl.innerHTML = '<span class="status-dot"></span>TERMINAL MONITORADO';
                 statusEl.style.color = '#00ff66';
 
             } catch (error) {
                 statusEl.innerHTML = '<span class="status-dot" style="background:#ff3333; box-shadow:0 0 8px #ff3333;"></span>FALHA NA REDE';
                 statusEl.style.color = '#ff3333';
-                console.error('Erro na sincronização:', error);
             }
             
-            // Reinicia o relógio
             tempoRestante = INTERVALO_SEGUNDOS;
         }
 
         function atualizarRelogio() {
             const contadorEl = document.getElementById('contador-tempo');
-            
-            // Só diminui o tempo se não estiver processando
             if (contadorEl.innerText !== 'PROCESSANDO...') {
                 tempoRestante--;
                 contadorEl.innerText = `AUTO-SYNC EM: ${tempoRestante}s`;
-                
                 if (tempoRestante <= 0) {
                     buscarDados();
                 }
@@ -340,12 +344,10 @@
         }
 
         function forcarSincronizacao() {
-            // Se o usuário clicar, reinicia o tempo e força a busca na hora
             tempoRestante = INTERVALO_SEGUNDOS; 
             buscarDados();
         }
 
-        // Estética do radar
         setInterval(() => {
             const hexChars = "0123456789ABCDEF";
             let code = "0x";
@@ -353,10 +355,9 @@
             document.getElementById('hex-code').innerText = code;
         }, 250);
 
-        // Inicia tudo ao carregar a página
         window.onload = () => {
-            buscarDados(); // Faz a primeira busca
-            timerId = setInterval(atualizarRelogio, 1000); // Liga o cronômetro de 1 em 1 segundo
+            buscarDados(); 
+            setInterval(atualizarRelogio, 1000); 
         };
     </script>
 </body>
