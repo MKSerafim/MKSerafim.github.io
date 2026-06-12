@@ -3,44 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Hiper-Ativo</title>
+    <title>Painel Hiper-Ativo - Prevenção</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: #001F42; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Rajdhani', sans-serif;
-            overflow: hidden;
-            padding: 10px;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; font-family: 'Rajdhani', sans-serif;
+            overflow: hidden; padding: 10px;
         }
 
-        /* Container Principal com Efeito de Grade e Linhas de Varredura */
+        /* Container Principal com Efeito de Grade */
         .tech-panel {
-            width: 100%;
-            max-width: 420px;
-            background-color: #001F42;
+            width: 100%; max-width: 420px; background-color: #001F42;
             background-image: 
                 linear-gradient(rgba(0, 245, 255, 0.04) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 245, 255, 0.04) 1px, transparent 1px);
             background-size: 15px 15px, 15px 15px;
-            border: 1px solid rgba(0, 180, 216, 0.4);
-            border-radius: 12px;
-            padding: 15px;
-            position: relative;
+            border: 1px solid rgba(0, 180, 216, 0.4); border-radius: 12px;
+            padding: 15px; position: relative;
             box-shadow: 0 0 25px rgba(0, 180, 216, 0.15), inset 0 0 20px rgba(0, 245, 255, 0.02);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            display: flex; flex-direction: column; gap: 12px;
         }
 
         /* Cantoneiras HUD */
@@ -52,51 +38,27 @@
 
         /* Título */
         .header h1 {
-            color: #ffffff;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            line-height: 1.2;
+            color: #ffffff; font-size: 1.1rem; text-transform: uppercase;
+            font-weight: 700; letter-spacing: 1.5px; line-height: 1.2;
             text-shadow: 0 0 10px rgba(0, 245, 255, 0.6);
-            border-left: 3px solid #ff3333;
-            padding-left: 8px;
+            border-left: 3px solid #ff3333; padding-left: 8px;
         }
 
         /* Grid Superior */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1.35fr 1fr;
-            gap: 10px;
-        }
+        .content-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 10px; }
 
         /* COLUNA ESQUERDA */
         .left-col { display: flex; flex-direction: column; gap: 10px; }
 
         .box {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(0, 245, 255, 0.25);
-            border-radius: 6px;
-            padding: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .box::after {
-            content: ''; position: absolute; top:0; left:0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,245,255,0.02) 50%, transparent 50%);
-            background-size: 100% 4px; pointer-events: none;
+            background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(0, 245, 255, 0.25);
+            border-radius: 6px; padding: 10px; position: relative; overflow: hidden;
         }
 
         .box-title {
-            color: #90e0ef;
-            font-size: 0.78rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            border-bottom: 1px dashed rgba(0, 245, 255, 0.3);
-            padding-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: #90e0ef; font-size: 0.78rem; font-weight: 700; margin-bottom: 8px;
+            border-bottom: 1px dashed rgba(0, 245, 255, 0.3); padding-bottom: 4px;
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
 
         /* Estoque Geral */
@@ -104,8 +66,7 @@
         .estoque-data p { color: #a3b1c6; font-size: 0.75rem; }
         .estoque-data .num-total {
             color: #00f5ff; font-size: 1.5rem; font-weight: 700;
-            font-family: 'Share Tech Mono', monospace;
-            text-shadow: 0 0 12px rgba(0, 245, 255, 0.7);
+            font-family: 'Share Tech Mono', monospace; text-shadow: 0 0 12px rgba(0, 245, 255, 0.7);
         }
         .alerta-txt {
             color: #ff3333; font-size: 0.7rem; font-weight: 700;
@@ -113,16 +74,11 @@
         }
 
         /* MODULO DE RISCO */
-        .risco-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; text-align: center;
-        }
+        .risco-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; text-align: center; }
         
         .risco-item { 
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(0, 245, 255, 0.1);
-            border-radius: 4px;
-            padding: 6px 2px;
-            position: relative;
+            background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(0, 245, 255, 0.1);
+            border-radius: 4px; padding: 6px 2px; position: relative;
         }
         
         .risco-header { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; }
@@ -131,13 +87,11 @@
         .c-cya { color: #00f5ff; text-shadow: 0 0 5px rgba(0,245,255,0.4); }
 
         .risco-val {
-            font-family: 'Share Tech Mono', monospace;
-            color: #fff; font-size: 0.82rem; font-weight: 700; margin: 2px 0;
+            font-family: 'Share Tech Mono', monospace; color: #fff; font-size: 0.82rem; font-weight: 700; margin: 2px 0;
         }
 
         .micro-sys {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.52rem; display: block; margin-top: 3px; opacity: 0.8;
+            font-family: 'Share Tech Mono', monospace; font-size: 0.52rem; display: block; margin-top: 3px; opacity: 0.8;
         }
         .m-red { color: rgba(255,51,51,0.7); }
         .m-yel { color: rgba(255,204,0,0.7); }
@@ -150,9 +104,7 @@
         .arc-live-2 { animation: pulseGlowYel 2.2s ease-in-out infinite; }
         .arc-live-3 { animation: pulseGlowCya 1.4s ease-in-out infinite; }
 
-        .icon-cal-mini { 
-            position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 11px; height: 11px; 
-        }
+        .icon-cal-mini { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 11px; height: 11px; }
         .i-anim-1 { animation: blinkFast 0.8s infinite; }
         .i-anim-2 { animation: blinkMedium 1.5s infinite; }
         .i-anim-3 { animation: blinkSlow 2.3s infinite; }
@@ -169,17 +121,14 @@
         .ring-2 { border-left: 2px dashed rgba(0, 245, 255, 0.4); border-right: 2px dashed rgba(0, 245, 255, 0.4); transform: scale(0.85); animation: spinRev 5s linear infinite; }
         
         .shield {
-            position: absolute; top: 15%; left: 20%; width: 60%; height: 70%;
-            background: rgba(0, 180, 216, 0.15);
+            position: absolute; top: 15%; left: 20%; width: 60%; height: 70%; background: rgba(0, 180, 216, 0.15);
             clip-path: polygon(50% 0%, 100% 20%, 100% 60%, 50% 100%, 0% 60%, 0% 20%);
-            border: 2px solid #00f5ff;
-            display: flex; justify-content: center; align-items: center; overflow: hidden;
+            border: 2px solid #00f5ff; display: flex; justify-content: center; align-items: center; overflow: hidden;
         }
 
         .scanner {
             position: absolute; top: 0; left: 0; width: 100%; height: 3px;
-            background: #fff; box-shadow: 0 0 8px #fff, 0 0 15px #00f5ff;
-            animation: scanBar 1.8s linear infinite;
+            background: #fff; box-shadow: 0 0 8px #fff, 0 0 15px #00f5ff; animation: scanBar 1.8s linear infinite;
         }
 
         .barcode {
@@ -193,13 +142,19 @@
         .btn-analise {
             background: rgba(0, 245, 255, 0.08); border: 1px solid #00f5ff; color: #00f5ff;
             padding: 2px 8px; font-size: 0.68rem; font-weight: 700; border-radius: 4px;
-            box-shadow: 0 0 6px rgba(0, 245, 255, 0.3); margin-bottom: 6px;
+            box-shadow: 0 0 6px rgba(0, 245, 255, 0.3); margin-bottom: 6px; cursor: pointer;
+            transition: all 0.2s;
         }
+        
+        .btn-analise:hover { background: rgba(0, 245, 255, 0.2); box-shadow: 0 0 10px rgba(0, 245, 255, 0.5); }
+        .btn-analise:active { transform: scale(0.95); }
 
         .status-dot { display: inline-block; width: 5px; height: 5px; background: #00ff66; border-radius: 50%; box-shadow: 0 0 8px #00ff66; margin-right: 4px; animation: nodeFlicker 0.6s infinite alternate; }
-        .status-text { color: #00ff66; font-size: 0.62rem; font-weight: 700; display: flex; align-items: center; }
+        .status-text { color: #00ff66; font-size: 0.62rem; font-weight: 700; display: flex; align-items: center; text-align: center; }
         .criterio { color: #88a8c8; font-size: 0.58rem; margin-top: 2px; }
-        .seguro { color: rgba(0, 245, 255, 0.4); font-size: 0.62rem; margin-top: 4px; letter-spacing: 1.5px; font-weight: bold;}
+        
+        /* Estilo do timer de auto-update */
+        .timer-update { font-family: 'Share Tech Mono', monospace; color: #00b4d8; font-size: 0.55rem; margin-top: 4px; font-weight: bold; }
 
         /* ANIMAÇÕES GERAIS */
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -219,18 +174,18 @@
     <div class="tech-panel">
         
         <div class="header">
-            <h1>Monitoramento Avançado<br>De Vencimentos</h1>
+            <h1>Monitoramento Tático<br>De Vencimentos</h1>
         </div>
 
         <div class="content-grid">
             
             <div class="left-col">
                 <div class="box">
-                    <div class="box-title">Estoque Tático em Análise</div>
+                    <div class="box-title">Visão Geral dos Alertas</div>
                     <div class="estoque-flex">
                         <div class="estoque-data">
-                            <p>Total Itens Monit.:</p>
-                            <div class="num-total" id="din-total">12.450</div>
+                            <p>Total de Itens Listados:</p>
+                            <div class="num-total" id="din-total">0</div>
                         </div>
                         <div style="width: 40px; height: 40px;">
                             <svg viewBox="0 0 36 36">
@@ -243,16 +198,16 @@
                     </div>
                     <div class="alerta-txt">
                         <span style="display:inline-block; width:6px; height:6px; background:#ff3333; border-radius:50%; animation: nodeFlicker 0.4s infinite alternate;"></span>
-                        Alerta de Curta Vencimento (&lt;7D): <span id="din-alerta">78</span> itens
+                        Produtos em Alerta Crítico: <span id="din-alerta">0</span>
                     </div>
                 </div>
 
                 <div class="box">
-                    <div class="box-title">Detalhamento de Risco por Período</div>
+                    <div class="box-title">Separação por Status</div>
                     <div class="risco-grid">
                         <div class="risco-item" style="border: 1px solid rgba(255,51,51,0.25);">
-                            <div class="risco-header c-red">&lt;3 Dias</div>
-                            <div class="risco-val c-red" id="din-r1">14</div>
+                            <div class="risco-header c-red">VENCIDOS</div>
+                            <div class="risco-val c-red" id="din-r1">0</div>
                             <div class="gauge-container">
                                 <svg class="gauge-svg" viewBox="0 0 32 16">
                                     <path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
@@ -260,12 +215,12 @@
                                 </svg>
                                 <svg class="icon-cal-mini i-anim-1" viewBox="0 0 24 24" fill="none" stroke="#ff3333" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             </div>
-                            <span class="micro-sys m-red" id="sub-r1">SYS-09</span>
+                            <span class="micro-sys m-red">ALTO RISCO</span>
                         </div>
 
                         <div class="risco-item" style="border: 1px solid rgba(255,204,0,0.25);">
-                            <div class="risco-header c-yel">4-14 Dias</div>
-                            <div class="risco-val c-yel" id="din-r2">64</div>
+                            <div class="risco-header c-yel">PRÓXIMOS</div>
+                            <div class="risco-val c-yel" id="din-r2">0</div>
                             <div class="gauge-container">
                                 <svg class="gauge-svg" viewBox="0 0 32 16">
                                     <path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
@@ -273,12 +228,12 @@
                                 </svg>
                                 <svg class="icon-cal-mini i-anim-2" viewBox="0 0 24 24" fill="none" stroke="#ffcc00" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             </div>
-                            <span class="micro-sys m-yel" id="sub-r2">RATE: 5%</span>
+                            <span class="micro-sys m-yel">ATENÇÃO</span>
                         </div>
 
                         <div class="risco-item" style="border: 1px solid rgba(0,245,255,0.25);">
-                            <div class="risco-header c-cya">&gt;15 Dias</div>
-                            <div class="risco-val c-cya" id="din-r3">12.372</div>
+                            <div class="risco-header c-cya">SEM DATA</div>
+                            <div class="risco-val c-cya" id="din-r3">0</div>
                             <div class="gauge-container">
                                 <svg class="gauge-svg" viewBox="0 0 32 16">
                                     <path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
@@ -286,7 +241,7 @@
                                 </svg>
                                 <svg class="icon-cal-mini i-anim-3" viewBox="0 0 24 24" fill="none" stroke="#00f5ff" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             </div>
-                            <span class="micro-sys m-cya" id="sub-r3">SECURE</span>
+                            <span class="micro-sys m-cya">VERIFICAR</span>
                         </div>
                     </div>
                 </div>
@@ -303,10 +258,10 @@
                     <div class="hex-data" id="hex-code">0x7F2C</div>
                 </div>
 
-                <div class="btn-analise">ANÁLISE ATIVA</div>
-                <div class="status-text"><span class="status-dot"></span>TERMINAL CONECTADO</div>
-                <div class="criterio">Critério: Validade Lote</div>
-                <div class="seguro">SISTEMA SEGURO</div>
+                <div class="btn-analise" onclick="forcarSincronizacao()">FORÇAR SYNC</div>
+                <div class="status-text" id="status-conexao"><span class="status-dot"></span>AGUARDANDO DADOS</div>
+                <div class="timer-update" id="contador-tempo">AUTO-SYNC EM: 30s</div>
+                <div class="criterio">Origem: Google Sheets</div>
             </div>
 
         </div>
@@ -314,39 +269,95 @@
     </div>
 
     <script>
-        function inicializarMotorTatico() {
-            const totalEl = document.getElementById('din-total');
-            const alertaEl = document.getElementById('din-alerta');
-            const hexEl = document.getElementById('hex-code');
-            const r1El = document.getElementById('din-r1');
-            const r2El = document.getElementById('din-r2');
-            const sub1 = document.getElementById('sub-r1');
-            const sub2 = document.getElementById('sub-r2');
-            const sub3 = document.getElementById('sub-r3');
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadHistorico';
+        
+        const INTERVALO_SEGUNDOS = 30; // Tempo entre cada atualização automática (30 segundos)
+        let tempoRestante = INTERVALO_SEGUNDOS;
+        let timerId = null;
 
-            setInterval(() => {
-                let baseTotal = 12450;
-                totalEl.innerText = (baseTotal + (Math.floor(Math.random() * 7) - 3)).toLocaleString('pt-BR');
-                alertaEl.innerText = 78 + (Math.floor(Math.random() * 3) - 1);
-            }, 3000);
+        async function buscarDados() {
+            const statusEl = document.getElementById('status-conexao');
+            const contadorEl = document.getElementById('contador-tempo');
+            
+            try {
+                statusEl.innerHTML = '<span class="status-dot" style="background:#ffcc00; box-shadow:0 0 8px #ffcc00;"></span>BAIXANDO DADOS...';
+                statusEl.style.color = '#ffcc00';
+                contadorEl.innerText = 'PROCESSANDO...';
+                
+                const response = await fetch(scriptUrl);
+                const data = await response.json();
 
-            setInterval(() => {
-                const hexChars = "0123456789ABCDEF";
-                let code = "0x";
-                for(let i=0; i<4; i++) code += hexChars.charAt(Math.floor(Math.random() * 16));
-                hexEl.innerText = code;
-            }, 250);
+                let totalItens = 0;
+                let qtdVencidos = 0;
+                let qtdProximos = 0;
+                let qtdSemData = 0;
 
-            setInterval(() => {
-                r1El.innerText = 14 + (Math.floor(Math.random() * 3) - 1);
-                r2El.innerText = 64 + (Math.floor(Math.random() * 5) - 2);
-                sub1.innerText = "SYS-0" + Math.floor(Math.random() * 9 + 1);
-                sub2.innerText = "RATE: " + (4 + Math.random() * 3).toFixed(1) + "%";
-                sub3.innerText = "IDX:" + Math.floor(Math.random() * 900 + 100);
-            }, 1800);
+                data.forEach(item => {
+                    let linhasDoAlerta = item.mensagem.split('\n').filter(linha => linha.trim() !== '').length;
+                    totalItens += linhasDoAlerta;
+
+                    if (item.titulo.includes('VENCIDOS')) {
+                        qtdVencidos += linhasDoAlerta;
+                    } else if (item.titulo.includes('VENCIMENTO PRÓXIMO')) {
+                        qtdProximos += linhasDoAlerta;
+                    } else if (item.titulo.includes('SEM DATA')) {
+                        qtdSemData += linhasDoAlerta;
+                    }
+                });
+
+                document.getElementById('din-total').innerText = totalItens;
+                document.getElementById('din-alerta').innerText = qtdVencidos;
+                
+                document.getElementById('din-r1').innerText = qtdVencidos;
+                document.getElementById('din-r2').innerText = qtdProximos;
+                document.getElementById('din-r3').innerText = qtdSemData;
+
+                statusEl.innerHTML = '<span class="status-dot"></span>TERMINAL ATUALIZADO';
+                statusEl.style.color = '#00ff66';
+
+            } catch (error) {
+                statusEl.innerHTML = '<span class="status-dot" style="background:#ff3333; box-shadow:0 0 8px #ff3333;"></span>FALHA NA REDE';
+                statusEl.style.color = '#ff3333';
+                console.error('Erro na sincronização:', error);
+            }
+            
+            // Reinicia o relógio
+            tempoRestante = INTERVALO_SEGUNDOS;
         }
 
-        window.onload = inicializarMotorTatico;
+        function atualizarRelogio() {
+            const contadorEl = document.getElementById('contador-tempo');
+            
+            // Só diminui o tempo se não estiver processando
+            if (contadorEl.innerText !== 'PROCESSANDO...') {
+                tempoRestante--;
+                contadorEl.innerText = `AUTO-SYNC EM: ${tempoRestante}s`;
+                
+                if (tempoRestante <= 0) {
+                    buscarDados();
+                }
+            }
+        }
+
+        function forcarSincronizacao() {
+            // Se o usuário clicar, reinicia o tempo e força a busca na hora
+            tempoRestante = INTERVALO_SEGUNDOS; 
+            buscarDados();
+        }
+
+        // Estética do radar
+        setInterval(() => {
+            const hexChars = "0123456789ABCDEF";
+            let code = "0x";
+            for(let i=0; i<4; i++) code += hexChars.charAt(Math.floor(Math.random() * 16));
+            document.getElementById('hex-code').innerText = code;
+        }, 250);
+
+        // Inicia tudo ao carregar a página
+        window.onload = () => {
+            buscarDados(); // Faz a primeira busca
+            timerId = setInterval(atualizarRelogio, 1000); // Liga o cronômetro de 1 em 1 segundo
+        };
     </script>
 </body>
 </html>
