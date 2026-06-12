@@ -293,15 +293,40 @@
     </div>
 
     <script>
-        // Objeto centralizando os links das duas fontes enviadas
         const fontesDados = {
             PGC: 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadAll',
             PRC: 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadAll1'
         };
         
-        let fonteAtual = 'PGC'; // Estado inicial
+        let fonteAtual = 'PGC'; 
         const INTERVALO_SEGUNDOS = 30; 
         let tempoRestante = INTERVALO_SEGUNDOS;
+
+        // DIAS PARA CONSIDERAR "PRÓXIMO DO VENCIMENTO" (Ajuste aqui se quiser 30 dias, por exemplo)
+        const DIAS_ALERTA_PROXIMO = 15; 
+
+        // Função interna para limpar e entender qualquer formato de data que venha da planilha
+        function analisarDataReal(stringData) {
+            if (!stringData) return null;
+            
+            let str = String(stringData).trim();
+            if (str === "" || str.toUpperCase().includes("SEM DATA")) return null;
+
+            // Se o formato for brasileiro padrão: DD/MM/YYYY
+            if (str.includes('/')) {
+                const partes = str.split('/');
+                if (partes.length >= 3) {
+                    const dia = parseInt(partes[0], 10);
+                    const mes = parseInt(partes[1], 10) - 1; // Meses no JS começam em 0
+                    const ano = parseInt(partes[2], 10);
+                    return new Date(ano, mes, dia);
+                }
+            }
+
+            // Tenta conversão direta caso venha no padrão ISO/Americano (YYYY-MM-DD)
+            const tentativaDireta = new Date(str);
+            return isNaN(tentativaDireta.getTime()) ? null : tentativaDireta;
+        }
 
         async function buscarDados() {
             const statusEl = document.getElementById('status-conexao');
@@ -312,37 +337,48 @@
                 statusEl.style.color = '#ffcc00';
                 contadorEl.innerText = 'PROCESSANDO...';
                 
-                // Escolhe dinamicamente a URL ativa com base na seleção do usuário
                 const baseUrlAtiva = fontesDados[fonteAtual];
                 const urlSemCache = `${baseUrlAtiva}&_=${new Date().getTime()}`;
                 
                 const response = await fetch(urlSemCache);
                 const data = await response.json();
 
-                console.log(`Dados carregados (${fonteAtual}):`, data);
+                console.log(`Análise Real de Datas (${fonteAtual}):`, data);
 
-                let totalItens = 0;
+                let totalItens = data.length; // Quantidade real de linhas que a planilha retornou
                 let qtdVencidos = 0;
                 let qtdProximos = 0;
                 let qtdSemData = 0;
 
+                // Captura a data de hoje zerando as horas para comparação exata de dias
+                const hoje = new Date();
+                hoje.setHours(0, 0, 0, 0);
+
                 data.forEach(item => {
-                    let linhasDoAlerta = item.mensagem.split('\n').filter(linha => linha.trim() !== '').length;
-                    totalItens += linhasDoAlerta;
+                    // O motor verifica onde está a informação da data (caso mude o nome da coluna)
+                    const campoDataBruto = item.validade || item.data || item.vencimento || item.mensagem;
+                    const dataValidade = analisarDataReal(campoDataBruto);
 
-                    const tituloFormatado = item.titulo.toUpperCase();
+                    if (!dataValidade) {
+                        qtdSemData++;
+                    } else {
+                        dataValidade.setHours(0, 0, 0, 0);
+                        
+                        // Calcula a diferença em milissegundos e transforma em dias decimais
+                        const diferencaTempo = dataValidade.getTime() - hoje.getTime();
+                        const diferencaDias = Math.ceil(diferencaTempo / (1000 * 60 * 60 * 24));
 
-                    if (tituloFormatado.includes('VENCIDO')) {
-                        qtdVencidos += linhasDoAlerta;
-                    } else if (tituloFormatado.includes('PRÓXIMO') || tituloFormatado.includes('PROXIMO')) {
-                        qtdProximos += linhasDoAlerta;
-                    } else if (tituloFormatado.includes('SEM DATA')) {
-                        qtdSemData += linhasDoAlerta;
+                        if (diferencaDias < 0) {
+                            qtdVencidos++; // Já passou da data de hoje
+                        } else if (diferencaDias <= DIAS_ALERTA_PROXIMO) {
+                            qtdProximos++; // Está no intervalo crítico (ex: entre 0 e 15 dias para vencer)
+                        }
                     }
                 });
 
+                // Atualização em tempo real dos contadores do HUD
                 document.getElementById('din-total').innerText = totalItens;
-                document.getElementById('din-alerta').innerText = qtdVencidos;
+                document.getElementById('din-alerta').innerText = qtdVencidos; // Crítico foca nos já vencidos
                 
                 document.getElementById('din-r1').innerText = qtdVencidos;
                 document.getElementById('din-r2').innerText = qtdProximos;
@@ -352,6 +388,7 @@
                 statusEl.style.color = '#00ff66';
 
             } catch (error) {
+                console.error("Erro no processamento:", error);
                 statusEl.innerHTML = '<span class="status-dot" style="background:#ff3333; box-shadow:0 0 8px #ff3333;"></span>FALHA NA REDE';
                 statusEl.style.color = '#ff3333';
             }
@@ -359,21 +396,16 @@
             tempoRestante = INTERVALO_SEGUNDOS;
         }
 
-        // Nova Função Tática: Alternar Fontes diretamente pela Interface
         function mudarFonte(novaFonte) {
-            if (fonteAtual === novaFonte) return; // Se já estiver nela, ignora
-            
+            if (fonteAtual === novaFonte) return;
             fonteAtual = novaFonte;
             
-            // Atualizar classes visuais dos botões
             document.getElementById('btn-PGC').classList.remove('active');
             document.getElementById('btn-PRC').classList.remove('active');
             document.getElementById(`btn-${novaFonte}`).classList.add('active');
             
-            // Atualizar indicador de sistema ativo no rodapé direito
             document.getElementById('din-origem').innerText = `SYS: ${novaFonte} ACTIVE`;
             
-            // Zera o tempo e força a busca imediata da nova planilha
             forcarSincronizacao();
         }
 
