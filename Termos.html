@@ -5,67 +5,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Termos e Condições</title>
     <style>
+        :root {
+            --primary-dark: #001f42;
+            --primary-light: #002244;
+            --accent-cyan: #00b4d8;
+            --bg-body: #eef2f6;
+            --text-main: #333333;
+            --text-muted: #555555;
+            --card-bg: #ffffff;
+        }
+
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            line-height: 1.5; 
+            line-height: 1.6; 
             margin: 0; 
-            padding: 15px; 
-            color: #333; 
-            /* Garante que o texto não ultrapasse a largura da tela */
-            word-wrap: break-word; 
-            background-color: #f9f9f9; /* Uma cor de fundo bem suave para a página */
+            padding: 20px; 
+            color: var(--text-main); 
+            background: linear-gradient(135deg, var(--bg-body) 0%, #d9e2ec 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        /* Ajuste para telas pequenas */
         .container {
+            width: 100%;
             max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            background-color: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 31, 66, 0.08);
+            box-sizing: border-box;
+            border-top: 5px solid var(--accent-cyan);
         }
 
         h2 { 
             text-align: center; 
-            color: #007bff; 
-            font-size: 1.5rem; 
+            color: var(--primary-dark); 
+            font-size: 1.6rem; 
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 700;
         }
         
         h3 { 
-            color: #444; 
-            border-bottom: 2px solid #007bff; 
-            padding-bottom: 5px;
-            margin-top: 25px;
-            font-size: 1.2rem;
+            color: var(--primary-dark); 
+            border-bottom: 2px solid var(--accent-cyan); 
+            padding-bottom: 6px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.15rem;
+            font-weight: 600;
         }
 
         p {
-            font-size: 1rem; /* Tamanho confortável para leitura */
+            font-size: 1rem; 
             margin-bottom: 15px;
-            color: #555;
+            color: var(--text-muted);
+            word-wrap: break-word; 
         }
 
-        /* ----- ESTILO DO BOTÃO DE VOLTAR ----- */
+        /* Destaque para as regras internas da empresa */
+        .aviso-interno {
+            background-color: rgba(0, 180, 216, 0.08);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+        }
+
+        .aviso-interno p {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .aviso-interno p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ----- ESTILO DO BOTÃO DE VOLTAR MODERNIZADO ----- */
         .btn-voltar {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             width: 100%;
-            max-width: 250px;
-            margin: 30px auto 10px auto;
-            background-color: #007bff;
-            color: white;
+            max-width: 260px;
+            margin: 40px auto 10px auto;
+            background-color: var(--primary-dark);
+            color: #ffffff;
             text-align: center;
-            padding: 12px 15px;
+            padding: 14px 20px;
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: background-color 0.3s;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 31, 66, 0.2);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
 
         .btn-voltar:hover {
-            background-color: #0056b3;
+            background-color: var(--accent-cyan);
+            box-shadow: 0 6px 18px rgba(0, 180, 216, 0.35);
+            transform: translateY(-2px);
+            color: #ffffff;
+        }
+
+        .btn-voltar:active {
+            transform: translateY(0);
+        }
+
+        /* Ajustes para telas bem pequenas */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
         }
     </style>
 </head>
@@ -74,9 +133,10 @@
     <div class="container">
         <h2>Termos e Condições de Uso</h2>
         
-        <p>Esse aplicativo é de uso exclusivo da empresa e em suas dependências, sendo restrito e não aberto ao público.</p>
-        
-        <p>O aplicativo contém senha, que será atualizada em caso de má utilização, desligamentos ou comportamentos que firam a LGPD.</p>
+        <div class="aviso-interno">
+            <p>Esse aplicativo é de uso exclusivo da empresa e em suas dependências, sendo restrito e não aberto ao público.</p>
+            <p>O aplicativo contém senha, que será atualizada em caso de má utilização, desligamentos ou comportamentos que firam a LGPD.</p>
+        </div>
 
         <h3>1. Aceitação dos Termos</h3>
         <p>Ao utilizar o Aplicativo, você declara estar de acordo com estes termos.</p>
@@ -90,7 +150,13 @@
         <h3>4. Atualização e Responsabilidade</h3>
         <p>Reservamo-nos o direito de modificar o aplicativo sem aviso prévio. O serviço é fornecido "como está".</p>
 
-        <a href="https://mkserafim.github.io/Login.html" class="btn-voltar">Voltar para o Login</a>
+        <a href="https://mkserafim.github.io/Login.html" class="btn-voltar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Voltar para o Login
+        </a>
     </div>
 
 </body>
