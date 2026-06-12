@@ -210,30 +210,7 @@
         
         let fonteAtual = 'PGC'; 
         let tempoRestante = 30;
-        const DIAS_PARA_CONSIDERAR_PROXIMO = 15; 
-
-        function tratarData(valor) {
-            if (!valor) return null;
-            let texto = String(valor).trim().toUpperCase();
-            if (texto === "" || texto.includes("SEM DATA")) return null;
-
-            if (texto.includes('/')) {
-                let partes = texto.split('/');
-                if (partes.length >= 3) {
-                    let dia = parseInt(partes[0], 10);
-                    let mes = parseInt(partes[1], 10) - 1;
-                    
-                    // Tratamento caso o ano venha com horário junto (ex: 2026 13:00)
-                    let anoBruto = partes[2].split(' ')[0];
-                    let ano = parseInt(anoBruto, 10);
-                    
-                    return new Date(ano, mes, dia);
-                }
-            }
-            
-            let dataTentativa = new Date(texto);
-            return isNaN(dataTentativa.getTime()) ? null : dataTentativa;
-        }
+        const DIAS_PARA_CONSIDERAR_PROXIMO = 15; // Alerta amarelo para itens de 0 a 15 dias
 
         async function buscarDados() {
             const statusEl = document.getElementById('status-conexao');
@@ -246,46 +223,41 @@
                 
                 const urlCompleta = `${fontesDados[fonteAtual]}&_ts=${new Date().getTime()}`;
                 
-                // Mudança Crítica: Lendo como TEXTO porque o Google Apps Script envia TEXTO (CSV)
                 const response = await fetch(urlCompleta);
                 if (!response.ok) throw new Error("Erro HTTP");
                 
                 const textData = await response.text();
-                
-                // Separa o texto linha por linha
                 const linhas = textData.split('\n');
                 
                 let qtdVencidos = 0;
                 let qtdProximos = 0;
                 let qtdSemData = 0;
                 
-                // Quantidade total ignora a primeira linha (cabeçalho)
                 let totalItens = linhas.length > 1 ? linhas.length - 1 : 0; 
 
-                const hoje = new Date();
-                hoje.setHours(0,0,0,0);
-
-                // Começamos o loop do 1 para pular a linha de Títulos da Planilha
+                // Loop pelas linhas da planilha (pula o cabeçalho no índice 0)
                 for (let i = 1; i < linhas.length; i++) {
                     const linhaBruta = linhas[i].trim();
-                    if (!linhaBruta) continue; // Pula linha vazia
+                    if (!linhaBruta) {
+                        totalItens--; // Linha vazia no fim do arquivo não conta
+                        continue; 
+                    }
 
-                    // Divide as colunas separadas por vírgula no Apps Script
                     const colunas = linhaBruta.split(',');
 
-                    // A Data de Validade no seu script está na coluna E (Índice 4 no Array JS)
-                    let dataBruta = colunas[4] ? colunas[4].trim() : "";
-                    
-                    let dataValidade = tratarData(dataBruta);
+                    // Validação Inteligente: Se a coluna E (Validade - Índice 4) estiver vazia, é "Sem Data"
+                    let validadeBruta = colunas[4] ? colunas[4].trim() : "";
+                    // Pega direto os dias para vencer calculados pelo Sheets na coluna F (Índice 5)
+                    let diasBruto = colunas[5] ? colunas[5].trim() : "";
 
-                    if (!dataValidade) {
+                    if (validadeBruta === "" || validadeBruta.toUpperCase() === "SEM DATA") {
                         qtdSemData++;
                     } else {
-                        dataValidade.setHours(0,0,0,0);
-                        let diferencaMili = dataValidade.getTime() - hoje.getTime();
-                        let diferencaDias = Math.ceil(diferencaMili / (1000 * 60 * 60 * 24));
+                        let diferencaDias = parseInt(diasBruto, 10);
 
-                        if (diferencaDias < 0) {
+                        if (isNaN(diferencaDias)) {
+                            qtdSemData++;
+                        } else if (diferencaDias < 0) {
                             qtdVencidos++;
                         } else if (diferencaDias <= DIAS_PARA_CONSIDERAR_PROXIMO) {
                             qtdProximos++;
@@ -293,7 +265,7 @@
                     }
                 }
 
-                // Atualiza a tela 
+                // Atualiza o painel tático
                 document.getElementById('din-total').innerText = totalItens;
                 document.getElementById('din-alerta').innerText = qtdVencidos;
                 document.getElementById('din-r1').innerText = qtdVencidos;
@@ -304,7 +276,7 @@
                 statusEl.style.color = '#00ff66';
 
             } catch (error) {
-                console.error("Erro detalhado:", error);
+                console.error("Erro tático:", error);
                 statusEl.innerHTML = '<span class="status-dot" style="background:#ff3333; box-shadow:0 0 8px #ff3333;"></span>FALHA NA REDE';
                 statusEl.style.color = '#ff3333';
             }
