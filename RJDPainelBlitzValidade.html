@@ -124,7 +124,6 @@
         .criterio { color: #88a8c8; font-size: 0.58rem; margin-top: 2px; text-transform: uppercase; font-weight: bold; }
         .timer-update { font-family: 'Share Tech Mono', monospace; color: #00b4d8; font-size: 0.55rem; margin-top: 4px; font-weight: bold; }
 
-        /* TELA DE CARREGAMENTO (SPINNER) */
         .loading-overlay {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 31, 66, 0.85);
@@ -230,7 +229,6 @@
     </div>
 
     <script>
-        // URLs novas para as abas Blitz (ReadAll2 e ReadAll3)
         const fontesDados = {
             PGC: 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadAll2',
             PRC: 'https://script.google.com/macros/s/AKfycbylDwN5Gi4RoqfxJNv_6Qtkqzqkf-pXDkBGJ3fHYv5xKLaR2RNu20QiDyup3yNDLBb5Kg/exec?func=ReadAll3'
@@ -240,20 +238,21 @@
         let tempoRestante = 30;
         const DIAS_PARA_CONSIDERAR_PROXIMO = 15; 
 
-        // Função INTELIGENTE para limpar a data com ponto (ex: .9/11/2026) e converter em formato de tempo
+        // FUNÇÃO DE TRATAMENTO DE DATA CORRIGIDA
         function tratarDataComPonto(valor) {
             if (!valor) return null;
             
-            // Remove espaços e o ponto "." invisível do começo se ele existir
+            // Remove o ponto inicial se existir e limpa espaços
             let texto = String(valor).trim().replace(/^\./, '').toUpperCase();
             
             if (texto === "" || texto.includes("SEM DATA")) return null;
 
+            // Se for DD/MM/AAAA
             if (texto.includes('/')) {
                 let partes = texto.split('/');
                 if (partes.length >= 3) {
                     let dia = parseInt(partes[0], 10);
-                    let mes = parseInt(partes[1], 10) - 1; // Mês no JS começa do 0
+                    let mes = parseInt(partes[1], 10) - 1; // Mês no JS base 0
                     let anoBruto = partes[2].split(' ')[0];
                     let ano = parseInt(anoBruto, 10);
                     
@@ -289,30 +288,27 @@
                 let qtdProximos = 0;
                 let qtdSemData = 0;
                 
-                let totalItens = linhas.length > 1 ? linhas.length - 1 : 0; 
+                let totalItens = 0;
 
                 const hoje = new Date();
                 hoje.setHours(0,0,0,0);
 
+                // Otimizado: pulando a linha de cabeçalho
                 for (let i = 1; i < linhas.length; i++) {
                     const linhaBruta = linhas[i].trim();
-                    if (!linhaBruta) {
-                        totalItens--; 
-                        continue; 
-                    }
+                    if (!linhaBruta) continue; 
+                    
+                    totalItens++; 
 
                     const colunas = linhaBruta.split(',');
-                    
-                    // Na aba de Blitz, a Data de Validade ainda é a Coluna E (Índice 4)
+                    // Coluna 4 é o índice da data (coluna E)
                     let validadeBruta = colunas[4] ? colunas[4] : "";
                     
-                    // Como não tem mais a coluna de "Dias Para Vencer", nós mesmos fazemos o cálculo!
                     let dataValidade = tratarDataComPonto(validadeBruta);
 
                     if (!dataValidade) {
                         qtdSemData++;
                     } else {
-                        // Calcula a diferença da data da planilha com a data de hoje
                         dataValidade.setHours(0,0,0,0);
                         let diferencaMili = dataValidade.getTime() - hoje.getTime();
                         let diferencaDias = Math.ceil(diferencaMili / (1000 * 60 * 60 * 24));
@@ -325,7 +321,6 @@
                     }
                 }
 
-                // Atualiza o painel tático
                 document.getElementById('din-total').innerText = totalItens;
                 document.getElementById('din-alerta').innerText = qtdVencidos;
                 document.getElementById('din-r1').innerText = qtdVencidos;
