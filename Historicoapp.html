@@ -30,59 +30,52 @@
         }
         
         /* ===================================================
-           ESTILOS DO CARREGAMENTO PREMIUM DARK (SKELETON SHIMMER)
+           ESTILOS DO CARREGAMENTO HIGH-TECH (SPINNER)
            =================================================== */
         #loading {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 0;
+            gap: 20px;
             width: 100%;
         }
 
-        .skeleton-card {
-            background-color: #001630; /* Fundo interno do card dark */
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            border: 1px solid #002d5e;
-            border-left: 5px solid #002d5e; /* Borda esquerda neutra durante loading */
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        /* O anel externo ciano com brilho */
+        .spinner {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 4px solid #002d5e; /* Fundo do trilho */
+            border-top: 4px solid #00b4d8; /* Cor que gira */
+            box-shadow: 0 0 15px rgba(0, 180, 216, 0.4); /* Efeito Neon */
+            animation: spin 1s linear infinite;
         }
 
-        .skeleton-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #002d5e;
-            padding-bottom: 8px;
+        /* O anel interno branco girando ao contrário */
+        .spinner::before {
+            content: "";
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: 6px;
+            bottom: 6px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-bottom: 3px solid #ffffff;
+            animation: spinReverse 1.5s linear infinite;
         }
 
-        /* Linhas que representam o texto no modo dark */
-        .skeleton-line {
-            height: 12px;
-            background: #002244; /* Cor base da linha escura */
-            /* Efeito de onda em tons de azul profundo e ciano muito sutil */
-            background-image: linear-gradient(90deg, #002244 0px, #003366 40px, #002244 80px);
-            background-size: 250px 100%;
-            background-repeat: no-repeat;
-            border-radius: 4px;
-            animation: shimmer 1.2s infinite linear;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* Tamanhos diferentes para simular cabeçalho, título e os produtos */
-        .skeleton-line.tag { width: 60px; height: 18px; border-radius: 12px; }
-        .skeleton-line.data { width: 100px; height: 12px; }
-        .skeleton-line.titulo { width: 60%; height: 16px; margin-top: 5px; }
-        .skeleton-line.produto-1 { width: 90%; height: 12px; margin-top: 8px; }
-        .skeleton-line.produto-2 { width: 85%; height: 12px; }
-        .skeleton-line.produto-3 { width: 70%; height: 12px; }
-
-        /* Animação que move o brilho da esquerda para a direita */
-        @keyframes shimmer {
-            0% { background-position: -150px 0; }
-            100% { background-position: 150px 0; }
+        @keyframes spinReverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
         }
 
         /* Texto de carregamento */
@@ -91,14 +84,14 @@
             color: #00b4d8; /* Ciano de destaque */
             font-size: 0.95rem;
             font-weight: bold;
-            margin-top: 15px;
-            animation: pulse 1.5s infinite ease-in-out;
+            letter-spacing: 1px;
+            animation: pulseText 1.5s infinite ease-in-out;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.4; }
-            50% { opacity: 1; }
-            100% { opacity: 0.4; }
+        @keyframes pulseText {
+            0% { opacity: 0.5; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.5; transform: scale(0.98); }
         }
         /* =================================================== */
         
@@ -109,7 +102,7 @@
             padding: 15px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             border: 1px solid #002d5e;
-            border-left: 5px solid #00b4d8; /* Borda esquerda base (se não cair nas regras) */
+            border-left: 5px solid #00b4d8; /* Borda esquerda base */
             transition: transform 0.2s ease;
         }
         
@@ -174,36 +167,8 @@
     <h2>Histórico de Alertas</h2>
     
     <div id="loading">
-        <div class="skeleton-card">
-            <div class="skeleton-header">
-                <div class="skeleton-line tag"></div>
-                <div class="skeleton-line data"></div>
-            </div>
-            <div class="skeleton-line titulo"></div>
-            <div class="skeleton-line produto-1"></div>
-            <div class="skeleton-line produto-2"></div>
-        </div>
-
-        <div class="skeleton-card">
-            <div class="skeleton-header">
-                <div class="skeleton-line tag"></div>
-                <div class="skeleton-line data"></div>
-            </div>
-            <div class="skeleton-line titulo"></div>
-            <div class="skeleton-line produto-1"></div>
-            <div class="skeleton-line produto-3"></div>
-        </div>
-
-        <div class="skeleton-card">
-            <div class="skeleton-header">
-                <div class="skeleton-line tag"></div>
-                <div class="skeleton-line data"></div>
-            </div>
-            <div class="skeleton-line titulo"></div>
-            <div class="skeleton-line produto-1"></div>
-        </div>
-
-        <div class="loading-text">Sincronizando base de dados...</div>
+        <div class="spinner"></div>
+        <div class="loading-text">Sincronizando dados...</div>
     </div>
 
     <div id="historico-container"></div>
@@ -219,7 +184,7 @@
                 
                 const container = document.getElementById('historico-container');
                 
-                // Esconde todo o bloco de carregamento (os 3 esqueletos + o texto)
+                // Esconde todo o bloco de carregamento (spinner + texto)
                 document.getElementById('loading').style.display = 'none';
 
                 // Inverte o array para mostrar os mais recentes primeiro
@@ -255,7 +220,7 @@
                 });
 
             } catch (error) {
-                // Se der erro, limpa os esqueletos e mostra o aviso em vermelho
+                // Se der erro, para o spinner e mostra o aviso em vermelho
                 document.getElementById('loading').innerHTML = '<div class="loading-text" style="color: #ff4757; animation: none;">Falha na sincronização. Verifique a conexão de rede.</div>';
                 console.error('Erro:', error);
             }
