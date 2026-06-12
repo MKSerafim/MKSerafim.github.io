@@ -5,18 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico de Notificações</title>
     <style>
+        /* Reset e Estilização Base - Fundo Oficial Blindado */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f6f9;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #001f42; /* Azul escuro oficial */
+            color: #ffffff;
             padding: 15px;
+            max-width: 800px;
+            margin: 0 auto;
         }
-        h2 { text-align: center; color: #1a202c; margin-bottom: 20px; font-size: 1.5rem; }
-        #historico-container { display: flex; flex-direction: column; gap: 15px; }
+        
+        h2 { 
+            text-align: center; 
+            color: #ffffff; 
+            margin: 10px 0 25px 0; 
+            font-size: 1.5rem; 
+        }
+        
+        #historico-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+        }
         
         /* ===================================================
-           ESTILOS DO CARREGAMENTO PREMIUM (SKELETON SHIMMER)
+           ESTILOS DO CARREGAMENTO PREMIUM DARK (SKELETON SHIMMER)
            =================================================== */
         #loading {
             display: flex;
@@ -26,11 +40,12 @@
         }
 
         .skeleton-card {
-            background: #ffffff;
-            border-radius: 10px;
+            background-color: #001630; /* Fundo interno do card dark */
+            border-radius: 12px;
             padding: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-left: 5px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border: 1px solid #002d5e;
+            border-left: 5px solid #002d5e; /* Borda esquerda neutra durante loading */
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -40,16 +55,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #edf2f7;
+            border-bottom: 1px solid #002d5e;
             padding-bottom: 8px;
         }
 
-        /* Linhas cinzas que representam o texto */
+        /* Linhas que representam o texto no modo dark */
         .skeleton-line {
             height: 12px;
-            background: #e2e8f0;
-            /* Cria o efeito de onda/brilho prateado com um toque sutil de azul */
-            background-image: linear-gradient(90deg, #e2e8f0 0px, #f0f4f8 40px, #e2e8f0 80px);
+            background: #002244; /* Cor base da linha escura */
+            /* Efeito de onda em tons de azul profundo e ciano muito sutil */
+            background-image: linear-gradient(90deg, #002244 0px, #003366 40px, #002244 80px);
             background-size: 250px 100%;
             background-repeat: no-repeat;
             border-radius: 4px;
@@ -57,10 +72,10 @@
         }
 
         /* Tamanhos diferentes para simular cabeçalho, título e os produtos */
-        .skeleton-line.tag { width: 50px; height: 16px; border-radius: 12px; }
-        .skeleton-line.data { width: 80px; height: 12px; }
-        .skeleton-line.titulo { width: 65%; height: 16px; margin-top: 5px; font-weight: bold; }
-        .skeleton-line.produto-1 { width: 90%; height: 12px; margin-top: 4px; }
+        .skeleton-line.tag { width: 60px; height: 18px; border-radius: 12px; }
+        .skeleton-line.data { width: 100px; height: 12px; }
+        .skeleton-line.titulo { width: 60%; height: 16px; margin-top: 5px; }
+        .skeleton-line.produto-1 { width: 90%; height: 12px; margin-top: 8px; }
         .skeleton-line.produto-2 { width: 85%; height: 12px; }
         .skeleton-line.produto-3 { width: 70%; height: 12px; }
 
@@ -70,45 +85,88 @@
             100% { background-position: 150px 0; }
         }
 
-        /* Texto de carregamento centralizado abaixo dos cards */
+        /* Texto de carregamento */
         .loading-text {
             text-align: center;
-            color: #4a5568;
+            color: #00b4d8; /* Ciano de destaque */
             font-size: 0.95rem;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 15px;
             animation: pulse 1.5s infinite ease-in-out;
         }
 
         @keyframes pulse {
-            0% { opacity: 0.6; }
+            0% { opacity: 0.4; }
             50% { opacity: 1; }
-            100% { opacity: 0.6; }
+            100% { opacity: 0.4; }
         }
         /* =================================================== */
         
         /* Estilo dos Cartões Reais (Quando carregados) */
         .card {
-            background: #ffffff;
-            border-radius: 10px;
+            background-color: #001630;
+            border-radius: 12px;
             padding: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-left: 5px solid #cbd5e0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border: 1px solid #002d5e;
+            border-left: 5px solid #00b4d8; /* Borda esquerda base (se não cair nas regras) */
+            transition: transform 0.2s ease;
         }
         
-        /* Cores baseadas no tipo de alerta */
-        .card.vencidos { border-left-color: #e53e3e; } /* Vermelho */
-        .card.proximo { border-left-color: #3182ce; } /* Azul */
-        .card.sem-data { border-left-color: #ecc94b; } /* Amarelo */
+        /* Cores baseadas no tipo de alerta adaptadas para Dark Mode */
+        .card.vencidos { border-left-color: #ff4757; } /* Vermelho Neon para Vencidos */
+        .card.proximo { border-left-color: #00b4d8; } /* Ciano para Próximo */
+        .card.sem-data { border-left-color: #ffa502; } /* Amarelo/Laranja para Sem Data */
 
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #edf2f7; padding-bottom: 8px;}
-        .card-title { font-weight: bold; font-size: 0.95rem; color: #2d3748; }
-        .card-date { font-size: 0.8rem; color: #718096; }
-        .card-origin { background: #edf2f7; padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; color: #4a5568;}
+        .card-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 12px; 
+            border-bottom: 1px solid #002d5e; 
+            padding-bottom: 10px;
+        }
+        
+        .card-title { 
+            font-weight: bold; 
+            font-size: 1.05rem; 
+            color: #ffffff; 
+            margin-bottom: 5px;
+        }
+        
+        .card-date { 
+            font-size: 0.85rem; 
+            color: #8c9baf; /* Cinza azulado claro para data */
+        }
+        
+        .card-origin { 
+            background-color: #002d5e; /* Fundo da tag no dark mode */
+            padding: 4px 10px; 
+            border-radius: 12px; 
+            font-size: 0.75rem; 
+            font-weight: bold; 
+            color: #00b4d8; /* Texto em ciano */
+            border: 1px solid rgba(0, 180, 216, 0.3);
+        }
         
         /* Formatação da lista de produtos */
-        .produto-item { font-size: 0.85rem; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; }
-        .produto-item:last-child { border-bottom: none; }
+        .produto-item { 
+            font-size: 0.9rem; 
+            padding: 8px 0; 
+            border-bottom: 1px dashed #002d5e; 
+            color: #cccccc; /* Texto descritivo claro */
+        }
+        
+        .produto-item:last-child { 
+            border-bottom: none; 
+            padding-bottom: 0;
+        }
+
+        /* Classes de cores nos títulos dos cards para combinar com as bordas */
+        .card.vencidos .card-title { color: #ff4757; }
+        .card.proximo .card-title { color: #00b4d8; }
+        .card.sem-data .card-title { color: #ffa502; }
+
     </style>
 </head>
 <body>
@@ -145,7 +203,7 @@
             <div class="skeleton-line produto-1"></div>
         </div>
 
-        <div class="loading-text">Carregando dados da planilha...</div>
+        <div class="loading-text">Sincronizando base de dados...</div>
     </div>
 
     <div id="historico-container"></div>
@@ -189,7 +247,7 @@
                             <span class="card-date">${dataFormatada}</span>
                         </div>
                         <div class="card-title">${item.titulo}</div>
-                        <div style="margin-top: 10px;">
+                        <div>
                             ${linesMensagem}
                         </div>
                     `;
@@ -198,7 +256,7 @@
 
             } catch (error) {
                 // Se der erro, limpa os esqueletos e mostra o aviso em vermelho
-                document.getElementById('loading').innerHTML = '<div class="loading-text" style="color: #e53e3e; animation: none;">Erro ao carregar os dados. Verifique a conexão.</div>';
+                document.getElementById('loading').innerHTML = '<div class="loading-text" style="color: #ff4757; animation: none;">Falha na sincronização. Verifique a conexão de rede.</div>';
                 console.error('Erro:', error);
             }
         }
