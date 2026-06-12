@@ -86,12 +86,12 @@
 
         .risco-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; text-align: center; }
         .risco-item { background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(0, 245, 255, 0.1); border-radius: 4px; padding: 6px 2px; }
-        .risco-header { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; }
+        .risco-header { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; }
         
         .c-red { color: #ff3333; text-shadow: 0 0 5px rgba(255,51,51,0.4); }
         .c-yel { color: #ffcc00; text-shadow: 0 0 5px rgba(255,204,0,0.4); }
         .c-cya { color: #00f5ff; text-shadow: 0 0 5px rgba(0,245,255,0.4); }
-        .risco-val { font-family: 'Share Tech Mono', monospace; color: #fff; font-size: 0.82rem; font-weight: 700; margin: 2px 0; }
+        .risco-val { font-family: 'Share Tech Mono', monospace; color: #fff; font-size: 0.75rem; font-weight: 700; margin: 2px 0; }
         .micro-sys { font-family: 'Share Tech Mono', monospace; font-size: 0.52rem; display: block; margin-top: 3px; opacity: 0.8; }
         
         .m-red { color: rgba(255,51,51,0.7); }
@@ -204,9 +204,9 @@
                         </div>
 
                         <div class="risco-item" style="border: 1px solid rgba(0,245,255,0.25);">
-                            <div class="risco-header c-cya">SEM DATA</div>
-                            <div class="risco-val c-cya" id="din-r3">0</div>
-                            <span class="micro-sys m-cya">AUDITAR</span>
+                            <div class="risco-header c-cya">ÚLTIMA</div>
+                            <div class="risco-val c-cya" id="din-r3">--</div>
+                            <span class="micro-sys m-cya">DATA REG.</span>
                         </div>
                     </div>
                 </div>
@@ -238,28 +238,21 @@
         let tempoRestante = 30;
         const DIAS_PARA_CONSIDERAR_PROXIMO = 15; 
 
-        // FUNÇÃO DE TRATAMENTO DE DATA CORRIGIDA
         function tratarDataComPonto(valor) {
             if (!valor) return null;
-            
-            // Remove o ponto inicial se existir e limpa espaços
             let texto = String(valor).trim().replace(/^\./, '').toUpperCase();
-            
             if (texto === "" || texto.includes("SEM DATA")) return null;
 
-            // Se for DD/MM/AAAA
             if (texto.includes('/')) {
                 let partes = texto.split('/');
                 if (partes.length >= 3) {
                     let dia = parseInt(partes[0], 10);
-                    let mes = parseInt(partes[1], 10) - 1; // Mês no JS base 0
+                    let mes = parseInt(partes[1], 10) - 1; 
                     let anoBruto = partes[2].split(' ')[0];
                     let ano = parseInt(anoBruto, 10);
-                    
                     return new Date(ano, mes, dia);
                 }
             }
-            
             let dataTentativa = new Date(texto);
             return isNaN(dataTentativa.getTime()) ? null : dataTentativa;
         }
@@ -271,13 +264,11 @@
             
             try {
                 loadingScreen.classList.add('active'); 
-                
                 statusEl.innerHTML = '<span class="status-dot" style="background:#ffcc00; box-shadow:0 0 8px #ffcc00;"></span>CONECTANDO...';
                 statusEl.style.color = '#ffcc00';
                 contadorEl.innerText = 'PROCESSANDO...';
                 
                 const urlCompleta = `${fontesDados[fonteAtual]}&_ts=${new Date().getTime()}`;
-                
                 const response = await fetch(urlCompleta);
                 if (!response.ok) throw new Error("Erro HTTP");
                 
@@ -286,38 +277,38 @@
                 
                 let qtdVencidos = 0;
                 let qtdProximos = 0;
-                let qtdSemData = 0;
-                
+                let dataMaisRecente = new Date(0); // Data inicial bem antiga
                 let totalItens = 0;
 
                 const hoje = new Date();
                 hoje.setHours(0,0,0,0);
 
-                // Otimizado: pulando a linha de cabeçalho
                 for (let i = 1; i < linhas.length; i++) {
                     const linhaBruta = linhas[i].trim();
                     if (!linhaBruta) continue; 
                     
                     totalItens++; 
-
                     const colunas = linhaBruta.split(',');
-                    // Coluna 4 é o índice da data (coluna E)
-                    let validadeBruta = colunas[4] ? colunas[4] : "";
                     
+                    // Coluna E (índice 4) para validade
+                    let validadeBruta = colunas[4] ? colunas[4] : "";
+                    // Coluna H (índice 7) para data da blitz (POSTADO)
+                    let postadoBruta = colunas[7] ? colunas[7] : "";
+                    
+                    // Verifica validade
                     let dataValidade = tratarDataComPonto(validadeBruta);
-
-                    if (!dataValidade) {
-                        qtdSemData++;
-                    } else {
+                    if (dataValidade) {
                         dataValidade.setHours(0,0,0,0);
                         let diferencaMili = dataValidade.getTime() - hoje.getTime();
                         let diferencaDias = Math.ceil(diferencaMili / (1000 * 60 * 60 * 24));
+                        if (diferencaDias < 0) qtdVencidos++;
+                        else if (diferencaDias <= DIAS_PARA_CONSIDERAR_PROXIMO) qtdProximos++;
+                    }
 
-                        if (diferencaDias < 0) {
-                            qtdVencidos++;
-                        } else if (diferencaDias <= DIAS_PARA_CONSIDERAR_PROXIMO) {
-                            qtdProximos++;
-                        }
+                    // Verifica data da Blitz (Coluna H) para achar a mais recente
+                    let dataPostado = tratarDataComPonto(postadoBruta);
+                    if (dataPostado && dataPostado > dataMaisRecente) {
+                        dataMaisRecente = dataPostado;
                     }
                 }
 
@@ -325,7 +316,15 @@
                 document.getElementById('din-alerta').innerText = qtdVencidos;
                 document.getElementById('din-r1').innerText = qtdVencidos;
                 document.getElementById('din-r2').innerText = qtdProximos;
-                document.getElementById('din-r3').innerText = qtdSemData;
+                
+                // Exibe a data mais recente formatada ou "--" se não achar
+                if (dataMaisRecente.getTime() === 0) {
+                    document.getElementById('din-r3').innerText = "--";
+                } else {
+                    let d = ("0" + dataMaisRecente.getDate()).slice(-2);
+                    let m = ("0" + (dataMaisRecente.getMonth() + 1)).slice(-2);
+                    document.getElementById('din-r3').innerText = `${d}/${m}`;
+                }
 
                 statusEl.innerHTML = '<span class="status-dot"></span>SINCRO OK';
                 statusEl.style.color = '#00ff66';
