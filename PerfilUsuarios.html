@@ -1,56 +1,241 @@
-<script>
-    const TABLE_ID = "180827"; // Verifique se este é o ID da tabela certa
-    const TOKEN = "x6rXtkpcBaAYIER6MMDo6Lfd0RSS28Ey";
-    const URL = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true`;
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Tático - Colaboradores</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap');
 
-    async function carregarDados() {
-        const userList = document.getElementById('user-list');
-        try {
-            const response = await fetch(URL, {
-                headers: { 'Authorization': `Token ${TOKEN}` }
-            });
-            
-            if (!response.ok) throw new Error(`Erro na API: ${response.status}`);
-            
-            const data = await response.json();
-            console.log("Dados recebidos do Baserow:", data.results); // VERIFIQUE ISSO NO CONSOLE F12
-            
-            if (data.results && data.results.length > 0) {
-                processarDados(data.results);
-            } else {
-                userList.innerHTML = "<p>Nenhum dado encontrado nesta tabela.</p>";
-            }
-        } catch (e) {
-            console.error("Erro crítico:", e);
-            userList.innerHTML = `<p style="color:red">Erro ao carregar: ${e.message}. Verifique o Console (F12).</p>`;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #001F42;
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            padding: 20px;
+            background-image: linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
-    }
 
-    function processarDados(usuarios) {
-        const statsContainer = document.getElementById('stats-container');
-        const userList = document.getElementById('user-list');
+        .header {
+            text-align: center; margin-bottom: 30px; border-bottom: 1px dashed rgba(0, 245, 255, 0.3); padding-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2rem; text-transform: uppercase; letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 245, 255, 0.6); color: #fff;
+            border-left: 4px solid #00f5ff; padding-left: 10px; display: inline-block;
+        }
+
+        /* Cards Superiores (Resumo) */
+        .resumo-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto;
+        }
+
+        .resumo-card {
+            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(0, 245, 255, 0.3);
+            border-radius: 8px; padding: 15px; text-align: center;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.05);
+        }
+
+        .resumo-card h3 { color: #88a8c8; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 5px; }
+        .resumo-card .valor { font-family: 'Share Tech Mono', monospace; font-size: 2.5rem; color: #00f5ff; text-shadow: 0 0 10px rgba(0, 245, 255, 0.5); }
+
+        /* Blocos das Lojas */
+        .loja-section {
+            background: rgba(0, 31, 66, 0.8); border: 1px solid rgba(0, 180, 216, 0.3);
+            border-radius: 10px; padding: 20px; margin-bottom: 30px;
+        }
+
+        .loja-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.2); padding-bottom: 10px; margin-bottom: 15px;
+        }
+
+        .loja-header h2 { color: #00f5ff; font-size: 1.5rem; text-transform: uppercase; }
+        .badge-qtd {
+            background: rgba(0, 245, 255, 0.15); border: 1px solid #00f5ff;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 700; color: #fff;
+        }
+
+        /* Grid de Colaboradores */
+        .colaboradores-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;
+        }
+
+        .user-card {
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 15px;
+            transition: all 0.3s ease;
+        }
         
-        const totalColaboradores = usuarios.length;
-        // Usa Set para contar lojas únicas (considerando que a coluna chama 'Loja')
-        const lojasUnicas = new Set(usuarios.map(u => u.Loja || "Sem Loja"));
-        const totalLojas = lojasUnicas.size;
+        .user-card:hover { border-color: #00f5ff; transform: translateY(-2px); background: rgba(0, 245, 255, 0.05); }
 
-        statsContainer.innerHTML = `
-            <div class="card"><h3>Colaboradores</h3><p>${totalColaboradores}</p></div>
-            <div class="card"><h3>Total de Lojas</h3><p>${totalLojas}</p></div>
-        `;
+        .foto-container img {
+            width: 60px; height: 60px; border-radius: 50%; object-fit: cover;
+            border: 2px solid #88a8c8; background-color: #111;
+        }
 
-        userList.innerHTML = usuarios.map(u => `
-            <div class="user-card">
-                <img src="${u.Foto || 'https://via.placeholder.com/50'}" onerror="this.src='https://via.placeholder.com/50'">
-                <div class="user-info">
-                    <h4>${u.Nome || u.Email || "Sem Nome"}</h4>
-                    <span class="store-tag">${u.Loja || "Sem Loja"}</span>
-                    <span>${u.Cargo || "Cargo não definido"}</span>
-                </div>
+        .user-info { display: flex; flex-direction: column; overflow: hidden; }
+        .user-info h4 { font-size: 1.1rem; margin: 0 0 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
+        .user-info .cargo { font-size: 0.8rem; color: #00f5ff; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+        .user-info .drt { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: #88a8c8; }
+
+        /* Mensagens de Status e Erro */
+        #status-msg { text-align: center; font-size: 1.2rem; margin: 20px 0; color: #ffcc00; }
+        #error-box { display: none; background: rgba(255, 51, 51, 0.1); border: 1px solid #ff3333; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #ff3333; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Gestão Tática de Equipe</h1>
+    </div>
+
+    <div id="status-msg">Iniciando conexão com o servidor...</div>
+    
+    <div id="error-box"></div>
+
+    <div id="painel-conteudo" style="display: none;">
+        <div class="resumo-grid" id="resumo-geral">
             </div>
-        `).join('');
-    }
+        <div id="lojas-container">
+            </div>
+    </div>
 
-    carregarDados();
-</script>
+    <script>
+        // CONFIGURAÇÕES DA API BASEROW
+        const TABLE_ID = "180827";
+        const TOKEN = "x6rXtkpcBaAYIER6MMDo6Lfd0RSS28Ey";
+        const API_URL = `https://api.baserow.io/api/database/rows/table/${TABLE_ID}/?user_field_names=true&size=100`;
+
+        // Elementos da tela
+        const statusMsg = document.getElementById('status-msg');
+        const errorBox = document.getElementById('error-box');
+        const painelConteudo = document.getElementById('painel-conteudo');
+        const resumoGeral = document.getElementById('resumo-geral');
+        const lojasContainer = document.getElementById('lojas-container');
+
+        function mostrarErro(mensagem, detalhe = "") {
+            statusMsg.style.display = 'none';
+            errorBox.style.display = 'block';
+            errorBox.innerHTML = `<strong>FALHA CRÍTICA:</strong> ${mensagem} <br><small>${detalhe}</small>`;
+        }
+
+        async function iniciarSistema() {
+            try {
+                statusMsg.innerText = "Conectando ao Baserow...";
+
+                const response = await fetch(API_URL, {
+                    method: "GET",
+                    headers: { 'Authorization': `Token ${TOKEN}` }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status} - Verifique se o Token e o Table ID estão corretos.`);
+                }
+
+                const data = await response.json();
+                
+                if (!data.results || data.results.length === 0) {
+                    mostrarErro("A tabela está vazia ou não possui registros.");
+                    return;
+                }
+
+                processarDados(data.results);
+
+            } catch (error) {
+                mostrarErro("Erro ao carregar os dados.", error.message);
+                console.error("Erro técnico:", error);
+            }
+        }
+
+        function processarDados(usuarios) {
+            // 1. Agrupar os usuários por Loja
+            const lojas = {};
+            let totalColaboradores = 0;
+
+            usuarios.forEach(user => {
+                // Tenta pegar a loja. Se estiver vazio, joga em "SEM LOJA"
+                const nomeLoja = user.Loja ? user.Loja.trim() : "LOJA NÃO INFORMADA";
+                
+                if (!lojas[nomeLoja]) {
+                    lojas[nomeLoja] = [];
+                }
+                lojas[nomeLoja].push(user);
+                totalColaboradores++;
+            });
+
+            const totalLojas = Object.keys(lojas).length;
+
+            // 2. Preencher os blocos superiores
+            resumoGeral.innerHTML = `
+                <div class="resumo-card">
+                    <h3>Colaboradores Ativos</h3>
+                    <div class="valor">${totalColaboradores}</div>
+                </div>
+                <div class="resumo-card">
+                    <h3>Lojas Monitoradas</h3>
+                    <div class="valor">${totalLojas}</div>
+                </div>
+            `;
+
+            // 3. Criar as seções para cada loja
+            let htmlLojas = "";
+
+            // Organizar em ordem alfabética pelo nome da loja
+            const lojasOrdenadas = Object.keys(lojas).sort();
+
+            lojasOrdenadas.forEach(lojaNome => {
+                const equipe = lojas[lojaNome];
+                
+                htmlLojas += `
+                    <div class="loja-section">
+                        <div class="loja-header">
+                            <h2>${lojaNome}</h2>
+                            <div class="badge-qtd">${equipe.length} PESSOA(S)</div>
+                        </div>
+                        <div class="colaboradores-grid">
+                `;
+
+                equipe.forEach(u => {
+                    // Trata os campos caso estejam em branco no Baserow
+                    const nome = u.Nome || u.Email || "Colaborador sem nome";
+                    const cargo = u.Cargo || "Cargo não definido";
+                    const drt = u.DRT ? `DRT: ${u.DRT}` : "Sem DRT";
+                    const fotoUrl = u.Foto || "https://ui-avatars.com/api/?name=" + encodeURIComponent(nome) + "&background=001F42&color=00f5ff";
+
+                    htmlLojas += `
+                        <div class="user-card">
+                            <div class="foto-container">
+                                <img src="${fotoUrl}" onerror="this.src='https://ui-avatars.com/api/?name=Erro&background=ff3333&color=fff'">
+                            </div>
+                            <div class="user-info">
+                                <h4>${nome}</h4>
+                                <div class="cargo">${cargo}</div>
+                                <div class="drt">${drt}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                htmlLojas += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            lojasContainer.innerHTML = htmlLojas;
+
+            // Oculta mensagem de status e exibe o painel
+            statusMsg.style.display = 'none';
+            painelConteudo.style.display = 'block';
+        }
+
+        // Inicia a aplicação ao carregar a página
+        window.onload = iniciarSistema;
+    </script>
+</body>
+</html>
