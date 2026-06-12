@@ -20,7 +20,6 @@
             overflow: hidden; padding: 10px;
         }
 
-        /* Container Principal com Efeito de Grade */
         .tech-panel {
             width: 100%; max-width: 420px; background-color: #001F42;
             background-image: 
@@ -33,14 +32,12 @@
             display: flex; flex-direction: column; gap: 12px;
         }
 
-        /* Cantoneiras HUD */
         .tech-panel::before, .tech-panel::after {
             content: ''; position: absolute; width: 16px; height: 16px; border: 2px solid #00f5ff;
         }
         .tech-panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; border-top-left-radius: 12px; }
         .tech-panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; border-bottom-right-radius: 12px; }
 
-        /* Título */
         .header h1 {
             color: #ffffff; font-size: 1.1rem; text-transform: uppercase;
             font-weight: 700; letter-spacing: 1.5px; line-height: 1.2;
@@ -48,10 +45,7 @@
             border-left: 3px solid #ff3333; padding-left: 8px;
         }
 
-        /* Seletor de Fontes HUD (PGC / PRC) */
-        .fonte-selector {
-            display: flex; gap: 6px; margin-top: 10px;
-        }
+        .fonte-selector { display: flex; gap: 6px; margin-top: 10px; }
         .btn-toggle {
             flex: 1; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(0, 245, 255, 0.2);
             color: #88a8c8; padding: 5px; font-size: 0.68rem; font-weight: 700;
@@ -65,10 +59,7 @@
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
         }
 
-        /* Grid Superior */
         .content-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 10px; }
-
-        /* COLUNA ESQUERDA */
         .left-col { display: flex; flex-direction: column; gap: 10px; }
 
         .box {
@@ -82,7 +73,6 @@
             text-transform: uppercase; letter-spacing: 0.5px;
         }
 
-        /* Estoque Geral */
         .estoque-flex { display: flex; justify-content: space-between; align-items: center; }
         .estoque-data p { color: #a3b1c6; font-size: 0.75rem; }
         .estoque-data .num-total {
@@ -94,48 +84,21 @@
             margin-top: 6px; display: flex; align-items: center; gap: 4px;
         }
 
-        /* MODULO DE RISCO */
         .risco-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; text-align: center; }
-        
-        .risco-item { 
-            background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(0, 245, 255, 0.1);
-            border-radius: 4px; padding: 6px 2px; position: relative;
-        }
-        
+        .risco-item { background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(0, 245, 255, 0.1); border-radius: 4px; padding: 6px 2px; }
         .risco-header { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; }
+        
         .c-red { color: #ff3333; text-shadow: 0 0 5px rgba(255,51,51,0.4); }
         .c-yel { color: #ffcc00; text-shadow: 0 0 5px rgba(255,204,0,0.4); }
         .c-cya { color: #00f5ff; text-shadow: 0 0 5px rgba(0,245,255,0.4); }
-
-        .risco-val {
-            font-family: 'Share Tech Mono', monospace; color: #fff; font-size: 0.82rem; font-weight: 700; margin: 2px 0;
-        }
-
-        .micro-sys {
-            font-family: 'Share Tech Mono', monospace; font-size: 0.52rem; display: block; margin-top: 3px; opacity: 0.8;
-        }
+        .risco-val { font-family: 'Share Tech Mono', monospace; color: #fff; font-size: 0.82rem; font-weight: 700; margin: 2px 0; }
+        .micro-sys { font-family: 'Share Tech Mono', monospace; font-size: 0.52rem; display: block; margin-top: 3px; opacity: 0.8; }
+        
         .m-red { color: rgba(255,51,51,0.7); }
         .m-yel { color: rgba(255,204,0,0.7); }
         .m-cya { color: rgba(0,245,255,0.7); }
-
-        .gauge-container { position: relative; width: 36px; height: 20px; margin: 4px auto 0 auto; }
-        .gauge-svg { width: 100%; height: 100%; }
         
-        .arc-live-1 { animation: pulseGlowRed 1.8s ease-in-out infinite; }
-        .arc-live-2 { animation: pulseGlowYel 2.2s ease-in-out infinite; }
-        .arc-live-3 { animation: pulseGlowCya 1.4s ease-in-out infinite; }
-
-        .icon-cal-mini { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 11px; height: 11px; }
-        .i-anim-1 { animation: blinkFast 0.8s infinite; }
-        .i-anim-2 { animation: blinkMedium 1.5s infinite; }
-        .i-anim-3 { animation: blinkSlow 2.3s infinite; }
-
-        /* COLUNA DIREITA */
-        .right-col {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border-left: 1px dashed rgba(0, 245, 255, 0.2); padding-left: 6px;
-        }
-
+        .right-col { display: flex; flex-direction: column; align-items: center; justify-content: center; border-left: 1px dashed rgba(0, 245, 255, 0.2); padding-left: 6px; }
         .radar-box { position: relative; width: 110px; height: 110px; margin-bottom: 12px; }
         .ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; border: 1px solid transparent; }
         .ring-1 { border-top: 2px solid #00f5ff; border-bottom: 2px solid #00f5ff; animation: spin 3s linear infinite; }
@@ -143,56 +106,32 @@
         
         .shield {
             position: absolute; top: 15%; left: 20%; width: 60%; height: 70%; background: rgba(0, 180, 216, 0.15);
-            clip-path: polygon(50% 0%, 100% 20%, 100% 60%, 50% 100%, 0% 60%, 0% 20%);
-            border: 2px solid #00f5ff; display: flex; justify-content: center; align-items: center; overflow: hidden;
+            clip-path: polygon(50% 0%, 100% 20%, 100% 60%, 50% 100%, 0% 60%, 0% 20%); border: 2px solid #00f5ff; display: flex; justify-content: center; align-items: center;
         }
-
-        .scanner {
-            position: absolute; top: 0; left: 0; width: 100%; height: 3px;
-            background: #fff; box-shadow: 0 0 8px #fff, 0 0 15px #00f5ff; animation: scanBar 1.8s linear infinite;
-        }
-
-        .barcode {
-            width: 75%; height: 18px;
-            background: repeating-linear-gradient(90deg, #00f5ff, #00f5ff 1px, transparent 1px, transparent 3px, #00f5ff 3px, #00f5ff 4px, transparent 4px, transparent 6px);
-            opacity: 0.6;
-        }
-
+        .scanner { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #fff; box-shadow: 0 0 8px #fff, 0 0 15px #00f5ff; animation: scanBar 1.8s linear infinite; }
+        .barcode { width: 75%; height: 18px; background: repeating-linear-gradient(90deg, #00f5ff, #00f5ff 1px, transparent 1px, transparent 3px, #00f5ff 3px, #00f5ff 4px); opacity: 0.6; }
         .hex-data { font-family: 'Share Tech Mono', monospace; font-size: 0.45rem; color: #00f5ff; position: absolute; bottom: 8px; opacity: 0.8; }
 
         .btn-analise {
             background: rgba(0, 245, 255, 0.08); border: 1px solid #00f5ff; color: #00f5ff;
             padding: 2px 8px; font-size: 0.68rem; font-weight: 700; border-radius: 4px;
-            box-shadow: 0 0 6px rgba(0, 245, 255, 0.3); margin-bottom: 6px; cursor: pointer;
-            transition: all 0.2s;
+            box-shadow: 0 0 6px rgba(0, 245, 255, 0.3); margin-bottom: 6px; cursor: pointer; transition: all 0.2s;
         }
-        
         .btn-analise:hover { background: rgba(0, 245, 255, 0.2); box-shadow: 0 0 10px rgba(0, 245, 255, 0.5); }
-        .btn-analise:active { transform: scale(0.95); }
 
-        .status-dot { display: inline-block; width: 5px; height: 5px; background: #00ff66; border-radius: 50%; box-shadow: 0 0 8px #00ff66; margin-right: 4px; animation: nodeFlicker 0.6s infinite alternate; }
-        .status-text { color: #00ff66; font-size: 0.62rem; font-weight: 700; display: flex; align-items: center; text-align: center; }
+        .status-dot { display: inline-block; width: 5px; height: 5px; background: #00ff66; border-radius: 50%; box-shadow: 0 0 8px #00ff66; margin-right: 4px; }
+        .status-text { color: #00ff66; font-size: 0.62rem; font-weight: 700; display: flex; align-items: center; }
         .criterio { color: #88a8c8; font-size: 0.58rem; margin-top: 2px; text-transform: uppercase; font-weight: bold; }
-        
         .timer-update { font-family: 'Share Tech Mono', monospace; color: #00b4d8; font-size: 0.55rem; margin-top: 4px; font-weight: bold; }
 
-        /* ANIMAÇÕES GERAIS */
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes spinRev { 100% { transform: scale(0.85) rotate(-360deg); } }
         @keyframes scanBar { 0% { top: -10%; } 100% { top: 110%; } }
-        @keyframes nodeFlicker { 0% { opacity: 0.4; } 100% { opacity: 1; } }
-        @keyframes blinkFast { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; filter: drop-shadow(0 0 3px #ff3333); } }
-        @keyframes blinkMedium { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; filter: drop-shadow(0 0 3px #ffcc00); } }
-        @keyframes blinkSlow { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; filter: drop-shadow(0 0 3px #00f5ff); } }
-        @keyframes pulseGlowRed { 0%, 100% { stroke-width: 3; opacity: 0.7; } 50% { stroke-width: 4.5; opacity: 1; filter: drop-shadow(0 0 4px #ff3333); } }
-        @keyframes pulseGlowYel { 0%, 100% { stroke-width: 3; opacity: 0.6; } 50% { stroke-width: 4.2; opacity: 1; filter: drop-shadow(0 0 4px #ffcc00); } }
-        @keyframes pulseGlowCya { 0%, 100% { stroke-width: 3; opacity: 0.7; } 50% { stroke-width: 4.5; opacity: 1; filter: drop-shadow(0 0 4px #00f5ff); } }
     </style>
 </head>
 <body>
 
     <div class="tech-panel">
-        
         <div class="header">
             <h1>Monitoramento Tático<br>De Vencimentos</h1>
             <div class="fonte-selector">
@@ -202,7 +141,6 @@
         </div>
 
         <div class="content-grid">
-            
             <div class="left-col">
                 <div class="box">
                     <div class="box-title">Visão Geral dos Alertas</div>
@@ -215,57 +153,34 @@
                             <svg viewBox="0 0 36 36">
                                 <circle cx="18" cy="18" r="16" fill="none" stroke="rgba(0,245,255,0.08)" stroke-width="2.5" />
                                 <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#ff3333" stroke-width="2.5" stroke-dasharray="40, 100" />
-                                <line x1="18" y1="18" x2="26" y2="12" stroke="#00f5ff" stroke-width="2" />
-                                <circle cx="18" cy="18" r="2" fill="#fff" />
                             </svg>
                         </div>
                     </div>
                     <div class="alerta-txt">
-                        <span style="display:inline-block; width:6px; height:6px; background:#ff3333; border-radius:50%; animation: nodeFlicker 0.4s infinite alternate;"></span>
-                        Produtos em Alerta Crítico: <span id="din-alerta">0</span>
+                        <span style="display:inline-block; width:6px; height:6px; background:#ff3333; border-radius:50%;"></span>
+                        Produtos Já Vencidos: <span id="din-alerta">0</span>
                     </div>
                 </div>
 
                 <div class="box">
-                    <div class="box-title">Separação por Status</div>
+                    <div class="box-title">Separação por Status Real</div>
                     <div class="risco-grid">
                         <div class="risco-item" style="border: 1px solid rgba(255,51,51,0.25);">
                             <div class="risco-header c-red">VENCIDOS</div>
                             <div class="risco-val c-red" id="din-r1">0</div>
-                            <div class="gauge-container">
-                                <svg class="gauge-svg" viewBox="0 0 32 16">
-                                    <path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
-                                    <path class="arc-live-1" d="M2 16 A14 14 0 0 1 14 4" fill="none" stroke="#ff3333" stroke-width="3"/>
-                                </svg>
-                                <svg class="icon-cal-mini i-anim-1" viewBox="0 0 24 24" fill="none" stroke="#ff3333" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            </div>
-                            <span class="micro-sys m-red">ALTO RISCO</span>
+                            <span class="micro-sys m-red">CRÍTICO</span>
                         </div>
 
                         <div class="risco-item" style="border: 1px solid rgba(255,204,0,0.25);">
                             <div class="risco-header c-yel">PRÓXIMOS</div>
                             <div class="risco-val c-yel" id="din-r2">0</div>
-                            <div class="gauge-container">
-                                <svg class="gauge-svg" viewBox="0 0 32 16">
-                                    <path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
-                                    <path class="arc-live-2" d="M2 16 A14 14 0 0 1 24 5" fill="none" stroke="#ffcc00" stroke-width="3"/>
-                                </svg>
-                                <svg class="icon-cal-mini i-anim-2" viewBox="0 0 24 24" fill="none" stroke="#ffcc00" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            </div>
                             <span class="micro-sys m-yel">ATENÇÃO</span>
                         </div>
 
                         <div class="risco-item" style="border: 1px solid rgba(0,245,255,0.25);">
                             <div class="risco-header c-cya">SEM DATA</div>
                             <div class="risco-val c-cya" id="din-r3">0</div>
-                            <div class="gauge-container">
-                                <svg class="gauge-svg" viewBox="0 0 32 16">
-                                    <path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
-                                    <path class="arc-live-3" d="M2 16 A14 14 0 0 1 29 13" fill="none" stroke="#00f5ff" stroke-width="3"/>
-                                </svg>
-                                <svg class="icon-cal-mini i-anim-3" viewBox="0 0 24 24" fill="none" stroke="#00f5ff" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            </div>
-                            <span class="micro-sys m-cya">VERIFICAR</span>
+                            <span class="micro-sys m-cya">AUDITAR</span>
                         </div>
                     </div>
                 </div>
@@ -275,21 +190,16 @@
                 <div class="radar-box">
                     <div class="ring ring-1"></div>
                     <div class="ring ring-2"></div>
-                    <div class="shield">
-                        <div class="scanner"></div>
-                        <div class="barcode"></div>
-                    </div>
-                    <div class="hex-data" id="hex-code">0x7F2C</div>
+                    <div class="shield"><div class="scanner"></div><div class="barcode"></div></div>
+                    <div class="hex-data" id="hex-code">0x0000</div>
                 </div>
 
                 <div class="btn-analise" onclick="forcarSincronizacao()">FORÇAR SYNC</div>
-                <div class="status-text" id="status-conexao"><span class="status-dot"></span>AGUARDANDO DADOS</div>
-                <div class="timer-update" id="contador-tempo">AUTO-SYNC EM: 30s</div>
+                <div class="status-text" id="status-conexao"><span class="status-dot"></span>INICIANDO...</div>
+                <div class="timer-update" id="contador-tempo">AUTO-SYNC: 30s</div>
                 <div class="criterio" id="din-origem">SYS: PGC ACTIVE</div>
             </div>
-
         </div>
-
     </div>
 
     <script>
@@ -299,33 +209,30 @@
         };
         
         let fonteAtual = 'PGC'; 
-        const INTERVALO_SEGUNDOS = 30; 
-        let tempoRestante = INTERVALO_SEGUNDOS;
+        let tempoRestante = 30;
+        const DIAS_PARA_CONSIDERAR_PROXIMO = 15; 
 
-        // DIAS PARA CONSIDERAR "PRÓXIMO DO VENCIMENTO" (Ajuste aqui se quiser 30 dias, por exemplo)
-        const DIAS_ALERTA_PROXIMO = 15; 
+        function tratarData(valor) {
+            if (!valor) return null;
+            let texto = String(valor).trim().toUpperCase();
+            if (texto === "" || texto.includes("SEM DATA")) return null;
 
-        // Função interna para limpar e entender qualquer formato de data que venha da planilha
-        function analisarDataReal(stringData) {
-            if (!stringData) return null;
-            
-            let str = String(stringData).trim();
-            if (str === "" || str.toUpperCase().includes("SEM DATA")) return null;
-
-            // Se o formato for brasileiro padrão: DD/MM/YYYY
-            if (str.includes('/')) {
-                const partes = str.split('/');
+            if (texto.includes('/')) {
+                let partes = texto.split('/');
                 if (partes.length >= 3) {
-                    const dia = parseInt(partes[0], 10);
-                    const mes = parseInt(partes[1], 10) - 1; // Meses no JS começam em 0
-                    const ano = parseInt(partes[2], 10);
+                    let dia = parseInt(partes[0], 10);
+                    let mes = parseInt(partes[1], 10) - 1;
+                    
+                    // Tratamento caso o ano venha com horário junto (ex: 2026 13:00)
+                    let anoBruto = partes[2].split(' ')[0];
+                    let ano = parseInt(anoBruto, 10);
+                    
                     return new Date(ano, mes, dia);
                 }
             }
-
-            // Tenta conversão direta caso venha no padrão ISO/Americano (YYYY-MM-DD)
-            const tentativaDireta = new Date(str);
-            return isNaN(tentativaDireta.getTime()) ? null : tentativaDireta;
+            
+            let dataTentativa = new Date(texto);
+            return isNaN(dataTentativa.getTime()) ? null : dataTentativa;
         }
 
         async function buscarDados() {
@@ -333,79 +240,84 @@
             const contadorEl = document.getElementById('contador-tempo');
             
             try {
-                statusEl.innerHTML = '<span class="status-dot" style="background:#ffcc00; box-shadow:0 0 8px #ffcc00;"></span>LIVE FETCH...';
+                statusEl.innerHTML = '<span class="status-dot" style="background:#ffcc00; box-shadow:0 0 8px #ffcc00;"></span>CONECTANDO...';
                 statusEl.style.color = '#ffcc00';
                 contadorEl.innerText = 'PROCESSANDO...';
                 
-                const baseUrlAtiva = fontesDados[fonteAtual];
-                const urlSemCache = `${baseUrlAtiva}&_=${new Date().getTime()}`;
+                const urlCompleta = `${fontesDados[fonteAtual]}&_ts=${new Date().getTime()}`;
                 
-                const response = await fetch(urlSemCache);
-                const data = await response.json();
-
-                console.log(`Análise Real de Datas (${fonteAtual}):`, data);
-
-                let totalItens = data.length; // Quantidade real de linhas que a planilha retornou
+                // Mudança Crítica: Lendo como TEXTO porque o Google Apps Script envia TEXTO (CSV)
+                const response = await fetch(urlCompleta);
+                if (!response.ok) throw new Error("Erro HTTP");
+                
+                const textData = await response.text();
+                
+                // Separa o texto linha por linha
+                const linhas = textData.split('\n');
+                
                 let qtdVencidos = 0;
                 let qtdProximos = 0;
                 let qtdSemData = 0;
+                
+                // Quantidade total ignora a primeira linha (cabeçalho)
+                let totalItens = linhas.length > 1 ? linhas.length - 1 : 0; 
 
-                // Captura a data de hoje zerando as horas para comparação exata de dias
                 const hoje = new Date();
-                hoje.setHours(0, 0, 0, 0);
+                hoje.setHours(0,0,0,0);
 
-                data.forEach(item => {
-                    // O motor verifica onde está a informação da data (caso mude o nome da coluna)
-                    const campoDataBruto = item.validade || item.data || item.vencimento || item.mensagem;
-                    const dataValidade = analisarDataReal(campoDataBruto);
+                // Começamos o loop do 1 para pular a linha de Títulos da Planilha
+                for (let i = 1; i < linhas.length; i++) {
+                    const linhaBruta = linhas[i].trim();
+                    if (!linhaBruta) continue; // Pula linha vazia
+
+                    // Divide as colunas separadas por vírgula no Apps Script
+                    const colunas = linhaBruta.split(',');
+
+                    // A Data de Validade no seu script está na coluna E (Índice 4 no Array JS)
+                    let dataBruta = colunas[4] ? colunas[4].trim() : "";
+                    
+                    let dataValidade = tratarData(dataBruta);
 
                     if (!dataValidade) {
                         qtdSemData++;
                     } else {
-                        dataValidade.setHours(0, 0, 0, 0);
-                        
-                        // Calcula a diferença em milissegundos e transforma em dias decimais
-                        const diferencaTempo = dataValidade.getTime() - hoje.getTime();
-                        const diferencaDias = Math.ceil(diferencaTempo / (1000 * 60 * 60 * 24));
+                        dataValidade.setHours(0,0,0,0);
+                        let diferencaMili = dataValidade.getTime() - hoje.getTime();
+                        let diferencaDias = Math.ceil(diferencaMili / (1000 * 60 * 60 * 24));
 
                         if (diferencaDias < 0) {
-                            qtdVencidos++; // Já passou da data de hoje
-                        } else if (diferencaDias <= DIAS_ALERTA_PROXIMO) {
-                            qtdProximos++; // Está no intervalo crítico (ex: entre 0 e 15 dias para vencer)
+                            qtdVencidos++;
+                        } else if (diferencaDias <= DIAS_PARA_CONSIDERAR_PROXIMO) {
+                            qtdProximos++;
                         }
                     }
-                });
+                }
 
-                // Atualização em tempo real dos contadores do HUD
+                // Atualiza a tela 
                 document.getElementById('din-total').innerText = totalItens;
-                document.getElementById('din-alerta').innerText = qtdVencidos; // Crítico foca nos já vencidos
-                
+                document.getElementById('din-alerta').innerText = qtdVencidos;
                 document.getElementById('din-r1').innerText = qtdVencidos;
                 document.getElementById('din-r2').innerText = qtdProximos;
                 document.getElementById('din-r3').innerText = qtdSemData;
 
-                statusEl.innerHTML = '<span class="status-dot"></span>TERMINAL MONITORADO';
+                statusEl.innerHTML = '<span class="status-dot"></span>SINCRO OK';
                 statusEl.style.color = '#00ff66';
 
             } catch (error) {
-                console.error("Erro no processamento:", error);
+                console.error("Erro detalhado:", error);
                 statusEl.innerHTML = '<span class="status-dot" style="background:#ff3333; box-shadow:0 0 8px #ff3333;"></span>FALHA NA REDE';
                 statusEl.style.color = '#ff3333';
             }
-            
-            tempoRestante = INTERVALO_SEGUNDOS;
+            tempoRestante = 30;
         }
 
         function mudarFonte(novaFonte) {
             if (fonteAtual === novaFonte) return;
             fonteAtual = novaFonte;
-            
             document.getElementById('btn-PGC').classList.remove('active');
             document.getElementById('btn-PRC').classList.remove('active');
             document.getElementById(`btn-${novaFonte}`).classList.add('active');
-            
             document.getElementById('din-origem').innerText = `SYS: ${novaFonte} ACTIVE`;
-            
             forcarSincronizacao();
         }
 
@@ -413,28 +325,26 @@
             const contadorEl = document.getElementById('contador-tempo');
             if (contadorEl.innerText !== 'PROCESSANDO...') {
                 tempoRestante--;
-                contadorEl.innerText = `AUTO-SYNC EM: ${tempoRestante}s`;
-                if (tempoRestante <= 0) {
-                    buscarDados();
-                }
+                contadorEl.innerText = `AUTO-SYNC: ${tempoRestante}s`;
+                if (tempoRestante <= 0) buscarDados();
             }
         }
 
         function forcarSincronizacao() {
-            tempoRestante = INTERVALO_SEGUNDOS; 
+            tempoRestante = 30;
             buscarDados();
         }
 
         setInterval(() => {
-            const hexChars = "0123456789ABCDEF";
+            const hex = "0123456789ABCDEF";
             let code = "0x";
-            for(let i=0; i<4; i++) code += hexChars.charAt(Math.floor(Math.random() * 16));
+            for(let i=0; i<4; i++) code += hex.charAt(Math.floor(Math.random() * 16));
             document.getElementById('hex-code').innerText = code;
         }, 250);
 
         window.onload = () => {
-            buscarDados(); 
-            setInterval(atualizarRelogio, 1000); 
+            buscarDados();
+            setInterval(atualizarRelogio, 1000);
         };
     </script>
 </body>
