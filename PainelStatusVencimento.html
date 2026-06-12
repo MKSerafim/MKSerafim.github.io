@@ -33,7 +33,6 @@
             display: flex; flex-direction: column; gap: 12px;
         }
 
-        /* Cantoneiras HUD */
         .tech-panel::before, .tech-panel::after {
             content: ''; position: absolute; width: 16px; height: 16px; border: 2px solid #00f5ff;
         }
@@ -50,8 +49,6 @@
 
         /* Grid Superior */
         .content-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 10px; }
-
-        /* COLUNA ESQUERDA */
         .left-col { display: flex; flex-direction: column; gap: 10px; }
 
         .box {
@@ -65,98 +62,85 @@
             text-transform: uppercase; letter-spacing: 0.5px;
         }
 
-        /* Estoque Geral */
-        .estoque-flex { display: flex; justify-content: space-between; align-items: center; }
-        .estoque-data p { color: #a3b1c6; font-size: 0.75rem; }
-        .estoque-data .num-total {
-            color: #00f5ff; font-size: 1.5rem; font-weight: 700;
-            font-family: 'Share Tech Mono', monospace; text-shadow: 0 0 12px rgba(0, 245, 255, 0.7);
-        }
-        .alerta-txt {
-            color: #ff3333; font-size: 0.7rem; font-weight: 700;
-            margin-top: 6px; display: flex; align-items: center; gap: 4px;
+        /* FEED DE PRODUTOS CRÍTICOS (CONSOLE) */
+        .feed-box {
+            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(0, 245, 255, 0.1);
+            border-radius: 4px; height: 95px; overflow-y: auto; padding: 5px; margin-bottom: 8px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
         }
 
-        /* MODULO DE RISCO */
-        .risco-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; text-align: center; }
-        
-        .risco-item { 
-            background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(0, 245, 255, 0.1);
-            border-radius: 4px; padding: 6px 2px; position: relative;
+        /* Scrollbar Neon Customizada para Android Webview */
+        .feed-box::-webkit-scrollbar { width: 4px; }
+        .feed-box::-webkit-scrollbar-track { background: rgba(0, 245, 255, 0.05); border-radius: 2px; }
+        .feed-box::-webkit-scrollbar-thumb { background: #00f5ff; border-radius: 2px; }
+
+        .feed-item {
+            font-family: 'Share Tech Mono', monospace; font-size: 0.68rem;
+            padding: 4px 2px; border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            animation: fadeIn 0.3s ease-in;
         }
         
+        .feed-item:last-child { border-bottom: none; }
+        .item-red { color: #ff3333; text-shadow: 0 0 2px rgba(255,51,51,0.5); }
+        .item-yel { color: #ffcc00; text-shadow: 0 0 2px rgba(255,204,0,0.5); }
+        .item-cya { color: #00f5ff; text-shadow: 0 0 2px rgba(0,245,255,0.5); }
+
+        .alerta-txt {
+            color: #ff3333; font-size: 0.7rem; font-weight: 700;
+            display: flex; align-items: center; gap: 4px;
+        }
+
+        /* MODULO DE RISCO (BLOCÕES EMBAIXO) */
+        .risco-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; text-align: center; }
+        .risco-item { background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(0, 245, 255, 0.1); border-radius: 4px; padding: 6px 2px; }
         .risco-header { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; }
         .c-red { color: #ff3333; text-shadow: 0 0 5px rgba(255,51,51,0.4); }
         .c-yel { color: #ffcc00; text-shadow: 0 0 5px rgba(255,204,0,0.4); }
         .c-cya { color: #00f5ff; text-shadow: 0 0 5px rgba(0,245,255,0.4); }
-
-        .risco-val {
-            font-family: 'Share Tech Mono', monospace; color: #fff; font-size: 0.82rem; font-weight: 700; margin: 2px 0;
-        }
-
-        .micro-sys {
-            font-family: 'Share Tech Mono', monospace; font-size: 0.52rem; display: block; margin-top: 3px; opacity: 0.8;
-        }
+        .risco-val { font-family: 'Share Tech Mono', monospace; color: #fff; font-size: 0.82rem; font-weight: 700; margin: 2px 0; }
+        .micro-sys { font-family: 'Share Tech Mono', monospace; font-size: 0.52rem; display: block; margin-top: 3px; opacity: 0.8; }
         .m-red { color: rgba(255,51,51,0.7); }
         .m-yel { color: rgba(255,204,0,0.7); }
         .m-cya { color: rgba(0,245,255,0.7); }
 
+        /* GAUGE & ICONS */
         .gauge-container { position: relative; width: 36px; height: 20px; margin: 4px auto 0 auto; }
         .gauge-svg { width: 100%; height: 100%; }
-        
         .arc-live-1 { animation: pulseGlowRed 1.8s ease-in-out infinite; }
         .arc-live-2 { animation: pulseGlowYel 2.2s ease-in-out infinite; }
         .arc-live-3 { animation: pulseGlowCya 1.4s ease-in-out infinite; }
-
         .icon-cal-mini { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 11px; height: 11px; }
         .i-anim-1 { animation: blinkFast 0.8s infinite; }
         .i-anim-2 { animation: blinkMedium 1.5s infinite; }
         .i-anim-3 { animation: blinkSlow 2.3s infinite; }
 
-        /* COLUNA DIREITA */
-        .right-col {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border-left: 1px dashed rgba(0, 245, 255, 0.2); padding-left: 6px;
-        }
-
+        /* COLUNA DIREITA (RADAR E SYNC) */
+        .right-col { display: flex; flex-direction: column; align-items: center; justify-content: center; border-left: 1px dashed rgba(0, 245, 255, 0.2); padding-left: 6px; }
         .radar-box { position: relative; width: 110px; height: 110px; margin-bottom: 12px; }
         .ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; border: 1px solid transparent; }
         .ring-1 { border-top: 2px solid #00f5ff; border-bottom: 2px solid #00f5ff; animation: spin 3s linear infinite; }
         .ring-2 { border-left: 2px dashed rgba(0, 245, 255, 0.4); border-right: 2px dashed rgba(0, 245, 255, 0.4); transform: scale(0.85); animation: spinRev 5s linear infinite; }
-        
         .shield {
             position: absolute; top: 15%; left: 20%; width: 60%; height: 70%; background: rgba(0, 180, 216, 0.15);
             clip-path: polygon(50% 0%, 100% 20%, 100% 60%, 50% 100%, 0% 60%, 0% 20%);
             border: 2px solid #00f5ff; display: flex; justify-content: center; align-items: center; overflow: hidden;
         }
-
-        .scanner {
-            position: absolute; top: 0; left: 0; width: 100%; height: 3px;
-            background: #fff; box-shadow: 0 0 8px #fff, 0 0 15px #00f5ff; animation: scanBar 1.8s linear infinite;
-        }
-
-        .barcode {
-            width: 75%; height: 18px;
-            background: repeating-linear-gradient(90deg, #00f5ff, #00f5ff 1px, transparent 1px, transparent 3px, #00f5ff 3px, #00f5ff 4px, transparent 4px, transparent 6px);
-            opacity: 0.6;
-        }
-
+        .scanner { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #fff; box-shadow: 0 0 8px #fff, 0 0 15px #00f5ff; animation: scanBar 1.8s linear infinite; }
+        .barcode { width: 75%; height: 18px; background: repeating-linear-gradient(90deg, #00f5ff, #00f5ff 1px, transparent 1px, transparent 3px, #00f5ff 3px, #00f5ff 4px, transparent 4px, transparent 6px); opacity: 0.6; }
         .hex-data { font-family: 'Share Tech Mono', monospace; font-size: 0.45rem; color: #00f5ff; position: absolute; bottom: 8px; opacity: 0.8; }
 
         .btn-analise {
             background: rgba(0, 245, 255, 0.08); border: 1px solid #00f5ff; color: #00f5ff;
             padding: 2px 8px; font-size: 0.68rem; font-weight: 700; border-radius: 4px;
-            box-shadow: 0 0 6px rgba(0, 245, 255, 0.3); margin-bottom: 6px; cursor: pointer;
-            transition: all 0.2s;
+            box-shadow: 0 0 6px rgba(0, 245, 255, 0.3); margin-bottom: 6px; cursor: pointer; transition: all 0.2s;
         }
-        
         .btn-analise:hover { background: rgba(0, 245, 255, 0.2); box-shadow: 0 0 10px rgba(0, 245, 255, 0.5); }
         .btn-analise:active { transform: scale(0.95); }
 
         .status-dot { display: inline-block; width: 5px; height: 5px; background: #00ff66; border-radius: 50%; box-shadow: 0 0 8px #00ff66; margin-right: 4px; animation: nodeFlicker 0.6s infinite alternate; }
         .status-text { color: #00ff66; font-size: 0.62rem; font-weight: 700; display: flex; align-items: center; text-align: center; }
         .criterio { color: #88a8c8; font-size: 0.58rem; margin-top: 2px; }
-        
         .timer-update { font-family: 'Share Tech Mono', monospace; color: #00b4d8; font-size: 0.55rem; margin-top: 4px; font-weight: bold; }
 
         /* ANIMAÇÕES GERAIS */
@@ -164,6 +148,7 @@
         @keyframes spinRev { 100% { transform: scale(0.85) rotate(-360deg); } }
         @keyframes scanBar { 0% { top: -10%; } 100% { top: 110%; } }
         @keyframes nodeFlicker { 0% { opacity: 0.4; } 100% { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes blinkFast { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; filter: drop-shadow(0 0 3px #ff3333); } }
         @keyframes blinkMedium { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; filter: drop-shadow(0 0 3px #ffcc00); } }
         @keyframes blinkSlow { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; filter: drop-shadow(0 0 3px #00f5ff); } }
@@ -184,24 +169,13 @@
             
             <div class="left-col">
                 <div class="box">
-                    <div class="box-title">Visão Geral dos Alertas</div>
-                    <div class="estoque-flex">
-                        <div class="estoque-data">
-                            <p>Total de Itens Listados:</p>
-                            <div class="num-total" id="din-total">0</div>
-                        </div>
-                        <div style="width: 40px; height: 40px;">
-                            <svg viewBox="0 0 36 36">
-                                <circle cx="18" cy="18" r="16" fill="none" stroke="rgba(0,245,255,0.08)" stroke-width="2.5" />
-                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#ff3333" stroke-width="2.5" stroke-dasharray="40, 100" />
-                                <line x1="18" y1="18" x2="26" y2="12" stroke="#00f5ff" stroke-width="2" />
-                                <circle cx="18" cy="18" r="2" fill="#fff" />
-                            </svg>
-                        </div>
+                    <div class="box-title">Feed de Alertas e Produtos</div>
+                    <div class="feed-box" id="critical-feed">
+                        <div class="feed-item item-cya">AGUARDANDO DADOS DA PLANILHA...</div>
                     </div>
                     <div class="alerta-txt">
                         <span style="display:inline-block; width:6px; height:6px; background:#ff3333; border-radius:50%; animation: nodeFlicker 0.4s infinite alternate;"></span>
-                        Produtos em Alerta Crítico: <span id="din-alerta">0</span>
+                        TOTAL EM ALERTA: <span id="din-alerta" style="margin-left:4px;">0</span>
                     </div>
                 </div>
 
@@ -212,39 +186,27 @@
                             <div class="risco-header c-red">VENCIDOS</div>
                             <div class="risco-val c-red" id="din-r1">0</div>
                             <div class="gauge-container">
-                                <svg class="gauge-svg" viewBox="0 0 32 16">
-                                    <path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
-                                    <path class="arc-live-1" d="M2 16 A14 14 0 0 1 14 4" fill="none" stroke="#ff3333" stroke-width="3"/>
-                                </svg>
+                                <svg class="gauge-svg" viewBox="0 0 32 16"><path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/><path class="arc-live-1" d="M2 16 A14 14 0 0 1 14 4" fill="none" stroke="#ff3333" stroke-width="3"/></svg>
                                 <svg class="icon-cal-mini i-anim-1" viewBox="0 0 24 24" fill="none" stroke="#ff3333" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             </div>
-                            <span class="micro-sys m-red">ALTO RISCO</span>
                         </div>
 
                         <div class="risco-item" style="border: 1px solid rgba(255,204,0,0.25);">
                             <div class="risco-header c-yel">PRÓXIMOS</div>
                             <div class="risco-val c-yel" id="din-r2">0</div>
                             <div class="gauge-container">
-                                <svg class="gauge-svg" viewBox="0 0 32 16">
-                                    <path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
-                                    <path class="arc-live-2" d="M2 16 A14 14 0 0 1 24 5" fill="none" stroke="#ffcc00" stroke-width="3"/>
-                                </svg>
+                                <svg class="gauge-svg" viewBox="0 0 32 16"><path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/><path class="arc-live-2" d="M2 16 A14 14 0 0 1 24 5" fill="none" stroke="#ffcc00" stroke-width="3"/></svg>
                                 <svg class="icon-cal-mini i-anim-2" viewBox="0 0 24 24" fill="none" stroke="#ffcc00" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             </div>
-                            <span class="micro-sys m-yel">ATENÇÃO</span>
                         </div>
 
                         <div class="risco-item" style="border: 1px solid rgba(0,245,255,0.25);">
                             <div class="risco-header c-cya">SEM DATA</div>
                             <div class="risco-val c-cya" id="din-r3">0</div>
                             <div class="gauge-container">
-                                <svg class="gauge-svg" viewBox="0 0 32 16">
-                                    <path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
-                                    <path class="arc-live-3" d="M2 16 A14 14 0 0 1 29 13" fill="none" stroke="#00f5ff" stroke-width="3"/>
-                                </svg>
+                                <svg class="gauge-svg" viewBox="0 0 32 16"><path d="M2 16 A14 14 0 0 1 30 16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/><path class="arc-live-3" d="M2 16 A14 14 0 0 1 29 13" fill="none" stroke="#00f5ff" stroke-width="3"/></svg>
                                 <svg class="icon-cal-mini i-anim-3" viewBox="0 0 24 24" fill="none" stroke="#00f5ff" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             </div>
-                            <span class="micro-sys m-cya">VERIFICAR</span>
                         </div>
                     </div>
                 </div>
@@ -262,7 +224,7 @@
                 </div>
 
                 <div class="btn-analise" onclick="forcarSincronizacao()">FORÇAR SYNC</div>
-                <div class="status-text" id="status-conexao"><span class="status-dot"></span>AGUARDANDO DADOS</div>
+                <div class="status-text" id="status-conexao"><span class="status-dot"></span>AGUARDANDO</div>
                 <div class="timer-update" id="contador-tempo">AUTO-SYNC EM: 30s</div>
                 <div class="criterio">Origem: Google Sheets</div>
             </div>
@@ -280,43 +242,64 @@
         async function buscarDados() {
             const statusEl = document.getElementById('status-conexao');
             const contadorEl = document.getElementById('contador-tempo');
+            const feedContainer = document.getElementById('critical-feed');
             
             try {
                 statusEl.innerHTML = '<span class="status-dot" style="background:#ffcc00; box-shadow:0 0 8px #ffcc00;"></span>LIVE FETCH...';
                 statusEl.style.color = '#ffcc00';
                 contadorEl.innerText = 'PROCESSANDO...';
                 
-                // Força o link a mudar a cada requisição gerando um link único com timestamp
+                // Força o cache do Webview do Android a baixar novos dados
                 const urlSemCache = `${baseUrl}&_=${new Date().getTime()}`;
-                
                 const response = await fetch(urlSemCache);
                 const data = await response.json();
 
-                console.log("Dados do Sheets:", data);
-
-                let totalItens = 0;
                 let qtdVencidos = 0;
                 let qtdProximos = 0;
                 let qtdSemData = 0;
+                let totalAlertaMsg = 0;
+                let feedHTML = ''; // Variável para montar a lista
 
                 data.forEach(item => {
-                    let linhasDoAlerta = item.mensagem.split('\n').filter(linha => linha.trim() !== '').length;
-                    totalItens += linhasDoAlerta;
-
                     const tituloFormatado = item.titulo.toUpperCase();
+                    
+                    // Quebra a mensagem do script linha por linha ignorando espaços vazios
+                    const linhasDoAlerta = item.mensagem.split('\n').filter(linha => linha.trim() !== '');
+                    totalAlertaMsg += linhasDoAlerta.length;
+
+                    // Define o visual de cada linha baseada no risco
+                    let cssClass = 'item-cya';
+                    let prefixo = '🔹';
 
                     if (tituloFormatado.includes('VENCIDO')) {
-                        qtdVencidos += linhasDoAlerta;
+                        qtdVencidos += linhasDoAlerta.length;
+                        cssClass = 'item-red';
+                        prefixo = '🔴 [VENCIDO]';
                     } else if (tituloFormatado.includes('PRÓXIMO') || tituloFormatado.includes('PROXIMO')) {
-                        qtdProximos += linhasDoAlerta;
+                        qtdProximos += linhasDoAlerta.length;
+                        cssClass = 'item-yel';
+                        prefixo = '🟡 [PRÓXIMO]';
                     } else if (tituloFormatado.includes('SEM DATA')) {
-                        qtdSemData += linhasDoAlerta;
+                        qtdSemData += linhasDoAlerta.length;
+                        cssClass = 'item-cya';
+                        prefixo = '⚪ [VERIFICAR]';
                     }
+
+                    // Injeta cada produto extraído da planilha no console de rolagem
+                    linhasDoAlerta.forEach(produto => {
+                        feedHTML += `<div class="feed-item ${cssClass}">${prefixo} ${produto.trim()}</div>`;
+                    });
                 });
 
-                document.getElementById('din-total').innerText = totalItens;
-                document.getElementById('din-alerta').innerText = qtdVencidos;
+                // Caso a planilha retorne vazia
+                if (feedHTML === '') {
+                    feedHTML = '<div class="feed-item item-cya" style="text-align:center; padding-top: 25px;">Nenhum produto em área de risco no momento.</div>';
+                }
+
+                feedContainer.innerHTML = feedHTML;
+                document.getElementById('din-alerta').innerText = totalAlertaMsg;
                 
+                // Atualiza os blocões de baixo
                 document.getElementById('din-r1').innerText = qtdVencidos;
                 document.getElementById('din-r2').innerText = qtdProximos;
                 document.getElementById('din-r3').innerText = qtdSemData;
@@ -327,6 +310,7 @@
             } catch (error) {
                 statusEl.innerHTML = '<span class="status-dot" style="background:#ff3333; box-shadow:0 0 8px #ff3333;"></span>FALHA NA REDE';
                 statusEl.style.color = '#ff3333';
+                feedContainer.innerHTML = '<div class="feed-item item-red" style="text-align:center; padding-top: 25px;">⚠️ Erro de conexão com a planilha.</div>';
             }
             
             tempoRestante = INTERVALO_SEGUNDOS;
@@ -337,9 +321,7 @@
             if (contadorEl.innerText !== 'PROCESSANDO...') {
                 tempoRestante--;
                 contadorEl.innerText = `AUTO-SYNC EM: ${tempoRestante}s`;
-                if (tempoRestante <= 0) {
-                    buscarDados();
-                }
+                if (tempoRestante <= 0) buscarDados();
             }
         }
 
