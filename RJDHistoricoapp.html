@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico de Notificações</title>
     <style>
+        /* Importando a fonte para o botão manter o estilo tático */
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap');
+
         /* Reset e Estilização Base */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -14,6 +17,28 @@
             /* Removemos o padding geral do body para não atrapalhar o carregamento centralizado */
         }
         
+        /* --- BOTÃO DE RETORNO TÁTICO --- */
+        .btn-retornar {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(0, 31, 66, 0.6);
+            color: #00f5ff;
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .btn-retornar:hover, .btn-retornar:active {
+            background: rgba(0, 245, 255, 0.15);
+            border-color: #00f5ff;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
+            transform: translateX(-3px);
+        }
+        .btn-retornar svg { width: 18px; height: 18px; fill: currentColor; }
+
         /* ===================================================
            TELA DE CARREGAMENTO (SPLASH SCREEN CENTRALIZADA)
            =================================================== */
@@ -171,6 +196,14 @@
     </div>
 
     <div id="conteudo-principal">
+        
+        <button class="btn-retornar" onclick="voltarAoApp()">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Retornar
+        </button>
+
         <h2>Histórico de Alertas</h2>
         <div id="historico-container"></div>
     </div>
@@ -224,6 +257,17 @@
                 const telaCarregamento = document.getElementById('tela-carregamento');
                 telaCarregamento.innerHTML = '<div class="loading-text" style="color: #ff4757; animation: none;">Falha na sincronização. Verifique sua conexão.</div>';
                 console.error('Erro:', error);
+            }
+        }
+
+        // FUNÇÃO QUE MANDA O COMANDO PARA O KODULAR (Adicionada)
+        function voltarAoApp() {
+            if (window.AppInventor) {
+                // Envia a palavra mágica para o Kodular interceptar
+                window.AppInventor.setWebViewString("VoltarLoja");
+            } else {
+                // Se for testado no navegador do PC, só avisa
+                alert("Simulando o clique! No Kodular, isso abrirá a tela Loja.");
             }
         }
 
