@@ -13,13 +13,42 @@
             background-color: #001226;
             color: #ffffff;
             font-family: 'Rajdhani', sans-serif;
-            padding: 20px;
             background-image: linear-gradient(rgba(0, 245, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 245, 255, 0.02) 1px, transparent 1px);
             background-size: 20px 20px;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
+        /* --- TELA DE CARREGAMENTO ISOLADA --- */
+        #status-display {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100vh; /* Ocupa 100% da altura da tela */
+            width: 100vw;
+            text-align: center;
+            position: absolute;
+            top: 0; left: 0;
+            background-color: #001226;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 70px; height: 70px;
+            border: 4px solid rgba(0, 245, 255, 0.1);
+            border-top: 4px solid #00f5ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+            margin-bottom: 30px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .loader-text {
+            color: #00f5ff; font-family: 'Share Tech Mono', monospace; font-size: 1.2rem;
+            letter-spacing: 2px; animation: pulse 1.5s infinite; text-transform: uppercase;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(0, 245, 255, 0.8); } 50% { opacity: 0.4; text-shadow: none; } }
+
+        /* --- CABEÇALHO DO PAINEL --- */
         .header {
             border: 1px solid rgba(0, 245, 255, 0.2);
             background: rgba(0, 31, 66, 0.5);
@@ -32,28 +61,6 @@
             content: ''; position: absolute; left: 0; top: 20%; height: 60%; width: 4px; background: #00f5ff; box-shadow: 0 0 10px #00f5ff;
         }
         .header h1 { font-size: 1.8rem; text-transform: uppercase; letter-spacing: 2px; color: #fff; }
-
-        /* --- TELA DE CARREGAMENTO ANIMADA --- */
-        .loader-container {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 40vh; text-align: center;
-        }
-        .spinner {
-            width: 60px; height: 60px;
-            border: 4px solid rgba(0, 245, 255, 0.1);
-            border-top: 4px solid #00f5ff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            box-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
-            margin-bottom: 25px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .loader-text {
-            color: #00f5ff; font-family: 'Share Tech Mono', monospace; font-size: 1.1rem;
-            letter-spacing: 2px; animation: pulse 1.5s infinite; text-transform: uppercase;
-        }
-        @keyframes pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(0, 245, 255, 0.8); } 50% { opacity: 0.4; text-shadow: none; } }
 
         /* --- Grid de Resumos --- */
         .grid-stats {
@@ -99,7 +106,7 @@
         /* --- Debugger Tool --- */
         .debug-container {
             background: rgba(255, 51, 51, 0.08); border: 1px solid #ff3333;
-            border-radius: 8px; padding: 25px; margin: 20px 0; display: none;
+            border-radius: 8px; padding: 25px; margin: 40px auto; max-width: 800px; display: none;
         }
         .debug-container h4 { color: #ff3333; text-transform: uppercase; margin-bottom: 15px; font-size: 1.2rem; }
         .debug-form { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 6px; }
@@ -117,36 +124,34 @@
 </head>
 <body>
 
-    <div class="container">
+    <div id="status-display">
+        <div class="spinner"></div>
+        <div class="loader-text" id="loader-msg">Estabelecendo conexão segura...</div>
+    </div>
+
+    <div id="debug-box" class="debug-container">
+        <h4>⚠️ Acesso Negado (Erro 401)</h4>
+        <p>As credenciais de segurança do sistema foram rejeitadas. Ajuste os parâmetros de conexão abaixo:</p>
+        <div class="debug-form">
+            <input type="text" id="input-token" placeholder="Chave de Acesso (Token)">
+            <input type="text" id="input-table" placeholder="ID da Base de Dados">
+            <button onclick="testarNovasCredenciais()">Forçar Conexão</button>
+        </div>
+    </div>
+
+    <div id="main-content" class="container" style="display: none;">
+        
         <div class="header">
             <h1>Monitoramento Tático de Equipe</h1>
         </div>
 
-        <div id="status-display">
-            <div class="loader-container">
-                <div class="spinner"></div>
-                <div class="loader-text" id="loader-msg">Estabelecendo conexão segura...</div>
-            </div>
-        </div>
-
-        <div id="debug-box" class="debug-container">
-            <h4>⚠️ Acesso Negado (Erro 401)</h4>
-            <p>As credenciais de segurança do sistema foram rejeitadas. Ajuste os parâmetros de conexão abaixo:</p>
-            <div class="debug-form">
-                <input type="text" id="input-token" placeholder="Chave de Acesso (Token)">
-                <input type="text" id="input-table" placeholder="ID da Base de Dados">
-                <button onclick="testarNovasCredenciais()">Forçar Conexão</button>
-            </div>
-        </div>
-
-        <div id="main-content" style="display: none;">
-            <div class="grid-stats" id="stats-summary"></div>
-            <div id="lojas-render-target"></div>
-        </div>
+        <div class="grid-stats" id="stats-summary"></div>
+        
+        <div id="lojas-render-target"></div>
+        
     </div>
 
     <script>
-        // CREDENCIAIS DE ACESSO
         let CONFIG = {
             TABLE_ID: "180827",
             TOKEN: "x6rXtkpcBaAYlER6MMDo6Lfd0RSS28Ey" 
@@ -157,7 +162,6 @@
         const debugBox = document.getElementById('debug-box');
         const mainContent = document.getElementById('main-content');
 
-        // Textos rotativos para dar um ar mais profissional ao carregamento
         const mensagensCarregamento = [
             "Autenticando credenciais...",
             "Sincronizando banco de dados...",
@@ -166,14 +170,13 @@
 
         async function puxarDadosServidor() {
             try {
-                // Animação inicial
-                statusDisplay.style.display = 'block';
+                // Prepara a tela (Exibe apenas o loader em tela cheia)
+                statusDisplay.style.display = 'flex';
                 mainContent.style.display = 'none';
                 debugBox.style.display = 'none';
                 
-                // Simula um delay rápido para o usuário ver a animação bonita (opcional, mas dá um "feeling" premium)
                 loaderMsg.innerText = mensagensCarregamento[0];
-                setTimeout(() => { if(statusDisplay.style.display === 'block') loaderMsg.innerText = mensagensCarregamento[1]; }, 600);
+                setTimeout(() => { if(statusDisplay.style.display === 'flex') loaderMsg.innerText = mensagensCarregamento[1]; }, 600);
 
                 const url = `https://api.baserow.io/api/database/rows/table/${CONFIG.TABLE_ID}/?user_field_names=true&size=100`;
                 
@@ -194,18 +197,16 @@
 
                 const data = await response.json();
                 
-                // Oculta carregamento e mostra o painel
+                // Oculta completamente a tela de carregamento e mostra o painel
                 statusDisplay.style.display = 'none';
                 renderizarPainel(data.results || []);
 
             } catch (err) {
-                // Se cair a internet ou der erro genérico, exibe sem falar do Baserow
                 statusDisplay.innerHTML = `
-                    <div class="loader-container">
-                        <h3 style="color:#ff3333; margin-bottom: 10px;">⚠️ Falha na Comunicação</h3>
-                        <p style="color:#aaa;">Não foi possível sincronizar os dados táticos. Verifique a conexão com a rede.</p>
-                        <p style="color:#555; font-size:0.8rem; margin-top:10px;">Detalhe técnico: ${err.message}</p>
-                    </div>`;
+                    <h3 style="color:#ff3333; margin-bottom: 10px;">⚠️ Falha na Comunicação</h3>
+                    <p style="color:#aaa;">Não foi possível sincronizar os dados táticos. Verifique a conexão.</p>
+                    <p style="color:#555; font-size:0.8rem; margin-top:10px;">Detalhe: ${err.message}</p>
+                `;
             }
         }
 
@@ -213,26 +214,22 @@
             CONFIG.TOKEN = document.getElementById('input-token').value.trim();
             CONFIG.TABLE_ID = document.getElementById('input-table').value.trim();
             
-            // Restaura o visual do loader antes de tentar de novo
             statusDisplay.innerHTML = `
-                <div class="loader-container">
-                    <div class="spinner"></div>
-                    <div class="loader-text" id="loader-msg">Reestabelecendo conexão...</div>
-                </div>`;
+                <div class="spinner"></div>
+                <div class="loader-text" id="loader-msg">Reestabelecendo conexão...</div>
+            `;
             puxarDadosServidor();
         }
 
         function renderizarPainel(registros) {
             if(registros.length === 0) {
-                statusDisplay.style.display = 'block';
+                statusDisplay.style.display = 'flex';
                 statusDisplay.innerHTML = `
-                    <div class="loader-container">
-                        <div class="loader-text" style="animation: none;">NENHUM COLABORADOR ENCONTRADO NO SISTEMA.</div>
-                    </div>`;
+                    <div class="loader-text" style="animation: none;">NENHUM COLABORADOR ENCONTRADO NO SISTEMA.</div>
+                `;
                 return;
             }
 
-            // Agrupamento
             const mapaLojas = {};
             let contagemTotal = 0;
 
@@ -243,13 +240,11 @@
                 contagemTotal++;
             });
 
-            // Renderizar estatísticas superiores
             document.getElementById('stats-summary').innerHTML = `
                 <div class="card-stat"><h3>Total de Colaboradores</h3><div class="num">${contagemTotal}</div></div>
                 <div class="card-stat"><h3>Unidades Conectadas</h3><div class="num">${Object.keys(mapaLojas).length}</div></div>
             `;
 
-            // Renderizar seções por loja
             let htmlHTML = "";
             Object.keys(mapaLojas).sort().forEach(nomeLoja => {
                 const equipe = mapaLojas[nomeLoja];
@@ -286,7 +281,7 @@
             });
 
             document.getElementById('lojas-render-target').innerHTML = htmlHTML;
-            mainContent.style.display = 'block';
+            mainContent.style.display = 'block'; // Mostra todo o layout de uma vez só!
         }
 
         window.onload = puxarDadosServidor;
