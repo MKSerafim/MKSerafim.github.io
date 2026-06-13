@@ -22,7 +22,7 @@
         /* --- TELA DE CARREGAMENTO ISOLADA --- */
         #status-display {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100vh; /* Ocupa 100% da altura da tela */
+            height: 100vh;
             width: 100vw;
             text-align: center;
             position: absolute;
@@ -47,6 +47,28 @@
             letter-spacing: 2px; animation: pulse 1.5s infinite; text-transform: uppercase;
         }
         @keyframes pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(0, 245, 255, 0.8); } 50% { opacity: 0.4; text-shadow: none; } }
+
+        /* --- BOTÃO DE RETORNO TÁTICO --- */
+        .btn-retornar {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(0, 31, 66, 0.6);
+            color: #00f5ff;
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        .btn-retornar:hover, .btn-retornar:active {
+            background: rgba(0, 245, 255, 0.15);
+            border-color: #00f5ff;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
+            transform: translateX(-3px);
+        }
+        .btn-retornar svg { width: 18px; height: 18px; fill: currentColor; }
 
         /* --- CABEÇALHO DO PAINEL --- */
         .header {
@@ -102,24 +124,6 @@
         .info .name { font-size: 1.1rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .info .role { font-size: 0.85rem; color: #00b4d8; font-weight: bold; text-transform: uppercase; margin-top: 2px; }
         .info .drt { font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: #708fa6; margin-top: 4px; }
-
-        /* --- Debugger Tool --- */
-        .debug-container {
-            background: rgba(255, 51, 51, 0.08); border: 1px solid #ff3333;
-            border-radius: 8px; padding: 25px; margin: 40px auto; max-width: 800px; display: none;
-        }
-        .debug-container h4 { color: #ff3333; text-transform: uppercase; margin-bottom: 15px; font-size: 1.2rem; }
-        .debug-form { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 6px; }
-        .debug-form input {
-            background: #001226; border: 1px solid rgba(255,255,255,0.2); color: #fff;
-            padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 0.9rem; flex: 1; min-width: 200px;
-        }
-        .debug-form input:focus { border-color: #00f5ff; outline: none; }
-        .debug-form button {
-            background: #ff3333; color: #fff; border: none; padding: 8px 20px;
-            border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase;
-        }
-        .debug-form button:hover { background: #ff5555; }
     </style>
 </head>
 <body>
@@ -129,17 +133,14 @@
         <div class="loader-text" id="loader-msg">Estabelecendo conexão segura...</div>
     </div>
 
-    <div id="debug-box" class="debug-container">
-        <h4>⚠️ Acesso Negado (Erro 401)</h4>
-        <p>As credenciais de segurança do sistema foram rejeitadas. Ajuste os parâmetros de conexão abaixo:</p>
-        <div class="debug-form">
-            <input type="text" id="input-token" placeholder="Chave de Acesso (Token)">
-            <input type="text" id="input-table" placeholder="ID da Base de Dados">
-            <button onclick="testarNovasCredenciais()">Forçar Conexão</button>
-        </div>
-    </div>
-
     <div id="main-content" class="container" style="display: none;">
+        
+        <button class="btn-retornar" onclick="voltarAoApp()">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Retornar
+        </button>
         
         <div class="header">
             <h1>Monitoramento Tático de Equipe</h1>
@@ -152,6 +153,7 @@
     </div>
 
     <script>
+        // CREDENCIAIS DA API
         let CONFIG = {
             TABLE_ID: "180827",
             TOKEN: "x6rXtkpcBaAYlER6MMDo6Lfd0RSS28Ey" 
@@ -159,7 +161,6 @@
 
         const statusDisplay = document.getElementById('status-display');
         const loaderMsg = document.getElementById('loader-msg');
-        const debugBox = document.getElementById('debug-box');
         const mainContent = document.getElementById('main-content');
 
         const mensagensCarregamento = [
@@ -168,12 +169,21 @@
             "Processando organograma das lojas..."
         ];
 
+        // FUNÇÃO QUE MANDA O COMANDO PARA O KODULAR
+        function voltarAoApp() {
+            if (window.AppInventor) {
+                // Envia a palavra mágica para o Kodular interceptar
+                window.AppInventor.setWebViewString("VoltarLoja");
+            } else {
+                // Se for testado no navegador do PC, só avisa
+                alert("Simulando o clique! No Kodular, isso abrirá a tela Loja.");
+            }
+        }
+
         async function puxarDadosServidor() {
             try {
-                // Prepara a tela (Exibe apenas o loader em tela cheia)
                 statusDisplay.style.display = 'flex';
                 mainContent.style.display = 'none';
-                debugBox.style.display = 'none';
                 
                 loaderMsg.innerText = mensagensCarregamento[0];
                 setTimeout(() => { if(statusDisplay.style.display === 'flex') loaderMsg.innerText = mensagensCarregamento[1]; }, 600);
@@ -185,48 +195,25 @@
                     headers: { 'Authorization': `Token ${CONFIG.TOKEN}` }
                 });
 
-                if (response.status === 401) {
-                    statusDisplay.style.display = 'none';
-                    debugBox.style.display = 'block';
-                    document.getElementById('input-token').value = CONFIG.TOKEN;
-                    document.getElementById('input-table').value = CONFIG.TABLE_ID;
-                    return;
-                }
-
-                if (!response.ok) throw new Error(`Status da Rede: ${response.status}`);
+                if (!response.ok) throw new Error(`Status: ${response.status}`);
 
                 const data = await response.json();
                 
-                // Oculta completamente a tela de carregamento e mostra o painel
                 statusDisplay.style.display = 'none';
                 renderizarPainel(data.results || []);
 
             } catch (err) {
                 statusDisplay.innerHTML = `
                     <h3 style="color:#ff3333; margin-bottom: 10px;">⚠️ Falha na Comunicação</h3>
-                    <p style="color:#aaa;">Não foi possível sincronizar os dados táticos. Verifique a conexão.</p>
-                    <p style="color:#555; font-size:0.8rem; margin-top:10px;">Detalhe: ${err.message}</p>
+                    <p style="color:#aaa;">Verifique sua conexão e tente novamente.</p>
                 `;
             }
-        }
-
-        function testarNovasCredenciais() {
-            CONFIG.TOKEN = document.getElementById('input-token').value.trim();
-            CONFIG.TABLE_ID = document.getElementById('input-table').value.trim();
-            
-            statusDisplay.innerHTML = `
-                <div class="spinner"></div>
-                <div class="loader-text" id="loader-msg">Reestabelecendo conexão...</div>
-            `;
-            puxarDadosServidor();
         }
 
         function renderizarPainel(registros) {
             if(registros.length === 0) {
                 statusDisplay.style.display = 'flex';
-                statusDisplay.innerHTML = `
-                    <div class="loader-text" style="animation: none;">NENHUM COLABORADOR ENCONTRADO NO SISTEMA.</div>
-                `;
+                statusDisplay.innerHTML = `<div class="loader-text" style="animation: none;">NENHUM COLABORADOR ENCONTRADO.</div>`;
                 return;
             }
 
@@ -281,7 +268,7 @@
             });
 
             document.getElementById('lojas-render-target').innerHTML = htmlHTML;
-            mainContent.style.display = 'block'; // Mostra todo o layout de uma vez só!
+            mainContent.style.display = 'block'; 
         }
 
         window.onload = puxarDadosServidor;
