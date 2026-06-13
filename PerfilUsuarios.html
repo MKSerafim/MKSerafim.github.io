@@ -33,7 +33,29 @@
         }
         .header h1 { font-size: 1.8rem; text-transform: uppercase; letter-spacing: 2px; color: #fff; }
 
-        /* Grid de Resumos */
+        /* --- TELA DE CARREGAMENTO ANIMADA --- */
+        .loader-container {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 40vh; text-align: center;
+        }
+        .spinner {
+            width: 60px; height: 60px;
+            border: 4px solid rgba(0, 245, 255, 0.1);
+            border-top: 4px solid #00f5ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
+            margin-bottom: 25px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .loader-text {
+            color: #00f5ff; font-family: 'Share Tech Mono', monospace; font-size: 1.1rem;
+            letter-spacing: 2px; animation: pulse 1.5s infinite; text-transform: uppercase;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(0, 245, 255, 0.8); } 50% { opacity: 0.4; text-shadow: none; } }
+
+        /* --- Grid de Resumos --- */
         .grid-stats {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px;
         }
@@ -44,7 +66,7 @@
         .card-stat h3 { font-size: 0.9rem; color: #88a8c8; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
         .card-stat .num { font-family: 'Share Tech Mono', monospace; font-size: 2.8rem; color: #00f5ff; text-shadow: 0 0 10px rgba(0, 245, 255, 0.4); }
 
-        /* Seções de Lojas */
+        /* --- Seções de Lojas --- */
         .loja-box {
             background: rgba(0, 25, 51, 0.4); border: 1px solid rgba(0, 180, 216, 0.25);
             border-radius: 8px; padding: 20px; margin-bottom: 25px;
@@ -59,14 +81,14 @@
             color: #fff; padding: 3px 12px; border-radius: 4px; font-size: 0.85rem; font-weight: bold;
         }
 
-        /* Grid de Usuários */
+        /* --- Grid de Usuários --- */
         .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .user-card {
             background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 6px; padding: 15px; display: flex; align-items: center; gap: 15px;
             transition: all 0.25s ease;
         }
-        .user-card:hover { border-color: #00f5ff; background: rgba(0, 245, 255, 0.04); transform: translateY(-1px); }
+        .user-card:hover { border-color: #00f5ff; background: rgba(0, 245, 255, 0.04); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0, 245, 255, 0.1); }
         
         .avatar img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid #88a8c8; background: #001226; }
         .info { display: flex; flex-direction: column; min-width: 0; }
@@ -74,9 +96,7 @@
         .info .role { font-size: 0.85rem; color: #00b4d8; font-weight: bold; text-transform: uppercase; margin-top: 2px; }
         .info .drt { font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: #708fa6; margin-top: 4px; }
 
-        /* Status & Debugger Tool */
-        .status-panel { text-align: center; padding: 40px; font-size: 1.2rem; color: #ffcc00; }
-        
+        /* --- Debugger Tool --- */
         .debug-container {
             background: rgba(255, 51, 51, 0.08); border: 1px solid #ff3333;
             border-radius: 8px; padding: 25px; margin: 20px 0; display: none;
@@ -102,14 +122,19 @@
             <h1>Monitoramento Tático de Equipe</h1>
         </div>
 
-        <div id="status-display" class="status-panel">Estabelecendo link de dados...</div>
+        <div id="status-display">
+            <div class="loader-container">
+                <div class="spinner"></div>
+                <div class="loader-text" id="loader-msg">Estabelecendo conexão segura...</div>
+            </div>
+        </div>
 
         <div id="debug-box" class="debug-container">
-            <h4>⚠️ Erro de Autenticação (HTTP 401)</h4>
-            <p>O Baserow rejeitou as credenciais fornecidas. Como você mencionou que o token funciona no seu app, ajuste os campos abaixo para testar em tempo real:</p>
+            <h4>⚠️ Acesso Negado (Erro 401)</h4>
+            <p>As credenciais de segurança do sistema foram rejeitadas. Ajuste os parâmetros de conexão abaixo:</p>
             <div class="debug-form">
-                <input type="text" id="input-token" placeholder="Cole o Token Aqui">
-                <input type="text" id="input-table" placeholder="ID da Tabela">
+                <input type="text" id="input-token" placeholder="Chave de Acesso (Token)">
+                <input type="text" id="input-table" placeholder="ID da Base de Dados">
                 <button onclick="testarNovasCredenciais()">Forçar Conexão</button>
             </div>
         </div>
@@ -121,21 +146,35 @@
     </div>
 
     <script>
-        // CREDENCIAIS CORRIGIDAS (I maiúsculo trocado por l minúsculo)
+        // CREDENCIAIS DE ACESSO
         let CONFIG = {
             TABLE_ID: "180827",
             TOKEN: "x6rXtkpcBaAYlER6MMDo6Lfd0RSS28Ey" 
         };
 
         const statusDisplay = document.getElementById('status-display');
+        const loaderMsg = document.getElementById('loader-msg');
         const debugBox = document.getElementById('debug-box');
         const mainContent = document.getElementById('main-content');
 
+        // Textos rotativos para dar um ar mais profissional ao carregamento
+        const mensagensCarregamento = [
+            "Autenticando credenciais...",
+            "Sincronizando banco de dados...",
+            "Processando organograma das lojas..."
+        ];
+
         async function puxarDadosServidor() {
             try {
+                // Animação inicial
                 statusDisplay.style.display = 'block';
-                statusDisplay.innerText = "Sincronizando com a API Baserow...";
+                mainContent.style.display = 'none';
+                debugBox.style.display = 'none';
                 
+                // Simula um delay rápido para o usuário ver a animação bonita (opcional, mas dá um "feeling" premium)
+                loaderMsg.innerText = mensagensCarregamento[0];
+                setTimeout(() => { if(statusDisplay.style.display === 'block') loaderMsg.innerText = mensagensCarregamento[1]; }, 600);
+
                 const url = `https://api.baserow.io/api/database/rows/table/${CONFIG.TABLE_ID}/?user_field_names=true&size=100`;
                 
                 const response = await fetch(url, {
@@ -151,29 +190,45 @@
                     return;
                 }
 
-                if (!response.ok) throw new Error(`Status HTTP: ${response.status}`);
+                if (!response.ok) throw new Error(`Status da Rede: ${response.status}`);
 
                 const data = await response.json();
-                debugBox.style.display = 'none';
-                statusDisplay.style.display = 'none';
                 
+                // Oculta carregamento e mostra o painel
+                statusDisplay.style.display = 'none';
                 renderizarPainel(data.results || []);
 
             } catch (err) {
-                statusDisplay.innerHTML = `<span style="color:#ff3333">Erro de Conexão: ${err.message}</span>`;
+                // Se cair a internet ou der erro genérico, exibe sem falar do Baserow
+                statusDisplay.innerHTML = `
+                    <div class="loader-container">
+                        <h3 style="color:#ff3333; margin-bottom: 10px;">⚠️ Falha na Comunicação</h3>
+                        <p style="color:#aaa;">Não foi possível sincronizar os dados táticos. Verifique a conexão com a rede.</p>
+                        <p style="color:#555; font-size:0.8rem; margin-top:10px;">Detalhe técnico: ${err.message}</p>
+                    </div>`;
             }
         }
 
         function testarNovasCredenciais() {
             CONFIG.TOKEN = document.getElementById('input-token').value.trim();
             CONFIG.TABLE_ID = document.getElementById('input-table').value.trim();
+            
+            // Restaura o visual do loader antes de tentar de novo
+            statusDisplay.innerHTML = `
+                <div class="loader-container">
+                    <div class="spinner"></div>
+                    <div class="loader-text" id="loader-msg">Reestabelecendo conexão...</div>
+                </div>`;
             puxarDadosServidor();
         }
 
         function renderizarPainel(registros) {
             if(registros.length === 0) {
                 statusDisplay.style.display = 'block';
-                statusDisplay.innerText = "Aviso: Nenhum colaborador cadastrado nesta tabela.";
+                statusDisplay.innerHTML = `
+                    <div class="loader-container">
+                        <div class="loader-text" style="animation: none;">NENHUM COLABORADOR ENCONTRADO NO SISTEMA.</div>
+                    </div>`;
                 return;
             }
 
@@ -190,8 +245,8 @@
 
             // Renderizar estatísticas superiores
             document.getElementById('stats-summary').innerHTML = `
-                <div class="card-stat"><h3>Total Colaboradores</h3><div class="num">${contagemTotal}</div></div>
-                <div class="card-stat"><h3>Lojas Conectadas</h3><div class="num">${Object.keys(mapaLojas).length}</div></div>
+                <div class="card-stat"><h3>Total de Colaboradores</h3><div class="num">${contagemTotal}</div></div>
+                <div class="card-stat"><h3>Unidades Conectadas</h3><div class="num">${Object.keys(mapaLojas).length}</div></div>
             `;
 
             // Renderizar seções por loja
@@ -208,12 +263,9 @@
                 `;
 
                 equipe.forEach(colab => {
-                    // Mapeamento dinâmico inteligente (Aceita Nome ou Email se Nome faltar)
-                    const displayNome = colab.Nome || colab.Email || "Sem identificação";
+                    const displayNome = colab.Nome || colab.Email || "Identificação Pendente";
                     const displayCargo = colab.Cargo || "Cargo não informado";
                     const displayDRT = colab.DRT ? `DRT: ${colab.DRT}` : "Sem Registro DRT";
-                    
-                    // Fallback de imagem usando as iniciais do nome caso a foto falhe ou venha vazia
                     const fotoValida = colab.Foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayNome)}&background=002347&color=00f5ff&bold=true`;
 
                     htmlHTML += `
